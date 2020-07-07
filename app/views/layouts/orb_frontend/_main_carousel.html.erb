@@ -1,0 +1,19 @@
+<% news_images = NewsImage.all_published %>
+<div class="main-carousel"> 
+
+	<!--Slider -->
+	<div id="carousel-example-generic" class="carousel" data-ride="carousel">
+		<ol class="carousel-indicators">
+			<% news_images.each_index do |i| %>
+	  			<li data-target="#carousel-example-generic" data-slide-to="<%= i %>" class="<%= i == 0 ? 'active' : '' %>"></li>
+	  		<% end %>
+		</ol>
+	  	<div class="carousel-inner"> 
+			<% news_images.each_index do |i| %>
+				<div class="no-padding item item<%= (i % 3) + 1 %> <%= i == 0 ? 'active' : '' %>"> <center><%= image_tag news_images[i].image.url, {alt: news_images[i].published_at, style: "height:433px;"} %></center> </div>
+	  		<% end %>
+	  	</div>
+	  	<a class="left carousel-control" href="/orb/frontend/#carousel-example-generic" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a> 
+	  	<a class="right carousel-control" href="/orb/frontend/#carousel-example-generic" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a> 
+  	</div>
+</div>

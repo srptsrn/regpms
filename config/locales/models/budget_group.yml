@@ -1,0 +1,28 @@
+en:
+  activerecord:
+    models:
+      budget_group: BudgetGroup
+    attributes:
+      budget_group:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        name: Name
+        name: Short Name
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      budget_group: ประเภทเงิน
+    attributes:
+      budget_group:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        name: ประเภทเงิน
+        short_name: ชื่อย่อ
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

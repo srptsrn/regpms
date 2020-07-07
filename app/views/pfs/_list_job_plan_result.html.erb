@@ -1,0 +1,51 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th><%= JobPlanResult.human_attribute_name(:name) %></th>
+			<th style="width:375px;"><%= JobPlanResultFile.model_name.human %></th>
+			<% if @current_evaluation.is_pf_range %>
+				<th>&nbsp;</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="job-plan-result-list-<%= job_plan.id %>">
+		<% job_plan.job_plan_results.each do |job_plan_result| %>
+			<%= render partial: "row_job_plan_result", locals: {job_plan_result: job_plan_result} %>
+		<% end %>
+	</tbody>
+	<% if @current_evaluation.is_pf_range %>
+		<tfoot>
+			<tr>
+				<td colspan="2" style="background-color:#DDDDDD;">
+					<%= text_area "new_job_plan_result_#{job_plan.id}", :name, {class: "form-control", placeholder: "รายงานผลการปฏิบัติงานตามตัวชี้วัด/เกณฑ์การประเมิน..."} %>
+				</td>
+				<td style="width:50px; background-color:#DDDDDD;">
+					<div id="job-plan-result-add-button-<%= job_plan.id %>-other" class="btn btn-info">
+						<i class="fa fa-plus"></i> เพิ่ม
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	<% end %>
+</table>
+<script type="text/javascript">
+	 jQuery(function($) {
+	 	$('#job-plan-result-add-button-<%= job_plan.id %>').click(function(event){
+	 		$.ajax({
+            	url: '<%= add_job_plan_result_pfs_path %>',
+    			type: 'post',
+    			data: {job_result_template_id: $('#new_job_plan_result_<%= job_plan.id %>_job_result_template_id').val(), job_plan_id: <%= job_plan.id %>},
+                dataType: 'script'
+            });
+        });
+	 	$('#job-plan-result-add-button-<%= job_plan.id %>-other').click(function(event){
+	 		$.ajax({
+            	url: '<%= add_job_plan_result_pfs_path %>',
+    			type: 'post',
+    			data: {name: $('#new_job_plan_result_<%= job_plan.id %>_name').val(), job_plan_id: <%= job_plan.id %>},
+                dataType: 'script'
+            });
+        });
+    });
+</script>
+<div class="clearfix"></div>

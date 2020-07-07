@@ -1,0 +1,5 @@
+$('#notification-<%= @notification.id %>').removeClass('bg-info');
+<% unless @notification.url.blank? %>
+	window.location='<%=h @notification.url %>';
+<% end %>
+

@@ -1,0 +1,34 @@
+en:
+  activerecord:
+    models:
+      budget: Budget
+    attributes:
+      budget:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        project: Project
+        sorting: Sorting
+        budget_type: Budget type
+        description: Description
+        amount: Amount
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      budget: งบประมาณ
+    attributes:
+      budget:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        project: โครงการ
+        sorting: ลำดับที่
+        budget_type: ประเภทงบประมาณ
+        description: รายละเอียด
+        amount: จำนวนเงิน (บาท)
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

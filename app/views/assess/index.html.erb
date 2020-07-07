@@ -1,0 +1,48 @@
+<div class="page-header">
+	<h1>
+		แบบประเมิน
+		<small>
+			<%
+				subtitle = "..."
+      			if @role == "director"
+      				subtitle = "#{Evaluation.human_attribute_name(:director)}"
+      			elsif @role == "vice_director"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director)}"
+				elsif @role == "vice_director2"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director2)}"
+				elsif @role == "vice_director3"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director3)}"
+				elsif @role == "secretary"
+      				subtitle = "#{Evaluation.human_attribute_name(:secretary)}"
+      			elsif @role == "committee"
+      				subtitle = "#{Committee.model_name.human}"
+      			elsif @role == "section_leader"
+      				subtitle = "#{Section.human_attribute_name(:leader)} #{@section}"
+      			elsif @role == "section_vice_leader"
+      				subtitle = "#{Section.human_attribute_name(:vice_leader)} #{@section}"
+      			elsif @role == "team_leader"
+      				subtitle = "#{Team.human_attribute_name(:leader)} #{@team}"
+      			elsif @role == "faculty_leader"
+      				subtitle = "#{Faculty.human_attribute_name(:leader)} #{@faculty}"
+      			elsif @role == "faculty_dean"
+      				subtitle = "#{Faculty.human_attribute_name(:dean)} #{@faculty}"
+      			end
+  			%>
+  			ประเมินในฐานะ : <%= subtitle %>
+		</small>
+	</h1>
+	<h4>รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %></h4>
+	สำหรับ <%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+</div>
+
+<% if @current_evaluation %>
+	<div class="row">
+		<div class="col-md-6 bootstrap-grid">
+			<%= render partial: "assess_employee_types", locals: {role: @role} %>
+			<%= render partial: "assess_positions", locals: {role: @role} %>
+		</div>
+		<div class="col-md-6 bootstrap-grid">
+			<%= render partial: "assess_users", locals: {role: @role} %>
+		</div>
+	</div>
+<% end %>

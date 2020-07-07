@@ -1,0 +1,45 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  evaluation_salary_up_id: 
+  user_id: 
+  position_level_id: 
+  salary: 1.5
+  base_salary: 1.5
+  base_salary_min: 1.5
+  base_salary_max: 1.5
+  is_eligible: false
+  is_work_hour_passed: false
+  lost_count: 1
+  late_count: 1
+  leave_count: 1.5
+  point: 1.5
+  percent_of_min_up: 1.5
+  salary_min_up: 1.5
+  percent_of_up: 1.5
+  salary_up: 1.5
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  evaluation_salary_up_id: 
+  user_id: 
+  position_level_id: 
+  salary: 1.5
+  base_salary: 1.5
+  base_salary_min: 1.5
+  base_salary_max: 1.5
+  is_eligible: false
+  is_work_hour_passed: false
+  lost_count: 1
+  late_count: 1
+  leave_count: 1.5
+  point: 1.5
+  percent_of_min_up: 1.5
+  salary_min_up: 1.5
+  percent_of_up: 1.5
+  salary_up: 1.5

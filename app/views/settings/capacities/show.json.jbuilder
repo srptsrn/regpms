@@ -1,0 +1,1 @@
+json.extract! @capacity, :id, :to_s, :workflow_state, :workflow_state_updater_id, :name, :file, :created_at, :updated_at

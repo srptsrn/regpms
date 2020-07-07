@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  e360_user_id: 
+  e360_item_id: 
+  score: 1
+
+two:
+  e360_user_id: 
+  e360_item_id: 
+  score: 1

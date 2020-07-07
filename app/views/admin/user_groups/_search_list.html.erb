@@ -1,0 +1,72 @@
+
+<div class="widget-container-span ui-sortable">
+    <div class="widget-box transparent">
+        <div class="widget-header">
+            <h4 class="lighter"><%= UserGroup.model_name.human %></h4>
+
+            <div class="widget-toolbar no-border">
+                <% unless @form_defaults && @form_defaults[:disabled] %>
+                    <span class="input-icon">
+                        <%= text_field_tag :user_group_search_list_input %>
+                        <i class="icon-search nav-search-icon"></i>
+                    </span>
+                <% end %>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main padding-6 no-padding-left no-padding-right">
+                <ul id="user_group_search_list" class="item-list ui-sortable">
+                    <% @user_groups.each do |user_group| %>
+                        <li class="item-default clearfix">
+                            <label class="inline">
+                                <% unless @form_defaults && @form_defaults[:disabled] %>
+                                <input type="<%= input_type %>" class="ace" name="<%= param_name %>" value="<%= user_group.id %>" checked>
+                                <% end %>
+                                <span class="lbl">
+                                    <%= user_group.name %>
+                                </span>
+                            </label>
+                        </li>
+                    <% end if @user_groups %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<% unless @form_defaults && @form_defaults[:disabled] %>
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('#user_group_search_list_input').keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'GET',
+                        url: '<%= admin_user_groups_url %>',
+                        data: {
+                            q: {
+                                name_cont: $('#user_group_search_list_input').val()
+                            },
+                            limit: 10
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            var data_html = '';
+                            $.each(data, function(index, result) {
+                                data_html += '<li class="item-default clearfix">';
+                                data_html += '<label class="inline">';
+                                data_html += '<input type="<%= input_type %>" class="ace" name="<%= param_name %>" value="' + result.id + '"/>';
+                                data_html += '<span class="lbl"> ';
+                                data_html += result.name;
+                                data_html += '</span>';
+                                data_html += '</label>';
+                                data_html += '</li>';
+                            });  
+                            $('#user_group_search_list').html(data_html);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+<% end %>

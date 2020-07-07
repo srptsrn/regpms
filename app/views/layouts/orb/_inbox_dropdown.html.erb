@@ -1,0 +1,38 @@
+<% if can?(:read, Message) %>
+	<div class="btn-group">
+		<button type="button" class="btn btn-default dropdown-toggle <%= 'disabled' if controller_name == "messages" %>"" data-toggle="dropdown">
+			<i class="entypo-mail"></i>
+			<% if current_user.unseen_messages.size > 0 %>
+				<span class="new"></span>
+			<% end %>
+		</button>
+		<div id="inbox-dropdown" class="dropdown-menu inbox">
+			<div class="dropdown-header"><%= t(:indox) %> <span class="badge pull-right"><%= current_user.unseen_messages.size %></span></div>
+			<div class="dropdown-container">
+				<div class="nano">
+					<div class="nano-content">
+						<ul class="inbox-dropdown">
+							<% current_user.unseen_messages.each do |message| %>
+								<li>
+									<%= link_to message, {remote: true} do %> 
+										<span class="user-image">
+	                    					<% if message.sender_avatar %>
+	                    						<%= image_tag message.sender_avatar.url(:thumb) %>
+	                						<% else %>
+	                    						<%= image_tag "/files/missing/users/thumb.png" %>
+	                						<% end %>
+										</span> 
+										<h4><%= message.topic %></h4>
+										<!-- p><%= message.body %></p -->
+										<span class="label label-default"><i class="entypo-clock"></i> <%= message.created_at.strftime("%b %d %H:%M") %></span> 
+									<% end %> 
+								</li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="dropdown-footer"><%= link_to "See All", messages_url, {class: "btn btn-dark"} %></div>
+		</div>
+	</div>
+<% end %>

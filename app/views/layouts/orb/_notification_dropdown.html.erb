@@ -1,0 +1,31 @@
+<% if can?(:read, Notification) %>
+	<div class="btn-group">
+		<button type="button" class="btn btn-default dropdown-toggle <%= 'disabled' if controller_name == "notifications" %>" data-toggle="dropdown"> 
+			<i class="entypo-megaphone"></i>
+			<% if current_user.unseen_notifications.size > 0 %>
+				<span class="new"></span>
+			<% end %>
+		</button>
+		<div id="notification-dropdown" class="dropdown-menu">
+			<div class="dropdown-header"><%= t(:notifications) %> <span class="badge pull-right"><%= current_user.unseen_notifications.size %></span></div>
+			<div class="dropdown-container">
+				<div class="nano">
+					<div class="nano-content">
+						<ul class="notification-dropdown">
+							<% current_user.unseen_notifications.each do |notification| %>
+								<li class="bg-white">
+									<%= link_to seen_notifications_url(id: notification.id), {remote: true, style: "padding-left:10px;"} do %> 
+										<!-- span class="notification-icon"><i class="fa fa-bolt"></i></span -->
+										<h6 class="text-black no-margin"><%= notification.description %></h6>
+										<span class="label label-default text-black"><i class="entypo-clock"></i> <%= distance_of_time_in_words_to_now notification.created_at %></span> 
+									<% end %> 
+								</li>
+							<% end %>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="dropdown-footer"><%= link_to "See All", notifications_url, {class: "btn btn-dark"} %></div>
+		</div>
+	</div>
+<% end %>

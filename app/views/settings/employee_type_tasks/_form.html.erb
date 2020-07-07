@@ -1,0 +1,39 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@employee_type_task.respond_to?(:current_state) && @employee_type_task.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @employee_type_task], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: EmployeeTypeTask, resource: @employee_type_task, f: f,
+	            resources_url: settings_employee_type_tasks_path(q: params[:q], page: params[:page]),
+	            resource_url: @employee_type_task.new_record? ? nil : settings_employee_type_task_path(@employee_type_task, q: params[:q], page: params[:page]),
+	            edit_resource_url: @employee_type_task.new_record? ? nil : edit_settings_employee_type_task_path(@employee_type_task, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+	        	<%= f.input :sorting %>
+		        <%= f.association :employee_type_task_group, collection: (EmployeeTypeTaskGroup.all + (f.object.employee_type_task_group.nil? ? [] : [f.object.employee_type_task_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/employee_type_task_groups/chosen_select", locals: {object_name: :employee_type_task, no_create: true} %>
+		        <%= f.association :task, collection: (Task.all + (f.object.task.nil? ? [] : [f.object.task])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/tasks/chosen_select", locals: {object_name: :employee_type_task, no_create: true} %>
+	        	<%= f.input :weight %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: EmployeeTypeTask, resource: @employee_type_task, f: f,
+			            resources_url: settings_employee_type_tasks_path(q: params[:q], page: params[:page]),
+			            resource_url: @employee_type_task.new_record? ? nil : settings_employee_type_task_path(@employee_type_task, q: params[:q], page: params[:page]),
+			            edit_resource_url: @employee_type_task.new_record? ? nil : edit_settings_employee_type_task_path(@employee_type_task, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

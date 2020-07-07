@@ -1,0 +1,7 @@
+<% if @error_message.blank? %>
+	$('#job-plan-result-file-<%= @job_plan_result_file.id %>').replaceWith("<%=j render(partial: "row_job_plan_result_file", locals: {job_plan_result_file: @job_plan_result_file}) %>");
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>
+
+init_input_chosen();

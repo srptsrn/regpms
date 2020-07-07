@@ -1,0 +1,117 @@
+  accepts_nested_attributes_for :cars, :reject_if => :all_blank, :allow_destroy => true
+
+
+class Admin::UsersController < AdminController
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def user_params
+      params.require(:user).permit(:username, :gender, :nickname, :firstname, :lastname, :phone, :email, :password, :password_confirmation, :locale, :timezone, cars_attributes: [:id, :name, :date, :time, :_destroy])
+    end
+end
+
+
+
+<div class="form-inputs">
+    <%= f.input :locale, collection: $LOCALES, label_html: {class: 'col-sm-3 no-padding-right'}, input_html: {class: 'col-xs-11 col-md-9 col-lg-6'} %>
+    <%= f.input :timezone, collection: ActiveSupport::TimeZone::MAPPING.collect {|tz| [ActiveSupport::TimeZone.create(tz[0]), tz[0]]}.sort_by {|tz| [tz[0]]}, label_html: {class: 'col-sm-3 no-padding-right'}, input_html: {class: 'col-xs-11 col-md-9 col-lg-6'} %>
+    <div class="control-group">
+        <div class="form-group">
+            <div class="control-label col-sm-3 no-padding-right">
+                <%= f.label :cars %>
+            </div>
+            <div class="col-sm-9">
+                <%= render partial: 'car_form', locals: {f: f} %>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+  # autocomplete :user, :username,
+  #   :display_value => :to_s, #custom method to display
+  #   :extra_data => [:nickname, :firstname, :lastname], #fetch attributes to support display_value
+  #   :full => false
+  
+  def autocomplete_user_username
+
+    term = params[:term]
+
+    if term && !term.blank?
+      p = {:username_or_nickname_or_firstname_or_lastname_cont => term}
+      q = User.search(p)
+      q.sorts = 'username ASC'
+      items = q.result
+    else
+      items = {}
+    end
+
+    render :json => json_for_autocomplete(items, :to_s, [:nickname, :firstname, :lastname])
+  end
+
+
+
+
+
+
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+          <% unless action_name == "show" %>
+              <th>
+          <%= link_to_add_association f, :cars, class: "btn btn-primary btn-xs",
+            "data-association-insertion-node" => "#car_fields",
+            "data-association-insertion-method" => :append do %>
+            <i class='fa fa-plus'></i>
+          <% end %>
+              </th>
+            <% end %>
+            <th><%= Car.human_attribute_name(:name) %></th>
+            <th><%= Car.human_attribute_name(:date) %></th>
+            <th><%= Car.human_attribute_name(:time) %></th>
+        </tr>
+    </thead>
+
+    <tbody id="car_fields">
+    <%= f.simple_fields_for :cars do |car| %>
+      <%= render 'car_fields', :f => car %>
+    <% end %>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+<tr class="nested-fields">
+    <% unless action_name == "show" %>
+        <td>
+            <%= link_to_remove_association f, class: "btn btn-xs btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+        </td>
+    <% end %>
+    <td>
+        <%= f.input_field :name %>
+    </td>
+    <td>
+        <%#= f.input_field :date, input_html: {value: (!f.object.date.nil? ? f.object.date.strftime("%d/%m/%Y") : nil), "data-date-format" => "dd/mm/yyyy"} %>
+    </td>
+    <td>
+        <%#= f.input_field :time %>
+    </td>
+</tr>
+
+
+

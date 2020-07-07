@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  job_template_id: 
+  name: MyString
+  unit: MyString
+  duration: 1
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  job_template_id: 
+  name: MyString
+  unit: MyString
+  duration: 1

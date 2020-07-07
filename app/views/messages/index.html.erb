@@ -1,0 +1,82 @@
+<div class="page-header">
+	<h1><%= Message.model_name.human %><small><%= action_name %></small></h1>
+</div>
+			      
+<!-- Widget Row Start grid -->
+<div class="row" id="powerwidgets">
+	<div class="col-md-12 bootstrap-grid">
+            
+		<!-- New widget -->
+		<div class="powerwidget cold-grey" id="mailinbox" data-widget-editbutton="false">
+			<div class="inner-spacer">
+                <div class="mailinbox">
+              		<div class="row">
+                    	<div class="col-md-1">
+                      		<div class="left-content">
+              					<%= render partial: "left_content" %>
+                      		</div>
+                    	</div>
+                    	<div class="col-md-11">
+                      		<div class="right-content clearfix">
+              					<%= render partial: "top_content" %>
+                        
+                        		<div class="table-relative table-responsive">
+                          			<table class="table table-condensed table-striped margin-0px">
+                            			<thead>
+                              				<tr>
+                                				<th style="width:50px;"></th>
+                            					<th style="width:150px;"><%= sort_link @q, Message.human_attribute_name(:user) %></th>
+                                				<th><%= Message.human_attribute_name(:body) %></th>
+                                				<th style="width:150px;"><%= sort_link @q, :created_at, Message.human_attribute_name(:date) %></th>
+                              				</tr>
+                            			</thead>
+                            			<tbody>
+                            				<% @messages.each do |message| %>
+                            					<% message_url = message_url(message.message_id, list: params[:list], q: params[:q], ocl: message.class, oid: message.id) %>
+	                              				<tr <%= "class='unread'".html_safe if message.current_state.to_sym == :unseen %>>
+	                                				<td>
+	                            						<%= link_to message_url do %>
+		                                					<div class="user-image">
+			                                					<% if message.sender_avatar %>
+			                                						<%= image_tag message.sender_avatar.url(:thumb) %>
+		                                						<% else %>
+			                                						<%= image_tag "/files/missing/users/thumb.png" %>
+		                                						<% end %>
+		                                  					</div>
+	                            						<% end %> 
+	                              					</td>
+	                                				<td>
+	                            						<%= link_to message_url do %>
+	                                						<%= message.sender %>
+	                            						<% end %> 
+	                            					</td>
+	                            					<td>
+	                            						<%= link_to message_url do %>
+	                            							<%= message.topic %>
+	                            						<% end %> 
+	                        						</td>
+	                                				<td>
+	                            						<%= link_to message_url do %>
+	                                						<%= message.sent_at ? message.sent_at.strftime("%d %b | %H:%M") : "" %>
+	                            						<% end %> 
+	                            					</td>
+	                              				</tr>
+                              				<% end %>
+                            			</tbody>
+                          			</table>
+                        		</div>
+                        		<div class="margin-top">
+									<%= will_paginate @messages %>
+                      			</div>
+                    		</div>
+                  		</div>
+                	</div>
+                	
+              	</div>
+            </div>
+        </div>
+        <!-- End Widget --> 
+		
+	</div>
+</div>
+<!-- /Widgets Row End Grid-->

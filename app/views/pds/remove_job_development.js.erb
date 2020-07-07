@@ -1,0 +1,5 @@
+<% if @error_message.blank? %>
+	$('#job-development-row-<%= @job_development.id %>').effect("explode");
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>

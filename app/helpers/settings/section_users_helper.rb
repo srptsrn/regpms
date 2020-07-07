@@ -1,0 +1,2 @@
+module Settings::SectionUsersHelper
+end

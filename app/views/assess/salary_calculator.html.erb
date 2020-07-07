@@ -1,0 +1,624 @@
+<style>
+	.form-control-display {
+		border:0;
+		background:transparent;    
+		height: 38px;
+    	padding: 8px 10px;
+	    width: 100%;
+	}
+</style>
+<div class="page-header">
+	<h1>
+		คำนวนเงินเดือน
+		<small>
+			<%
+				subtitle = "..."
+				task_scores = []
+				ability_scores = []
+      			if @role == "director"
+      				subtitle = "#{Evaluation.human_attribute_name(:director)}"
+  					task_scores = EvaluationScoreCard::BOARD_TASK_SCORES
+  					ability_scores = EvaluationScoreCard::BOARD_ABILITY_SCORES
+      			elsif @role == "vice_director"
+      				subtitle = "#{Evaluation.human_attribute_name(:vice_director)}"
+  					task_scores = EvaluationScoreCard::BOARD_TASK_SCORES
+  					ability_scores = EvaluationScoreCard::BOARD_ABILITY_SCORES
+      			elsif @role == "staff"
+      				subtitle = "บุคลากร"
+  					task_scores = EvaluationScoreCard::STAFF_TASK_SCORES
+  					ability_scores = EvaluationScoreCard::STAFF_ABILITY_SCORES
+      			end
+  			%>
+		</small>
+	</h1>
+	<h4>
+		รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %>
+		<%= @current_evaluation.is_360? ? "(360 องศา)" : "" %>
+	</h4>
+	สำหรับ <%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+</div>
+
+<% if @current_evaluation %>
+	<div class="row">
+		<div class="col-md-12 bootstrap-grid">
+			<% unless @role.blank? %>
+				<div class="powerwidget red">
+					<div class="inner-spacer">
+						<%= form_tag(save_salary_calculator_assess_url(@role, evid: @current_evaluation.id), {id: "myform"}) do %>
+							<div class="well">
+								<div class="col-xs-6">
+									<table class="table table-bordered">
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:percent_of_change) %></th>
+											<td><%= number_field :evaluation_salary_up, :percent_of_change, {class: "form-control text-right", step: 0.01} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:total_amount) %></th>
+											<td><%= number_field :evaluation_salary_up, :total_amount, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:total_quota_amount) %></th>
+											<td><%= number_field :evaluation_salary_up, :total_quota_amount, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:total_eligible_amount) %></th>
+											<td><%= number_field :evaluation_salary_up, :total_eligible_amount, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:percent_of_eligible) %></th>
+											<td><%= number_field :evaluation_salary_up, :percent_of_eligible, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:total_salary_min_up) %></th>
+											<td><%= number_field :evaluation_salary_up, :total_salary_min_up, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:total_quota_amount2) %></th>
+											<td><%= number_field :evaluation_salary_up, :total_quota_amount2, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:percent_of_quota_amount2) %></th>
+											<td><%= number_field :evaluation_salary_up, :percent_of_quota_amount2, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+										<tr>
+											<th><%= EvaluationSalaryUp.human_attribute_name(:avg_point) %></th>
+											<td><%= number_field :evaluation_salary_up, :avg_point, {class: "form-control text-right", readonly: true} %></td>
+										</tr>
+									</table>
+								</div>
+								<div class="col-xs-6">
+									<table class="table table-bordered">
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level_label) %></th>
+											<th nowrap style="width:100px;"><%= EvaluationSalaryUp.human_attribute_name(:point_level) %></th>
+											<th nowrap style="width:100px;"><%= EvaluationSalaryUp.human_attribute_name(:min_change) %></th>
+											<th nowrap style="width:100px;"><%= EvaluationSalaryUp.human_attribute_name(:max_change) %></th>
+										</tr>
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level1_label) %></th>
+											<td><%= number_field :evaluation_salary_up, :point_level1, {class: "form-control point_level text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :min_change1, {class: "form-control min_change text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :max_change1, {class: "form-control max_change text-right"} %></td>
+										</tr>
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level2_label) %></th>
+											<td><%= number_field :evaluation_salary_up, :point_level2, {class: "form-control point_level text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :min_change2, {class: "form-control min_change text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :max_change2, {class: "form-control max_change text-right"} %></td>
+										</tr>
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level3_label) %></th>
+											<td><%= number_field :evaluation_salary_up, :point_level3, {class: "form-control point_level text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :min_change3, {class: "form-control min_change text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :max_change3, {class: "form-control max_change text-right"} %></td>
+										</tr>
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level4_label) %></th>
+											<td><%= number_field :evaluation_salary_up, :point_level4, {class: "form-control point_level text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :min_change4, {class: "form-control min_change text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :max_change4, {class: "form-control max_change text-right"} %></td>
+										</tr>
+										<tr>
+											<th nowrap><%= EvaluationSalaryUp.human_attribute_name(:point_level5_label) %></th>
+											<td><%= number_field :evaluation_salary_up, :point_level5, {class: "form-control point_level text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :min_change5, {class: "form-control min_change text-right"} %></td>
+											<td><%= number_field :evaluation_salary_up, :max_change5, {class: "form-control max_change text-right"} %></td>
+										</tr>
+									</table>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="col-xs-12 no-padding" style="overflow-x:auto;">
+								<table class="table table-bordered table-hover no-margin" style="min-width:1800px;">
+						          	<thead>
+						            	<tr>
+						            		<th style="width:50px; text-align:right;"></th>
+						                    <th><%= t(:personel) %></th>
+						                    <th class="hide"><%= Position.model_name.human %></th>
+						                    <th class="hide"><%= PositionType.model_name.human %></th>
+						                    <th class="hide"><%= PositionLevel.model_name.human %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:salary) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:base_salary) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:is_eligible) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:point) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:percent_of_min_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:salary_min_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:percent_of_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:salary_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:total_salary_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:total_percent_of_up) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:is_out_of_range) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:new_salary) %></th>
+						                    <th class="text-center" style="width:120px;"><%= EvaluationSalaryUpUser.human_attribute_name(:extra_money) %></th>
+						            	</tr>
+						          	</thead>
+						          	<tbody>
+						          		<% 
+						          			users = current_user.assess_to_cards(@current_evaluation, @role, {})
+					      					users -= [current_user]
+					      					
+					      					evaluation_score_cards = EvaluationScoreCard.where(["role = ? AND evaluation_id = ? AND committee_id = ?", @role, @current_evaluation.id, current_user.id])
+					      					
+					      					evaluation_salary_up_users = EvaluationSalaryUpUser.where(["evaluation_salary_up_id = ?", @evaluation_salary_up.id])
+					      					
+					      					base_salaries = @current_evaluation.base_salaries
+					          			%>
+					          			<% @current_evaluation.evaluation_employee_types.each do |evaluation_employee_type| %>
+					          				<% 
+					          					employee_type = evaluation_employee_type.employee_type
+					          					us = users.select {|u| u.employee_type_id == employee_type.id} 
+					          				%>
+					          				<tr>
+					          					<th colspan="17" class="text-white" style="background-color:#000000;">
+					          						<%= employee_type %>
+					          					</th>
+					          				</tr>
+					          				<% Section.all_enabled.each do |section| %>
+					          					<% uuss = us.select {|u| u.sections.first && u.sections.first.id == section.id} %>
+					          					<% if uuss.size > 0 %>
+							          				<tr>
+							          					<th colspan="17" class="text-white" style="background-color:#666666;">
+							          						<%= section %>
+							          					</th>
+							          				</tr>
+						          					<% count = 0 %>
+								          			<% uuss.sort_by {|u| u.to_s}.each do |user| %>
+								          				<%
+								          					evaluation_score_card = evaluation_score_cards.select {|esc| esc.user_id == user.id}.first
+								          					evaluation_score_card = EvaluationScoreCard.new if evaluation_score_card.nil?
+								          					
+								          					evaluation_salary_up_user = evaluation_salary_up_users.select {|esc| esc.user_id == user.id}.first
+								          					evaluation_salary_up_user = EvaluationSalaryUpUser.new(position_level_id: user.position_level_id) if evaluation_salary_up_user.nil?
+								          					
+								          					base_salary = base_salaries.select {|bslr| bslr.position_level_id == user.position_level_id}.first
+								          					base_salary = BaseSalary.new if base_salary.nil?
+								          					
+								          					row_title = "#{user.prefix_firstname_lastname}\r\n"
+								          					row_title += "#{user.position_name}\r\n"
+								          					row_title += "#{user.position_type_name}\r\n"
+								          					row_title += "#{user.position_level_name}\r\n"
+								          					row_title += "เงินเดือนเดิม #{evaluation_salary_up_user.salary.to_s_decimal_comma}\r\n"
+								          					row_title += "ฐานการคำนวน #{evaluation_salary_up_user.base_salary.to_s_decimal_comma}\r\n"
+								          					row_title += "คะแนนประเมิน #{evaluation_salary_up_user.avg_point.to_s_decimal}\r\n"
+								          					
+								          				%>
+									            		<tr title="<%= row_title %>">
+									            			<td style="vertical-align:top; text-align:right;"><%= count += 1 %>.</td>
+															<td class="text-top">
+																<%= user.prefix_firstname_lastname %>
+																<%= hidden_field_tag "user_ids[]", user.id %>
+																<div class="clearfix"></div>
+																<%= user.position_name %>
+																<div class="clearfix"></div>
+																<%= user.position_type_name %>
+																<div class="clearfix"></div>
+																<%= user.position_level_name %>
+															</td>
+															<td class="text-top hide">
+																<%= user.position_name %>
+															</td>
+															<td class="text-top hide">
+																<%= user.position_type_name %>
+															</td>
+															<td class="text-top hide">
+																<%= user.position_level_name %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :position_level_id, {value: evaluation_salary_up_user.position_level_id} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :salary, {value: evaluation_salary_up_user.salary.to_s_decimal, class: "form-control-display salary text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :base_salary, {value: evaluation_salary_up_user.base_salary.to_s_decimal, class: "form-control-display base-salary text-right", readonly: true} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_min, {value: evaluation_salary_up_user.base_salary_min} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_max, {value: evaluation_salary_up_user.base_salary_max} %>
+																
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_low, {value: base_salary.base_low} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_min_low, {value: base_salary.min_low} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_max_low, {value: base_salary.max_low} %>
+																
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_high, {value: base_salary.base_high} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_min_high, {value: base_salary.min_high} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :base_salary_max_high, {value: base_salary.max_high} %>
+															</td>
+															<td class="text-top text-center">
+																<%= check_box "evaluation_salary_up_user_#{user.id}", :is_eligible, {checked: evaluation_salary_up_user.is_eligible, class: "form-control is_eligible"} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :avg_point, {value: evaluation_salary_up_user.avg_point_cal.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+																<div class="clearfix"></div>
+																<small class="text-cold-grey">(<%= evaluation_salary_up_user.points.join(" + ") %>) / <%= evaluation_salary_up_user.points.size.to_i %></small>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :percent_of_min_up, {value: evaluation_salary_up_user.percent_of_min_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :salary_min_up, {value: evaluation_salary_up_user.salary_min_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :percent_of_up, {value: evaluation_salary_up_user.percent_of_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :salary_up, {value: evaluation_salary_up_user.salary_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :total_salary_up, {value: evaluation_salary_up_user.total_salary_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :total_percent_of_up, {value: evaluation_salary_up_user.total_percent_of_up.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+																<%= hidden_field "evaluation_salary_up_user_#{user.id}", :max_change, {value: evaluation_salary_up_user.max_change} %>
+															</td>
+															<td class="text-top text-center">
+																<div id="evaluation_salary_up_user_<%= user.id %>_is_out_of_range" class="<%= 'hide' unless evaluation_salary_up_user.is_out_of_range %> btn btn-danger btn-xs">เกิน</div>
+																<div id="evaluation_salary_up_user_<%= user.id %>_is_in_of_range" class="<%= 'hide' if evaluation_salary_up_user.is_out_of_range %> btn btn-default btn-xs">ไม่เกิน</div>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :new_salary, {value: evaluation_salary_up_user.new_salary.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+															<td class="text-top text-center">
+																<%= text_field "evaluation_salary_up_user_#{user.id}", :extra_money, {value: evaluation_salary_up_user.extra_money.to_s_decimal, class: "form-control-display text-right", readonly: true} %>
+															</td>
+									                	</tr>
+								                	<% end %>
+						                		<% end %>
+						                	<% end %>
+					                	<% end %>
+						          	</tbody>
+						        </table>
+					        </div>
+					        <div class="col-xs-12">
+	          					<%= submit_tag t(:save), {class: "btn btn-success pull-right"} %>
+	          				</div>
+						<% end %>
+				  	</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<script type="text/javascript">
+	
+		function toFixedUp(num,dec){
+		  	if(typeof(pre) != 'undefined' && pre != null){ var decimals=dec;  } else{var decimals=2;}
+			
+		  	num *= Math.pow(10,decimals);
+		  	num = (Math.round(num,decimals) + (((num - Math.round(num,decimals))>=0.4)?1:0)) / Math.pow(10,decimals);
+		 	return num.toFixed(decimals);
+		}
+		
+		function calAmount(){
+			
+			// 
+			point_level1x = parseFloat($('#evaluation_salary_up_point_level1').val());
+			point_level1 = !isNaN(point_level1x) ? point_level1x : 0;
+			point_level2x = parseFloat($('#evaluation_salary_up_point_level2').val());
+			point_level2 = !isNaN(point_level2x) ? point_level2x : 0;
+			point_level3x = parseFloat($('#evaluation_salary_up_point_level3').val());
+			point_level3 = !isNaN(point_level3x) ? point_level3x : 0;
+			point_level4x = parseFloat($('#evaluation_salary_up_point_level4').val());
+			point_level4 = !isNaN(point_level4x) ? point_level4x : 0;
+			point_level5x = parseFloat($('#evaluation_salary_up_point_level5').val());
+			point_level5 = !isNaN(point_level5x) ? point_level5x : 0;
+			
+			min_change1x = parseFloat($('#evaluation_salary_up_min_change1').val());
+			min_change1 = !isNaN(min_change1x) ? min_change1x : 0;
+			min_change2x = parseFloat($('#evaluation_salary_up_min_change2').val());
+			min_change2 = !isNaN(min_change2x) ? min_change2x : 0;
+			min_change3x = parseFloat($('#evaluation_salary_up_min_change3').val());
+			min_change3 = !isNaN(min_change3x) ? min_change3x : 0;
+			min_change4x = parseFloat($('#evaluation_salary_up_min_change4').val());
+			min_change4 = !isNaN(min_change4x) ? min_change4x : 0;
+			min_change5x = parseFloat($('#evaluation_salary_up_min_change5').val());
+			min_change5 = !isNaN(min_change5x) ? min_change5x : 0;
+			
+			max_change1x = parseFloat($('#evaluation_salary_up_max_change1').val());
+			max_change1 = !isNaN(max_change1x) ? max_change1x : 0;
+			max_change2x = parseFloat($('#evaluation_salary_up_max_change2').val());
+			max_change2 = !isNaN(max_change2x) ? max_change2x : 0;
+			max_change3x = parseFloat($('#evaluation_salary_up_max_change3').val());
+			max_change3 = !isNaN(max_change3x) ? max_change3x : 0;
+			max_change4x = parseFloat($('#evaluation_salary_up_max_change4').val());
+			max_change4 = !isNaN(max_change4x) ? max_change4x : 0;
+			max_change5x = parseFloat($('#evaluation_salary_up_max_change5').val());
+			max_change5 = !isNaN(max_change5x) ? max_change5x : 0;
+			
+			// TOTAL AMOUNT
+			total_amount = 0;
+			point_size = 0;
+			total_point = 0;
+			$('.salary').each(function(){
+			
+				salary_id = this.id;
+				
+				point_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'avg_point');
+				
+				base_salary_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary');
+				base_salary_min_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_min');
+				base_salary_max_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_max');
+				
+				base_salary_low_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_low');
+				base_salary_low_min_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_min_low');
+				base_salary_low_max_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_max_low');
+				
+				base_salary_high_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_high');
+				base_salary_high_min_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_min_high');
+				base_salary_high_max_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_max_high');
+				
+				salaryx = parseFloat($('#' + salary_id).val());
+				salary = !isNaN(salaryx) ? salaryx : 0;
+				
+				base_salaryx = parseFloat($('#evaluation_salary_up_user_' + base_salary_id).val());
+				base_salary = !isNaN(base_salaryx) ? base_salaryx : 0;
+				
+				base_salary_minx = parseFloat($('#evaluation_salary_up_user_' + base_salary_min_id).val());
+				base_salary_min = !isNaN(base_salary_minx) ? base_salary_minx : 0;
+				
+				base_salary_maxx = parseFloat($('#evaluation_salary_up_user_' + base_salary_max_id).val());
+				base_salary_max = !isNaN(base_salary_maxx) ? base_salary_maxx : 0;
+				
+				base_salary_lowx = parseFloat($('#evaluation_salary_up_user_' + base_salary_low_id).val());
+				base_salary_low = !isNaN(base_salary_lowx) ? base_salary_lowx : 0;
+				
+				base_salary_low_minx = parseFloat($('#evaluation_salary_up_user_' + base_salary_low_min_id).val());
+				base_salary_low_min = !isNaN(base_salary_low_minx) ? base_salary_low_minx : 0;
+				
+				base_salary_low_maxx = parseFloat($('#evaluation_salary_up_user_' + base_salary_low_max_id).val());
+				base_salary_low_max = !isNaN(base_salary_low_maxx) ? base_salary_low_maxx : 0;
+				
+				base_salary_highx = parseFloat($('#evaluation_salary_up_user_' + base_salary_high_id).val());
+				base_salary_high = !isNaN(base_salary_highx) ? base_salary_highx : 0;
+				
+				base_salary_high_minx = parseFloat($('#evaluation_salary_up_user_' + base_salary_high_min_id).val());
+				base_salary_high_min = !isNaN(base_salary_high_minx) ? base_salary_high_minx : 0;
+				
+				base_salary_high_maxx = parseFloat($('#evaluation_salary_up_user_' + base_salary_high_max_id).val());
+				base_salary_high_max = !isNaN(base_salary_high_maxx) ? base_salary_high_maxx : 0;
+					
+				if(salary >= base_salary_low_min && salary <= base_salary_low_max){
+					$('#evaluation_salary_up_user_' + base_salary_id).val(base_salary_low.toFixed(2));
+					$('#evaluation_salary_up_user_' + base_salary_min_id).val(base_salary_low_min.toFixed(2));
+					$('#evaluation_salary_up_user_' + base_salary_max_id).val(base_salary_low_max.toFixed(2));
+				}else if(salary > base_salary_low_max){
+					$('#evaluation_salary_up_user_' + base_salary_id).val(base_salary_high.toFixed(2));
+					$('#evaluation_salary_up_user_' + base_salary_min_id).val(base_salary_high_min.toFixed(2));
+					$('#evaluation_salary_up_user_' + base_salary_max_id).val(base_salary_high_max.toFixed(2));
+				}else{
+					$('#evaluation_salary_up_user_' + base_salary_id).val('0.00');
+					$('#evaluation_salary_up_user_' + base_salary_min_id).val('0.00');
+					$('#evaluation_salary_up_user_' + base_salary_max_id).val('0.00');
+				}
+				
+				$(this).val(salary.toFixed(2));
+				
+			    total_amount += salary;
+				
+				salary_min_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'salary_min_up');
+				percent_of_min_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'percent_of_min_up');
+				salary_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'salary_up');
+				percent_of_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'percent_of_up');
+			    
+				$('#evaluation_salary_up_user_' + salary_min_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + percent_of_min_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + salary_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + percent_of_up_id).val('0.00');
+				
+				pointx = parseFloat($('#evaluation_salary_up_user_' + point_id).val());
+				point = !isNaN(pointx) ? pointx : 0;
+				
+			    if(point >= point_level2){
+					point_size += 1;
+					total_point += point;
+			    }
+				
+				salary_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'salary_up');
+				percent_of_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'percent_of_up');
+				total_salary_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'total_salary_up');
+				total_percent_of_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'total_percent_of_up');
+				
+				$('#evaluation_salary_up_user_' + salary_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + percent_of_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + total_salary_up_id).val('0.00');
+				$('#evaluation_salary_up_user_' + total_percent_of_up_id).val('0.00');
+			});
+			$('#evaluation_salary_up_total_amount').val(total_amount.toFixed(2));
+			
+			// QUOTA AMOUNT
+			total_amountx = parseFloat($('#evaluation_salary_up_total_amount').val());
+			total_amount = !isNaN(total_amountx) ? total_amountx : 0;
+
+			percent_of_changex = parseFloat($('#evaluation_salary_up_percent_of_change').val());
+			percent_of_change = !isNaN(percent_of_changex) ? percent_of_changex : 0;
+			
+			total_quota_amount = Math.floor((percent_of_change * total_amount) / 1000.0) * 10;
+			
+			$('#evaluation_salary_up_total_quota_amount').val(total_quota_amount.toFixed(2));
+
+			// Eligible Amount
+			total_eligible_amount = 0;
+			total_salary_min_up = 0;
+			$('.is_eligible:checked').each(function(){
+				
+				salary_id = this.id.replace('is_eligible', 'salary');
+				base_salary_id = this.id.replace('is_eligible', 'base_salary');
+				point_id = this.id.replace('is_eligible', 'avg_point');
+				salary_min_up_id = this.id.replace('is_eligible', 'salary_min_up');
+				percent_of_min_up_id = this.id.replace('is_eligible', 'percent_of_min_up');
+				
+				amountx = parseFloat($('#' + salary_id).val());
+				amount = !isNaN(amountx) ? amountx : 0;
+				
+				pointx = parseFloat($('#' + point_id).val());
+				point = !isNaN(pointx) ? pointx : 0;
+				
+				base_salaryx = parseFloat($('#' + base_salary_id).val());
+				base_salary = !isNaN(base_salaryx) ? base_salaryx : 0;
+				
+			    total_eligible_amount += amount;
+			    
+			    salary_min_up = 0
+			    if(point >= point_level5){
+			    	salary_min_up = Math.ceil((base_salary * min_change5) / 1000) * 10;
+					$('#' + salary_min_up_id).val(salary_min_up.toFixed(2));
+					$('#' + percent_of_min_up_id).val(min_change5.toFixed(2));
+			    }else  if(point >= point_level4){
+			    	salary_min_up = Math.ceil((base_salary * min_change4) / 1000) * 10;
+					$('#' + salary_min_up_id).val(salary_min_up.toFixed(2));
+					$('#' + percent_of_min_up_id).val(min_change4.toFixed(2));
+			    }else  if(point >= point_level3){
+			    	salary_min_up = Math.ceil((base_salary * min_change3) / 1000) * 10;
+					$('#' + salary_min_up_id).val(salary_min_up.toFixed(2));
+					$('#' + percent_of_min_up_id).val(min_change3.toFixed(2));
+			    }else  if(point >= point_level2){
+			    	salary_min_up = Math.ceil((base_salary * min_change2) / 1000) * 10;
+					$('#' + salary_min_up_id).val(salary_min_up.toFixed(2));
+					$('#' + percent_of_min_up_id).val(min_change2.toFixed(2));
+			    }else if(point >= point_level1){
+			    	salary_min_up = Math.ceil((base_salary * min_change1) / 1000) * 10;
+					$('#' + salary_min_up_id).val(salary_min_up.toFixed(2));
+					$('#' + percent_of_min_up_id).val(min_change1.toFixed(2));
+			    }else {
+					$('#' + salary_min_up_id).val('0.00');
+					$('#' + percent_of_min_up_id).val('0.00');
+			    }
+			    
+				total_salary_min_up += salary_min_up;
+				
+			});
+			
+			total_quota_amount2 = total_quota_amount - total_salary_min_up;
+			
+			percent_of_eligible = total_eligible_amount > 0 ? (total_quota_amount / total_eligible_amount) * 100 : 0;
+			
+			percent_of_quota_amount2 = total_eligible_amount > 0 ? (total_quota_amount2 / total_eligible_amount) * 100 : 0;
+			
+			avg_point = point_size > 0 ? Math.ceil(total_point / point_size) : 0;
+			
+			$('#evaluation_salary_up_total_eligible_amount').val(total_eligible_amount.toFixed(2));
+			$('#evaluation_salary_up_total_salary_min_up').val(total_salary_min_up.toFixed(2));
+			$('#evaluation_salary_up_total_quota_amount2').val(total_quota_amount2.toFixed(2));
+			$('#evaluation_salary_up_percent_of_eligible').val(toFixedUp(percent_of_eligible, 2));
+			$('#evaluation_salary_up_percent_of_quota_amount2').val(toFixedUp(percent_of_quota_amount2, 2));
+			$('#evaluation_salary_up_avg_point').val(avg_point);
+			
+			$('.is_eligible:checked').each(function(){
+				
+				base_salary_id = this.id.replace('is_eligible', 'base_salary');
+				point_id = this.id.replace('is_eligible', 'avg_point');
+				salary_up_id = this.id.replace('is_eligible', 'salary_up');
+				total_percent_of_up_id = this.id.replace('is_eligible', 'total_percent_of_up');
+				percent_of_up_id = this.id.replace('is_eligible', 'percent_of_up');
+				percent_of_min_up_id = this.id.replace('is_eligible', 'percent_of_min_up');
+				salary_min_up_id = this.id.replace('is_eligible', 'salary_min_up');
+				total_salary_up_id = this.id.replace('is_eligible', 'total_salary_up');
+				
+				base_salaryx = parseFloat($('#' + base_salary_id).val());
+				base_salary = !isNaN(base_salaryx) ? base_salaryx : 0;
+				
+				pointx = parseFloat($('#' + point_id).val());
+				point = !isNaN(pointx) ? pointx : 0;
+				
+				salary_min_upx = parseFloat($('#' + salary_min_up_id).val());
+				salary_min_up = !isNaN(salary_min_upx) ? salary_min_upx : 0;
+				
+				percent_of_min_upx = parseFloat($('#' + percent_of_min_up_id).val());
+				percent_of_min_up = !isNaN(percent_of_min_upx) ? percent_of_min_upx : 0;
+				
+		    	percent_of_up = Math.floor(((point  * percent_of_quota_amount2) / avg_point) * 100) / 100;
+		    	salary_up = Math.ceil((base_salary * percent_of_up) / 1000) * 10;
+		    	
+		    	total_percent_of_up = percent_of_up + percent_of_min_up;
+		    	total_salary_up = salary_up + salary_min_up;
+		    	
+				$('#' + salary_up_id).val(salary_up.toFixed(2));
+				$('#' + percent_of_up_id).val(percent_of_up.toFixed(2));
+				$('#' + total_percent_of_up_id).val(total_percent_of_up.toFixed(2));
+				$('#' + total_salary_up_id).val(total_salary_up.toFixed(2));
+			    
+			});
+			
+			// new salary
+			$('.salary').each(function(){
+			
+				salary_id = this.id;
+				new_salary_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'new_salary');
+				total_salary_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'total_salary_up');
+				max_salary_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'base_salary_max');
+				extra_money_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'extra_money');
+				total_percent_of_up_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'total_percent_of_up');
+				max_change_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'max_change');
+				is_out_of_range_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'is_out_of_range');
+				is_in_of_range_id = salary_id.replace('evaluation_salary_up_user_', '').replace('salary', 'is_in_of_range');
+				
+				salaryx = parseFloat($('#' + salary_id).val());
+				salary = !isNaN(salaryx) ? salaryx : 0;
+				
+				max_salaryx = parseFloat($('#evaluation_salary_up_user_' + max_salary_id).val());
+				max_salary = !isNaN(max_salaryx) ? max_salaryx : 0;
+				
+				total_salary_upx = parseFloat($('#evaluation_salary_up_user_' + total_salary_up_id).val());
+				total_salary_up = !isNaN(total_salary_upx) ? total_salary_upx : 0;
+				
+				max_changex = parseFloat($('#evaluation_salary_up_user_' + max_change_id).val());
+				max_change = !isNaN(max_changex) ? max_changex : 0;
+				
+				total_percent_of_upx = parseFloat($('#evaluation_salary_up_user_' + total_percent_of_up_id).val());
+				total_percent_of_up = !isNaN(total_percent_of_upx) ? total_percent_of_upx : 0;
+				
+				new_salary = salary + total_salary_up;
+				extra_money = 0;
+				if(new_salary > max_salary){
+					extra_money = new_salary - max_salary;
+					new_salary -= extra_money;
+				}
+				
+				$('#evaluation_salary_up_user_' + new_salary_id).val(new_salary.toFixed(2));
+				$('#evaluation_salary_up_user_' + extra_money_id).val(extra_money.toFixed(2));
+				
+				if(total_percent_of_up > max_change){
+					$('#evaluation_salary_up_user_' + is_out_of_range_id).removeClass('hide');
+					$('#evaluation_salary_up_user_' + is_in_of_range_id).addClass('hide');
+				}else{
+					$('#evaluation_salary_up_user_' + is_out_of_range_id).addClass('hide');
+					$('#evaluation_salary_up_user_' + is_in_of_range_id).removeClass('hide');
+				}
+				
+			});
+		}
+	
+		$('.is_eligible').on('click', function(event){
+			calAmount();
+		});
+	
+		$('.salary, .point_level, .min_change, .max_change').on('change, keyup, input', function(event){
+			
+			calAmount();
+		});
+	
+		$('#evaluation_salary_up_percent_of_change').on('change, keyup, input', function(event){
+			calAmount();
+		});
+		
+	
+		$(document).ready(function(){
+			calAmount();
+		});
+	</script>
+<% end %>

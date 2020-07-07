@@ -1,0 +1,30 @@
+en:
+  activerecord:
+    models:
+      edpex_kku: EdpexKku
+    attributes:
+      edpex_kku:
+        year: Year
+        edpex_kku_group: Edpex kku group
+        no: No
+        name: Name
+        description: Description
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      edpex_kku: EdPEx KKU
+    attributes:
+      edpex_kku:
+        year: ปีการศึกษา
+        edpex_kku_group: หัวข้อหลัก
+        "no": ลำดับ
+        name: หัวข้อ
+        description: คำอธิบาย
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

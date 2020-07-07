@@ -1,0 +1,34 @@
+<!-- replace '#{parent_object_name}' with your parent object name -->
+<%
+	parent_object_name ||= ""
+	f_index = "#{f.index}".to_s
+	object_name = "#{parent_object_name}_employee_type_tasks_attributes_#{f_index}".to_sym
+	task_select_id = "#{parent_object_name}_employee_type_tasks_attributes_#{f_index}_task_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :sorting, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.association :task, wrapper: :nested_form, collection: (Task.all + (f.object.task.nil? ? [] : [f.object.task])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/settings/tasks/chosen_select", locals: {object_name: :employee_type_task, no_create: true, select_id: task_select_id} %>
+        <div class="hide">
+	        <%= f.input :criteria1, wrapper: :nested_form %>
+	        <%= f.input :criteria2, wrapper: :nested_form %>
+	        <%= f.input :criteria3, wrapper: :nested_form %>
+	        <%= f.input :criteria4, wrapper: :nested_form %>
+	        <%= f.input :criteria5, wrapper: :nested_form %>
+        </div>
+    </td>
+    <td class="text-top">
+        <%= f.input :weight, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#<%= parent_object_name %>_employee_type_tasks_attributes_<%= f.index %>_task").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

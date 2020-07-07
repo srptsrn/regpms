@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  username: MyString
+  ip: MyString
+  controller_name: MyString
+  action_name: MyString
+  params: MyText
+  params_id: 1
+  log_time: 2015-02-20 01:38:47
+
+two:
+  user_id: 
+  username: MyString
+  ip: MyString
+  controller_name: MyString
+  action_name: MyString
+  params: MyText
+  params_id: 1
+  log_time: 2015-02-20 01:38:47

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><%= t(:application_name) %> | <%= controller_name.singularize.upcase.gsub('_', ' ') %> : <%= action_name %></title>
+		<link href="/orb/css/styles.css" rel="stylesheet" type="text/css">
+
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/logo_th.png">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="57x57">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="72x72">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="76x76">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="114x114">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="120x120">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="144x144">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="152x152">
+        <link rel="apple-touch-icon" href="/logo_th.png" sizes="180x180">
+        <!-- END Icons -->
+        
+		<script type="text/javascript" src="/orb/js/vendors/horisontal/cbpHorizontalSlideOutMenu.js"></script>
+	</head>
+	
+	<body>
+		<div class="colorful-page-wrapper">
+		  	<div class="center-block">
+		    	<div class="login-block">
+		      		<%= yield %>
+		    	</div> 
+	    		<% if false %>
+			    	<div class="using-social-header">Sign In Using Social Profiles</div>
+			    	<div class="social-buttons">
+			      		<ul class="social">
+			        		<li><a href="http://facebook.com/"><i class="entypo-facebook-circled"></i></a></li>
+			        		<li><a href="http://google.com/"><i class="entypo-gplus-circled"></i></a></li>
+			        		<li><a href="http://twitter.com/"><i class="entypo-twitter-circled"></i></a></li>
+			      		</ul>
+			    	</div>
+		    	<% end %>
+			    <div class="clearfix"></div>
+				<div class="well col-xs-12 col-sm-12 col-md-12 col-lg-12 small text-center padding-10px">
+					<b><%= t(:manual) %></b><br/>
+					<%= link_to "/files/manuals/manual_pdpf.pdf", {target: "_blank"} do %>
+						จัดทำข้อตกลงและแบบรายงานผล
+					<% end %> <br/>
+					<%= link_to "/files/manuals/manual_360.pdf", {target: "_blank"} do %>
+						ประเมิน 360 องศา
+					<% end %> <br/>
+					<%= link_to "/files/manuals/manual_committee.pdf", {target: "_blank"} do %>
+						ผู้บังคับบัญชาและคณะกรรมการประเมิน
+					<% end %> <br/>
+					<%= link_to "/files/manuals/manual_admin.pdf", {target: "_blank"} do %>
+						การเจ้าหน้าที่
+					<% end %> <br/>
+					<%= link_to "/files/manuals/manual_project.pdf", {target: "_blank"} do %>
+						บันทึกโครงการ
+					<% end %> <br/>
+					<%= link_to "/files/manuals/manual_expense.pdf", {target: "_blank"} do %>
+						บันทึกการเบิกงบประมาณ
+					<% end %>
+				</div>
+		    	<div class="copyrights"> 
+		    		<% if false %>
+			    		BAAD PMS Power Admin Dashboard Template <br>
+			      		Created by <%= t(:application_author) %> &copy; 2014
+		      		<% end %> 
+		      		batt &copy; 2015
+	      		</div>
+	  		</div>
+		</div>
+		
+		<!--Scripts--> 
+		<!--JQuery--> 
+		<script type="text/javascript" src="/orb/js/vendors/jquery/jquery.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/jquery/jquery-ui.min.js"></script> 
+		
+		<!--Forms--> 
+		<script type="text/javascript" src="/orb/js/vendors/forms/jquery.form.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/forms/jquery.validate.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/forms/jquery.maskedinput.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/jquery-steps/jquery.steps.min.js"></script> 
+		
+		<!--NanoScroller--> 
+		<script type="text/javascript" src="/orb/js/vendors/nanoscroller/jquery.nanoscroller.min.js"></script> 
+		
+		<!--Sparkline--> 
+		<script type="text/javascript" src="/orb/js/vendors/sparkline/jquery.sparkline.min.js"></script> 
+		
+		<!--Main App--> 
+		<!-- script type="text/javascript" src="/orb/js/scripts.js"></script -->
+		
+		
+		
+		<!--/Scripts-->
+	
+	</body>
+</html>

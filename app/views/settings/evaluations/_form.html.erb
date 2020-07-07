@@ -1,0 +1,166 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@evaluation.respond_to?(:current_state) && @evaluation.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @evaluation], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Evaluation, resource: @evaluation, f: f,
+	            resources_url: settings_evaluations_path(q: params[:q], page: params[:page]),
+	            resource_url: @evaluation.new_record? ? nil : settings_evaluation_path(@evaluation, q: params[:q], page: params[:page]),
+	            edit_resource_url: @evaluation.new_record? ? nil : edit_settings_evaluation_path(@evaluation, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+		  		
+	        	<%= f.input :year %>
+	        	<%= f.input :episode %>
+	        	<%= f.input :is_360, as: :boolean_custom %>
+	        	<%= f.input :is_salary_up, as: :boolean_custom %>
+	        	
+		        <%= f.association :evaluation1, collection: (Evaluation.all + (f.object.evaluation1.nil? ? [] : [f.object.evaluation1])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :long_title2, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/evaluations/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_evaluation1_id} %>
+		        <div class="hide">
+			        <%= f.association :evaluation2, collection: (Evaluation.all + (f.object.evaluation2.nil? ? [] : [f.object.evaluation2])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :long_title2, input_html: {data: {placeholder: t(:choose)}} %>
+			        <%= render partial: "/settings/evaluations/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_evaluation2_id} %>
+			        <%= f.association :evaluation3, collection: (Evaluation.all + (f.object.evaluation3.nil? ? [] : [f.object.evaluation3])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :long_title2, input_html: {data: {placeholder: t(:choose)}} %>
+			        <%= render partial: "/settings/evaluations/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_evaluation3_id} %>
+			        <%= f.association :evaluation4, collection: (Evaluation.all + (f.object.evaluation4.nil? ? [] : [f.object.evaluation4])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :long_title2, input_html: {data: {placeholder: t(:choose)}} %>
+			        <%= render partial: "/settings/evaluations/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_evaluation4_id} %>
+			        <%= f.association :evaluation5, collection: (Evaluation.all + (f.object.evaluation5.nil? ? [] : [f.object.evaluation5])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :long_title2, input_html: {data: {placeholder: t(:choose)}} %>
+			        <%= render partial: "/settings/evaluations/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_evaluation5_id} %>
+		        </div>
+
+		        <%= f.association :director, collection: (User.all + (f.object.director.nil? ? [] : [f.object.director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_director_id} %>
+		        <%= f.association :vice_director, collection: (User.all + (f.object.vice_director.nil? ? [] : [f.object.vice_director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_vice_director_id} %>
+		        <%= f.association :vice_director2, collection: (User.all + (f.object.vice_director2.nil? ? [] : [f.object.vice_director2])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_vice_director2_id} %>
+		        <%= f.association :vice_director3, collection: (User.all + (f.object.vice_director3.nil? ? [] : [f.object.vice_director3])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_vice_director3_id} %>
+				<div class="col-md-offset-4 col-md-6 text-danger small">*** ถ้าใช้การประเมินแบบเก่าจะใช้ชื่อรองผู้อำนวยการจากกลุ่มภารกิจ ***</div>
+				<div class="clearfix margin-bottom-15"></div>
+		        <%= f.association :secretary, collection: (User.all + (f.object.secretary.nil? ? [] : [f.object.secretary])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :evaluation, no_create: true, select_id: :evaluation_secretary_id} %>
+		        
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.start_date ? @evaluation.start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.end_date ? @evaluation.end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:query_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :query_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.query_start_date ? @evaluation.query_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :query_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.query_end_date ? @evaluation.query_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+		        
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:pd_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :pd_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.pd_start_date ? @evaluation.pd_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :pd_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.pd_end_date ? @evaluation.pd_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:director_confirm_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :director_confirm_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.director_confirm_start_date ? @evaluation.director_confirm_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :director_confirm_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.director_confirm_end_date ? @evaluation.director_confirm_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:pf_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :pf_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.pf_start_date ? @evaluation.pf_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :pf_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.pf_end_date ? @evaluation.pf_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group hide">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:confirm_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :confirm_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.confirm_start_date ? @evaluation.confirm_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :confirm_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.confirm_end_date ? @evaluation.confirm_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-4 control-label"><abbr title="จำเป็น">*</abbr> <%= Evaluation.human_attribute_name(:evaluation_start_date) %></label>
+					<div class="col-md-8">
+						<div class="pull-left">
+			        		<%= f.input :evaluation_start_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.evaluation_start_date ? @evaluation.evaluation_start_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+						<div class="pull-left control-label padding-left-5 padding-right-5"> ถึง </div>
+						<div class="pull-left">
+			        		<%= f.input :evaluation_end_date, as: :date_custom_no_hint, label: false, wrapper: :no_wrap, input_html: {value: @evaluation.evaluation_end_date ? @evaluation.evaluation_end_date.strftime("%d/%m/%Y") : ""} %>
+						</div>
+					</div>
+				</div>
+	            
+	        	<%= render partial: "/settings/committees/nested_form", locals: {f: f} %>
+	            
+	        	<%= render partial: "/settings/evaluation_employee_types/nested_form", locals: {f: f} %>
+	            
+	        	<%= render partial: "/settings/evaluation_principles/nested_form", locals: {f: f} %>
+	            
+	            <div class="hide">
+	        		<%= render partial: "/settings/e360_items/nested_form", locals: {f: f} %>
+	        	</div>
+	        	
+        		<%= render partial: "/settings/base_salaries/nested_form", locals: {f: f} %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Evaluation, resource: @evaluation, f: f,
+			            resources_url: settings_evaluations_path(q: params[:q], page: params[:page]),
+			            resource_url: @evaluation.new_record? ? nil : settings_evaluation_path(@evaluation, q: params[:q], page: params[:page]),
+			            edit_resource_url: @evaluation.new_record? ? nil : edit_settings_evaluation_path(@evaluation, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

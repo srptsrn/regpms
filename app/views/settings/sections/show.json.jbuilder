@@ -1,0 +1,1 @@
+json.extract! @section, :id, :to_s, :workflow_state, :workflow_state_updater_id, :name, :leader_id, :vice_leader_id, :created_at, :updated_at

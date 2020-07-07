@@ -1,0 +1,15 @@
+<tr class="nested-fields">
+    <td style="vertical-align:top;">
+        <%= f.input :sorting, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td style="vertical-align:top;">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+        </td>
+    <% end %>
+</tr>

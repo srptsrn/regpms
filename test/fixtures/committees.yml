@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  user_id: 
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  user_id: 

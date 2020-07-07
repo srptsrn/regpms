@@ -1,0 +1,25 @@
+<% if can?(:index_select, User) %>
+    <td class="center">
+    </td>
+<% end %>
+<td nowrap>     
+    <% params[:q].each do |k,v| %>
+        <%= hidden_field_tag "q[#{k}]", v %>
+    <% end unless params[:q].blank? %>
+    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+    <%= render partial: "/appui_scaffold/index_row_form_actions", locals: {
+        resource_class: User, resource: @user,
+        resources_url: admin_users_path(q: params[:q], page: params[:page]),
+        resource_url: admin_user_path(@user, q: params[:q], page: params[:page]),
+        edit_resource_url: edit_admin_user_path(@user, q: params[:q], page: params[:page])
+    } %>
+</td>
+<td><span class="label <%= state_label_class(@user.workflow_state.to_sym) %>"><%=t "workflow.state.#{@user.workflow_state}" %></span></td>
+<td><%= image_tag(@user.avatar.url(:row)) if @user.avatar.present? %></td>
+<td><%= text_field :user, :username, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :gender, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :nickname, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :firstname, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :lastname, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :phone, style: "width:100%", class: 'form-control' %></td>
+<td><%= text_field :user, :email, style: "width:100%", class: 'form-control' %></td>

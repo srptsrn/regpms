@@ -1,0 +1,8 @@
+$("#<%= singular_table_name %>_<%%= @<%= singular_table_name %>.id %>").html("<%%=j render(partial: "index_row", locals: {<%= singular_table_name %>: @<%= singular_table_name %>}) %>");
+				
+init_input_date_picker();
+init_input_time_picker();
+init_input_datetime_picker();
+init_input_icheckbox();
+init_input_chosen();
+init_input_wysihtml5();

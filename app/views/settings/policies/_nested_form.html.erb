@@ -1,0 +1,32 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th nowrap><%= Policy.human_attribute_name :policy %></th>
+            <th nowrap><%= Policy.human_attribute_name :code %></th>
+            <th nowrap><%= Policy.human_attribute_name :name %></th>
+            <% unless action_name == "show" %>
+                <th style="width:30px;">
+                    <%= link_to_add_association f, :policies, partial: "/settings/policies/nested_fields", class: "btn btn-sm btn-success",
+                    "data-association-insertion-node" => "#policy_fields",
+                    "data-association-insertion-method" => :append do %>
+                    <i class='fa fa-plus'></i>
+                    <% end %>
+                </th>
+            <% end %>
+        </tr>
+    </thead>
+    <tbody id="policy_fields">
+        <%= f.simple_fields_for :policies do |policy| %>
+            <%= render '/settings/policies/nested_fields', :f => policy %>
+        <% end %>
+    </tbody>
+</table>
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#policy_fields').on('cocoon:after-insert', function(e, insertedItem) {
+            init_input_date_picker();
+            init_input_time_picker();
+            init_input_datetime_picker();
+        });
+    });
+</script>

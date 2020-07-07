@@ -1,0 +1,80 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_evaluation_salary_up_users_attributes_#{f_index}".to_sym
+	evaluation_select_id = "parent_object_evaluation_salary_up_users_attributes_#{f_index}_evaluation_id".to_sym
+	evaluation_salary_up_select_id = "parent_object_evaluation_salary_up_users_attributes_#{f_index}_evaluation_salary_up_id".to_sym
+	user_select_id = "parent_object_evaluation_salary_up_users_attributes_#{f_index}_user_id".to_sym
+	position_level_select_id = "parent_object_evaluation_salary_up_users_attributes_#{f_index}_position_level_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td style="vertical-align:top;">
+        <%= f.association :evaluation, wrapper: :nested_form, collection: (Evaluation.all + (f.object.evaluation.nil? ? [] : [f.object.evaluation])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/evaluations/chosen_select", locals: {object_name: :evaluation_salary_up_user, no_create: true, select_id: evaluation_select_id} %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.association :evaluation_salary_up, wrapper: :nested_form, collection: (EvaluationSalaryUp.all + (f.object.evaluation_salary_up.nil? ? [] : [f.object.evaluation_salary_up])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/evaluation_salary_ups/chosen_select", locals: {object_name: :evaluation_salary_up_user, no_create: true, select_id: evaluation_salary_up_select_id} %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.association :user, wrapper: :nested_form, collection: (User.all + (f.object.user.nil? ? [] : [f.object.user])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/users/chosen_select", locals: {object_name: :evaluation_salary_up_user, no_create: true, select_id: user_select_id} %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.association :position_level, wrapper: :nested_form, collection: (PositionLevel.all + (f.object.position_level.nil? ? [] : [f.object.position_level])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/position_levels/chosen_select", locals: {object_name: :evaluation_salary_up_user, no_create: true, select_id: position_level_select_id} %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :salary, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :base_salary, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :base_salary_min, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :base_salary_max, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :is_eligible, wrapper: :nested_form, as: :boolean_custom %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :is_work_hour_passed, wrapper: :nested_form, as: :boolean_custom %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :lost_count, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :late_count, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :leave_count, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :point, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :percent_of_min_up, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :salary_min_up, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :percent_of_up, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :salary_up, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td style="vertical-align:top;">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_evaluation_salary_up_users_attributes_<%= f.index %>_evaluation").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_evaluation_salary_up_users_attributes_<%= f.index %>_evaluation_salary_up").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_evaluation_salary_up_users_attributes_<%= f.index %>_user").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_evaluation_salary_up_users_attributes_<%= f.index %>_position_level").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

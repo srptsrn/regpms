@@ -1,0 +1,217 @@
+<% 
+	section_id = @section ? @section.id : nil
+	team_id = @team ? @team.id : nil
+	faculty_id = @faculty ? @faculty.id : nil
+	users = current_user.assess_to(@current_evaluation, @role, {section_id: section_id, team_id: team_id, faculty_id: faculty_id}).select {|u| u.employee_type_id == @employee_type.id}
+	users -= [current_user]
+%>
+<div class="page-header">
+	<h1>
+		ประเมินตามภาระงาน
+		<small>
+			<%
+				subtitle = "..."
+      			if @role == "director"
+      				subtitle = "#{Evaluation.human_attribute_name(:director)}"
+      			elsif @role == "vice_director"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director)}"
+				elsif @role == "vice_director2"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director2)}"
+				elsif @role == "vice_director3"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director3)}"
+				elsif @role == "secretary"
+      				subtitle = "#{Evaluation.human_attribute_name(:secretary)}"	  
+      			elsif @role == "committee"
+      				subtitle = "#{Committee.model_name.human}"
+      			elsif @role == "section_leader"
+      				subtitle = "#{Section.human_attribute_name(:leader)} #{@section}"
+      			elsif @role == "section_vice_leader"
+      				subtitle = "#{Section.human_attribute_name(:vice_leader)} #{@section}"
+      			elsif @role == "team_leader"
+      				subtitle = "#{Team.human_attribute_name(:leader)} #{@team}"
+      			elsif @role == "faculty_leader"
+      				subtitle = "#{Faculty.human_attribute_name(:leader)} #{@faculty}"
+      			elsif @role == "faculty_dean"
+      				subtitle = "#{Faculty.human_attribute_name(:dean)} #{@faculty}"
+      			end
+  			%>
+  			ประเมินในฐานะ : <%= subtitle %>
+		</small>
+	</h1>
+	<h4>รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %></h4>
+	สำหรับ <%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+</div>
+
+<div class="powerwidget red" role="widget">
+	<header role="heading">
+		<h2><%= @employee_type.name %><small>...</small></h2>
+	</header>
+	
+	<div class="inner-spacer" role="content">
+		
+		<%= link_to assess_url(@role, section_id: @section, team_id: @team, faculty_id: @faculty), {class: "btn #{event_btn_class(:back)}"} do %>
+			<%= event_icon_tag(:back) %>  <%= t(:back) %>
+		<% end %>
+		<legend></legend>
+		
+		<div class="tabbable tabs-left hidden-xs">
+			<ul class="nav nav-tabs">
+				<% is_first_tab = true %>
+				<% @employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+					<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+						<li class="<%= is_first_tab ? 'active' : '' %>">
+							<a data-toggle="tab" href="#employee_type-task-<%= employee_type_task.id %>"><%= employee_type_task_group.sorting %>.<%= employee_type_task.sorting %></a>
+						</li>
+						<% is_first_tab = false %>
+					<% end %>
+				<% end %>
+			</ul>
+			<div class="tab-content">
+				<% 
+					hcount = 0
+					@employee_type.employee_type_task_groups.each do |employee_type_task_group|
+						employee_type_task_group.employee_type_tasks.each do |employee_type_task|
+							hcount += 1
+						end
+					end
+				%>
+				<% is_first_tab = true %>
+				<% @employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+					<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+						<div id="employee_type-task-<%= employee_type_task.id %>" class="tab-pane <%= is_first_tab ? 'active' : '' %>" style="min-height:<%= 45 * hcount %>px;">
+							<h5 class="no-margin"><%= employee_type_task_group.sorting %>. <%= employee_type_task_group %></h5>
+							<h6><%= employee_type_task_group.sorting %>.<%= employee_type_task.sorting %> <%= employee_type_task %></h6>
+							<table class="table table-striped table-hover margin-0px">
+			                  	<thead>
+			                    	<tr>
+					            		<th rowspan="2" style="width:40px;"></th>
+					                    <th rowspan="2"><%= User.human_attribute_name(:firstname_lastname) %></th>
+			                      		<th colspan="5" class="text-center"><%= "ค่าคะแนนที่ได้" %></th>
+			                      		<th rowspan="2" style="text-align:center; width:80px;"><%= "ค่าถ่วงน้ำหนัก" %></th>
+			                      		<th rowspan="2" style="text-align:center; width:85px;"><%= "คะแนนหลังถ่วงน้ำหนัก" %></th>
+			                    	</tr>
+			                    	<tr>
+			                      		<th style="text-align:center; width:30px;">0</th>
+			                      		<th style="text-align:center; width:30px;">1</th>
+			                      		<th style="text-align:center; width:30px;">2</th>
+			                      		<th style="text-align:center; width:30px;">3</th>
+			                      		<th style="text-align:center; width:30px;">4</th>
+			                    	</tr>
+			                  	</thead>
+					          	<tbody>
+					          		<% count = 0 %>
+					          		<% users.each do |user| %>
+					          			<%
+					          				employee_type_task_user = EmployeeTypeTaskUser.where(["employee_type_task_id = ? AND user_id = ? AND evaluation_id = ? AND committee_id = ? AND role = ?", employee_type_task.id, user.id, @current_evaluation.id, current_user.id, @role]).first
+					          				checked_1 = employee_type_task_user && employee_type_task_user.score == 1
+					          				checked_2 = employee_type_task_user && employee_type_task_user.score == 2
+					          				checked_3 = employee_type_task_user && employee_type_task_user.score == 3
+					          				checked_4 = employee_type_task_user && employee_type_task_user.score == 4
+					          				checked_5 = employee_type_task_user && employee_type_task_user.score == 5
+					          				
+					          				image_title = "#{image_tag user.avatar.url(:small)}"
+					          			%>
+					            		<tr>
+					            			<td class="text-right"><%= count += 1 %>.</td>
+											<td class="text-top">
+												<%= user.prefix_firstname_lastname %>
+												<span class="btn btn-xs btn-default disabled pull-right"><%= user.employee_type_name %></span>
+												<%= image_tag user.avatar.url(:row), {alt: "", class: "tooltipx pull-right margin-right-10", title: html_escape(image_title)} %>
+											</td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :weight, {value: employee_type_task.weight, class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+											<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score_real, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+					                	</tr>
+					            	<% end %>
+					          	</tbody>
+					        </table>
+						</div>
+						<% is_first_tab = false %>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+        
+        <div class="hidden-sm hidden-md hidden-lg text-center margin-bottom-20">
+        	<%= t(:small_device_error) %>
+    	</div>
+  	</div>
+</div>
+
+
+<% unless action_name == "show" %>
+	<script type="text/javascript">
+	
+		function autoCalculateScore () {
+		    	
+			<% @employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+				<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+	          		<% @employee_type.users.each do |user| %>
+	          		
+          				<% iii = "#{user.id}_#{employee_type_task.id}" %>
+	    	
+				    	v<%= iii %>w = parseFloat($('#employee_type_task_user_<%= iii %>_weight').val());
+				    	v<%= iii %> = 0;
+				    	v<%= iii %>r = 0;
+				        if ($('#employee_type_task_user_<%= iii %>_score_1').is(':checked')) { v<%= iii %> = 1;}
+				        if ($('#employee_type_task_user_<%= iii %>_score_2').is(':checked')) { v<%= iii %> = 2; }
+				        if ($('#employee_type_task_user_<%= iii %>_score_3').is(':checked')) { v<%= iii %> = 3; }
+				        if ($('#employee_type_task_user_<%= iii %>_score_4').is(':checked')) { v<%= iii %> = 4; }
+				        if ($('#employee_type_task_user_<%= iii %>_score_5').is(':checked')) { v<%= iii %> = 5; }
+				        
+				        v<%= iii %>r = (v<%= iii %>w / 5) * v<%= iii %>;
+				        $('#employee_type_task_user_<%= iii %>_score_real').val(v<%= iii %>r.toFixed(5));
+	        
+	        		<% end %>
+	        	<% end %>
+	        <% end %>
+	        
+		}
+	
+		function saveScore (user_id, employee_type_task_id) {
+			
+			score = 0
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_1').is(':checked')) { score = 1; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_2').is(':checked')) { score = 2; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_3').is(':checked')) { score = 3; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_4').is(':checked')) { score = 4; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_5').is(':checked')) { score = 5; }
+			
+	 		$.ajax({
+            	url: '<%= employee_type_task_user_save_assess_url(@role) %>',
+    			type: 'post',
+    			data: {
+				      employee_type_task_id: employee_type_task_id,  
+				      user_id: user_id,  
+				      evaluation_id: <%= @current_evaluation.id %>, 
+				      role: '<%= @role %>',  
+				      section_id: <%= @section ? @section.id : "null" %>,  
+				      team_id: <%= @team ? @team.id : "null" %>,  
+				      faculty_id: <%= @faculty ? @faculty.id : "null" %>,  
+				      score: score, 
+				      weight: $('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_weight').val(), 
+				      score_real: $('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_real').val()
+			      },
+                dataType: 'script'
+            });
+		}
+
+	 	jQuery(function($) {
+		 	
+		    $('input').click(function () {
+		        autoCalculateScore();
+		        
+				arr = this.id.split('_');
+		        saveScore(arr[4], arr[5]);
+		    });
+	        
+		 });
+		 
+		 autoCalculateScore();
+		 
+	</script>
+<% end %>

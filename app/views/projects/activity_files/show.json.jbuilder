@@ -1,0 +1,1 @@
+json.extract! @activity_file, :id, :to_s, :workflow_state, :workflow_state_updater_id, :activity_id, :file, :created_at, :updated_at

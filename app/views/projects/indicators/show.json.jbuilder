@@ -1,0 +1,1 @@
+json.extract! @indicator, :id, :to_s, :workflow_state, :workflow_state_updater_id, :project_id, :sorting, :description, :target, :result1, :result2, :result3, :created_at, :updated_at

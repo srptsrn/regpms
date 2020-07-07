@@ -1,0 +1,42 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@section.respond_to?(:current_state) && @section.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @section], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Section, resource: @section, f: f,
+	            resources_url: settings_sections_path(q: params[:q], page: params[:page]),
+	            resource_url: @section.new_record? ? nil : settings_section_path(@section, q: params[:q], page: params[:page]),
+	            edit_resource_url: @section.new_record? ? nil : edit_settings_section_path(@section, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+	        	<%= f.input :name %>
+		        <%= f.association :vice_director, collection: (User.all + (f.object.vice_director.nil? ? [] : [f.object.vice_director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director_id} %>
+		        <%= f.association :leader, collection: (User.all + (f.object.leader.nil? ? [] : [f.object.leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_leader_id} %>
+		        <%= f.association :vice_leader, collection: (User.all + (f.object.vice_leader.nil? ? [] : [f.object.vice_leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_leader_id} %>
+		        
+		        <%= render partial: "/settings/section_users/nested_form", locals: {f: f} %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Section, resource: @section, f: f,
+			            resources_url: settings_sections_path(q: params[:q], page: params[:page]),
+			            resource_url: @section.new_record? ? nil : settings_section_path(@section, q: params[:q], page: params[:page]),
+			            edit_resource_url: @section.new_record? ? nil : edit_settings_section_path(@section, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

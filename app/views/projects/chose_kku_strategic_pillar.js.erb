@@ -1,0 +1,15 @@
+$("#project_kku_strategic_pillar_id").val("<%= @kku_strategic_pillar ? @kku_strategic_pillar.id : "" %>");
+$("#project_kku_strategic_pillar_id").trigger('chosen:updated');
+
+// remove all options
+$("#project_kku_strategic_id").empty();
+// insert blank option
+$("#project_kku_strategic_id").append($('<option></option>'));
+// insert new options
+<% if @kku_strategic_pillar %>
+	<% @kku_strategic_pillar.kku_strategics.sort_by {|a| a.to_s_sort}.each do |kku_strategic| %>
+		$("#project_kku_strategic_id").append($('<option></option>').attr('value', <%= kku_strategic.id %>).text('<%= kku_strategic.to_s_long %>'));
+	<% end %>
+<% end %>
+// chosen update
+$("#project_kku_strategic_id").trigger('chosen:updated');

@@ -1,0 +1,74 @@
+<% if false %>
+	
+	<h2>Log in</h2>
+	
+	<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+	  <div class="form-inputs">
+	    <%= f.input :login, required: false, autofocus: true %>
+	    <%= f.input :password, required: false %>
+	    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+	  </div>
+	
+	  <div class="form-actions">
+	    <%= f.button :submit, "Log in" %>
+	  </div>
+	<% end %>
+	
+	<%= render "users/shared/links" %>
+
+<% elsif controller.send(:_layout) == "orb_login" %>
+
+	<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {id: "login-form", class: "orb-form"}) do |f| %>
+
+    	<header>
+			<div class="image-block"><img src="/logo_th.png" alt="User" /></div>
+      		Login to <%= t(:application_name) %>
+			<% if false %>
+	      		<small>
+	      			Have no account? &#8212; 
+	      			<%= link_to new_registration_path(resource_name), {"title" => "Create new account"} do %>
+	      				Register
+	      			<% end %>
+	  			</small>
+          	<% end %>
+  		</header>
+  		
+    	<fieldset>
+            <% if false && flash[:alert] %>
+                <div class="alert alert-danger">
+                    <%= flash[:alert] %>
+                </div>
+            <% end %>
+			<%= f.input :login, wrapper: :login, required: true, autofocus: true, hint: "<i class='fa fa-user'></i>".html_safe, input_html: {placeholder: "Login"} %>
+			<%= f.input :password, wrapper: :login, required: true, hint: "<i class='fa fa-lock'></i>".html_safe, input_html: {placeholder: "Password"} %>
+			<% if false %>
+	      		<section>
+		            <div class="row">
+		              	<div class="col col-xs-12">
+		                	<label class="checkbox pull-left">
+		                		<input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me">
+		                  		<i></i>Keep me logged in
+	                  		</label>
+		                	<div class="note pull-right">
+					        	<%= link_to new_password_path(resource_name), {"title" => "Forgot your password?"} do %>
+					        		Forgot password?
+					        	<% end %>
+		                	</div>
+	                	</div>
+	            	</div>
+	          	</section>
+          	<% end %>
+		    <%= f.button :button, class: "btn btn-primary col col-xs-12" do %>
+		    	Log in
+		    <% end %>
+		    <div class="col-xs-12 no-padding text-center text-bold text-danger small">
+		    	การเข้าใช้งานระบบด้วย <br/>
+		    	username และ password ของท่าน <br/>
+		    	ถือว่าเป็นการลงลายมือชื่อทางอิเล็กทรอนิกส์<br/>
+		    	ตามกฎหมาย
+		    </div>
+    	</fieldset>
+		      
+      <% end %>
+      
+<% end %>

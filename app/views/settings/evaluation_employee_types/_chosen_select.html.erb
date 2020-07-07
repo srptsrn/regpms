@@ -1,0 +1,113 @@
+<!--
+Usage: render partial: "/settings/evaluation_employee_types/chosen_select", locals: {object_name: :child, select_id: :optional, width: :optional, no_create: false}
+-->
+<% select_id ||= "#{object_name}_evaluation_employee_type_id" %>
+<% width ||= "" %>
+<% no_create ||= false %>
+<% rand_id = "%04d" % rand(9999) %>
+<% if can?(:create, EvaluationEmployeeType) %>
+    <div id="<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %>" class="modal" tabindex="-1" data-backdrop="static" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+            		<button type="button" class="close pull-right" data-dismiss="modal">×</button>
+					<div class="clearfix"></div>
+                </div>
+                <div class="modal-body">
+                	
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>
+<script type="text/javascript">
+    jQuery(function($) {
+        $("#<%= select_id %>").chosen({
+            allow_single_deselect: true,
+            search_contains: true,
+            <% unless width.blank? %>
+                width: '<%= width %>',
+            <% end %>
+            no_results_text: (
+                '<%=t :no_result_match %> ' +
+                '<a href="#" class="btn btn-xs <%= event_btn_class(:search) %>" onclick=" ' +
+                "   search_input = $('#<%= select_id %>_chosen .chosen-search input'); " +
+                "   search_str = search_input.val(); " +
+                "   $.ajax({ " +
+                "       url: '<%= settings_evaluation_employee_types_path %>', " +
+                "       type: 'GET', " +
+                "       data: { " +
+                "           q: { " +
+                "               workflow_state_cont: search_str " +
+                "           }, " +
+                "           limit: 100 " +
+                "       }, " +
+                "       dataType: 'json', " +
+                "       success: function(response){ " +
+                "           select = $('#<%= select_id %>'); " +
+                "           select.empty(); " +
+                "           select.append($('<option></option>')); " +
+                "           $.each(response, function(index, result) { " +
+                "               select.append($('<option></option>').attr('value', result.id).text(result.to_s)); " +
+                "           }); " +
+                "           select.trigger('chosen:updated'); " +
+                "           search_input.val(search_str); " +
+                "           search_input.focus(); " +
+                "           e = jQuery.Event('keyup');" +
+                "           e.which = 35; " +
+                "           search_input.trigger(e); " +
+                "       } " +
+                "   }); " +
+                '"><%= event_icon_tag(:search) %> <%=t :search_on_server %></a> '
+                <% if can?(:create, EvaluationEmployeeType) && !no_create %>
+                    + '<%=t :or %> ' +
+                    '<a href="#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %>" data-toggle="modal" class="btn btn-xs <%= event_btn_class(:new) %>" onclick=" ' +
+                    "   $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body').html(''); " +
+                    "   $.ajax({ " +
+                    "       url: '<%= new_settings_evaluation_employee_type_url(modal: true) %>', " +
+                    "       type: 'GET', " +
+                    "       dataType: 'html', " +
+                    "       success: function(response){ " +
+                    "           $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body').html(response); " +
+                    "           $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body h2').remove(); " +
+                    "           $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body .form-actions:first').remove(); " +
+                    "           $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body .panel-heading').remove(); " +
+                    "           $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body form').submit(function(e){ " +
+                    "               $.ajax( { " +
+                    "                   type: 'POST', " +
+                    "                   url: $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body form').attr('action'), " +
+                    "                   data: $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %> .modal-body form').serialize() + '&button=submit', " +
+                    "                   dataType: 'json', " +
+                    "                   success: function(response) { " +
+                    "                       $.ajax({ " +
+                    "                           type: 'GET', " +
+                    "                           url: '<%= settings_evaluation_employee_types_path(limit: 1, q: {s: "id desc"}) %>', " +
+                    "                           dataType: 'json', " +
+                    "                           success: function(response) { " +
+                    "                               search_input = $('#<%= select_id %>_chosen .chosen-search input'); " +
+                    "                               select = $('#<%= select_id %>'); " +
+                    "                               select.empty(); " +
+                    "                               select.append($('<option></option>')); " +
+                    "                               $.each(response, function(index, result) { " +
+                    "                                   select.append($('<option></option>').attr('value', result.id).text(result.to_s)); " +
+                    "                               }); " +
+                    "                               select.trigger('chosen:updated'); " +
+                    "                               select.trigger('chosen:open'); " +
+                    "                               $('#<%= object_name %>_evaluation_employee_type_modal_form_<%= rand_id %>').modal('hide'); " +
+                    "                           } " +
+                    "                       }); " +
+                    "                   }, " +
+                    "                   error: function(response) { " +
+                    "                       alert(response.responseText); " +
+                    "                   } " +
+                    "               }); " +
+                    "               return false; " +
+                    "           }); " +
+                    "       } " +
+                    "   }); " +
+                    '"><%= event_icon_tag(:new) %> <%=t :create_new %></a> '
+                <% end %>
+            )
+        });
+    });
+</script>

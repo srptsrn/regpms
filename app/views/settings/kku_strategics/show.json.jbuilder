@@ -1,0 +1,1 @@
+json.extract! @kku_strategic, :id, :to_s, :workflow_state, :workflow_state_updater_id, :kku_strategic_pillar_id, :no, :name, :created_at, :updated_at

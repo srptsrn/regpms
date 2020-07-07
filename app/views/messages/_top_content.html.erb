@@ -1,0 +1,27 @@
+<div class="clearfix margin-bottom"> 
+	<%= link_to new_message_url(q: params[:q], page: params[:page], list: params[:list]), {class: "btn btn-success"} do %>
+		<i class="fa fa-envelope"></i> <%= Message.human_attribute_name(:new_message) %>
+	<% end unless action_name == "new" %>
+	<!-- div class="btn-group btn-group-sm pull-right"> 
+		<a class="btn btn-default mark_read"><i class="fa fa-check-circle-o"></i>Read</a> 
+		<a class="btn btn-default mark_unread"><i class="fa fa-circle-o"></i>Unread</a> 
+		<a class="btn btn-default delete"><i class="fa fa-times-circle"></i> Delete</a> 
+		<a class="btn btn-default refresh"><i class="fa fa-refresh"></i> Refresh</a> 
+	</div -->
+	<%= search_form_for @q, url: messages_url, id: 'quick-search', class: "form-horizontal pull-right no-padding col-sm-8 col-md-6 col-lg-4" do |f| %>
+	    <%= hidden_field_tag(:list, params[:list]) unless params[:list].blank? %>
+		<div class="input-group margin-bottom">
+			<% if params[:list].blank? || params[:list].to_s != "trashed" || params[:list].to_s != "archived" %>
+				<%= f.text_field :message_topic_cont, :autofocus => true, class: "form-control", placeholder: "#{t(:search)} ..." %>
+			<% else %>
+				<%= f.text_field :topic_cont, :autofocus => true, class: "form-control", placeholder: "#{t(:search)} ..." %>
+			<% end %>
+			<span class="input-group-btn">
+				<%= f.button :button, class: "btn btn-info" do%>
+					<%= t(:search) %>
+				<% end %>
+			</span>
+	    </div>
+	<% end %>
+	<!-- /input-group -->
+</div>

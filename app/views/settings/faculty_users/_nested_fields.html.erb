@@ -1,0 +1,20 @@
+<!-- replace 'faculty' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "faculty_faculty_users_attributes_#{f_index}".to_sym
+	user_select_id = "faculty_faculty_users_attributes_#{f_index}_user_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.association :user, wrapper: :nested_form, collection: (User.all + (f.object.user.nil? ? [] : [f.object.user])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :faculty_user, no_create: true, select_id: user_select_id} %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#faculty_faculty_users_attributes_<%= f.index %>_user").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

@@ -1,0 +1,2 @@
+module Settings::JobResultTemplatesHelper
+end

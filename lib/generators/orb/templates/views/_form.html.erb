@@ -1,0 +1,57 @@
+<%% @form_defaults = {input_html: {autocomplete: :off}} %>
+<%% @form_defaults[:disabled] = (action_name == "show") || (@<%= singular_table_name %>.respond_to?(:current_state) && @<%= singular_table_name %>.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%%= simple_form_for(<%= prefix.present? ? %{["#{prefix}", @#{singular_table_name}]} : %{@#{singular_table_name}} %>, html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<%% params[:q].each do |k,v| %>
+		        <%%= hidden_field_tag "q[#{k}]", v %>
+		    <%% end unless params[:q].blank? %>
+		    <%%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%%= render partial: "/form_actions_top", locals: {
+	            resource_class: <%= class_name %>, resource: @<%= singular_table_name %>, f: f,
+	            resources_url: <%= orb_plural_model_url %>_path(q: params[:q], page: params[:page]),
+	            resource_url: @<%= singular_table_name %>.new_record? ? nil : <%= orb_plain_model_url %>_path(@<%= singular_table_name %>, q: params[:q], page: params[:page]),
+	            edit_resource_url: @<%= singular_table_name %>.new_record? ? nil : edit_<%= orb_plain_model_url %>_path(@<%= singular_table_name %>, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+				<%- attributes.select{|a| a.name.to_s != 'workflow_state' && a.name.to_s != "workflow_state_updater"}.each do |attribute| -%>
+				<%- if attribute.type == :date -%>
+	        	<%%= f.input :<%= attribute.name %>, as: :date_custom, input_html: {value: @<%= singular_table_name %>.<%= attribute.name %> ? @<%= singular_table_name %>.<%= attribute.name %>.strftime("%d/%m/%Y") : ""} %>
+				<%- elsif attribute.type == :time -%>
+	        	<%%= f.input :<%= attribute.name %>, as: :time_custom, input_html: {value: @<%= singular_table_name %>.<%= attribute.name %> ? @<%= singular_table_name %>.<%= attribute.name %>.strftime("%H:%M") : ""} %>
+				<%- elsif attribute.type == :datetime -%>
+				<%%= f.input :<%= attribute.name %>, as: :datetime_custom, input_html: {value: @<%= singular_table_name %>.<%= attribute.name %> ? @<%= singular_table_name %>.<%= attribute.name %>.strftime("%d/%m/%Y %H:%M") : ""} %>
+				<%- elsif attribute.type == :attachment -%>
+		        <%%= f.input :<%= attribute.name %>, as: :attachment_custom %>
+				<%- elsif attribute.type == :float -%>
+	        	<%%= f.input :<%= attribute.name %> %>
+				<%- elsif attribute.type == :integer -%>
+	        	<%%= f.input :<%= attribute.name %> %>
+				<%- elsif attribute.reference? -%>
+		        <%%= f.association :<%= attribute.name %>, collection: (<%= attribute.name.camelize %>.all + (f.object.<%= attribute.name %>.nil? ? [] : [f.object.<%= attribute.name %>])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%%= render partial: "/<%= attribute.name.pluralize %>/chosen_select", locals: {object_name: :<%= singular_table_name %>, no_create: true} %>
+				<%- elsif attribute.type == :boolean -%>
+	        	<%%= f.input :<%= attribute.name %>, as: :boolean_custom %>
+				<%- elsif attribute.type == :text -%>
+				<%%= f.input :<%= attribute.name %> %>
+				<%- else -%>
+	        	<%%= f.input :<%= attribute.name %> %>
+				<%- end -%>
+				<%- end -%>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: <%= class_name %>, resource: @<%= singular_table_name %>, f: f,
+			            resources_url: <%= orb_plural_model_url %>_path(q: params[:q], page: params[:page]),
+			            resource_url: @<%= singular_table_name %>.new_record? ? nil : <%= orb_plain_model_url %>_path(@<%= singular_table_name %>, q: params[:q], page: params[:page]),
+			            edit_resource_url: @<%= singular_table_name %>.new_record? ? nil : edit_<%= orb_plain_model_url %>_path(@<%= singular_table_name %>, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<%% end %>
+  	</div>
+</div>		

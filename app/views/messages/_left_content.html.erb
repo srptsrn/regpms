@@ -1,0 +1,25 @@
+<div class="list-group">
+	<%= link_to messages_url, {class: "list-group-item #{'active' if params[:list].blank?}"} do %>
+		<i class="entypo-inbox"></i>
+		<b><%= Message.human_attribute_name(:inbox) %></b>
+		<% if current_user.unseen_message_receivers.size > 0 %>
+			<span class="badge"><%= current_user.unseen_message_receivers.size %></span>
+		<% end %>
+	<% end %> 
+	<%= link_to messages_url(list: :sent), {class: "list-group-item #{'active' if params[:list] == 'sent'}"} do %>
+		<i class="entypo-paper-plane"></i>
+		<b><%= Message.human_attribute_name(:sent) %></b>
+	<% end %>
+	<%= link_to messages_url(list: :drafted), {class: "list-group-item #{'active' if params[:list] == 'drafted'}"} do %>
+		<i class="entypo-doc-text"></i>
+		<b><%= Message.human_attribute_name(:draft) %></b>
+	<% end %>
+	<%= link_to messages_url(list: :archived), {class: "list-group-item #{'active' if params[:list] == 'archived'}"} do %>
+		<i class="entypo-archive"></i>
+		<b><%= Message.human_attribute_name(:archive) %></b>
+	<% end %>
+	<%= link_to messages_url(list: :trashed), {class: "list-group-item #{'active' if params[:list] == 'trashed'}"} do %>
+		<i class="entypo-trash"></i>
+		<b><%= Message.human_attribute_name(:trash) %></b>
+	<% end %>
+</div>

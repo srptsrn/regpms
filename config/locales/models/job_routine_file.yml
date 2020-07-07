@@ -1,0 +1,30 @@
+en:
+  activerecord:
+    models:
+      job_routine_file: JobRoutineFile
+    attributes:
+      job_routine_file:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        job_routine: Job routine
+        file: File
+        description: Description
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      job_routine_file: หลักฐานงานประจำ
+    attributes:
+      job_routine_file:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        job_routine: งานประจำ
+        file: ไฟล์หลักฐาน
+        description: รายละเอียด
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

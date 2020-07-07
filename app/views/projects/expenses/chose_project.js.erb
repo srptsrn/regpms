@@ -1,0 +1,5 @@
+$("#expense_project_id").val("<%= @project ? @project.id : "" %>");
+$("#expense_project_id").trigger('chosen:updated');
+
+$("#expense_budget_group_id").val("<%= @project ? @project.budget_group_id : "" %>");
+$("#expense_budget_group_id").trigger('chosen:updated');

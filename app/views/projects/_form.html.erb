@@ -1,0 +1,412 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@project.respond_to?(:current_state) && @project.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(@project, html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Project, resource: @project, f: f,
+	            resources_url: projects_path(q: params[:q], page: params[:page]),
+	            resource_url: @project.new_record? ? nil : project_path(@project, q: params[:q], page: params[:page]),
+	            edit_resource_url: @project.new_record? ? nil : edit_project_path(@project, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :project, collection: (Project.where(["workflow_state NOT IN (?)", [:terminated]]) + (f.object.project.nil? ? [] : [f.object.project]) - [f.object]).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/projects/chosen_select", locals: {object_name: :project, no_create: true} %>
+
+	        	<%= f.input :year, wrapper: :full, collection: (2010..(Date.current.year + 3)).collect {|y| [y + 543, y]}.reverse, input_html: {class: "form-control chosen-select", data: {placeholder: t(:choose)}} %>
+	        	<%= f.input :code, wrapper: :full %>
+				<%= f.input :name, wrapper: :full %>
+				
+		        <%= f.association :kku_strategic_pillar, wrapper: :full, collection: (KkuStrategicPillar.all_enabled + (f.object.kku_strategic_pillar.nil? ? [] : [f.object.kku_strategic_pillar])).uniq.sort_by {|asso| asso.to_s_sort}, value_method: :id, label_method: :to_s_long, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/kku_strategic_pillars/chosen_select", locals: {object_name: :project, no_create: true} %>
+		        <% kku_strategics = f.object.kku_strategic_pillar ? f.object.kku_strategic_pillar.kku_strategics : [] %>
+		        <%= f.association :kku_strategic, wrapper: :full, collection: kku_strategics.uniq.sort_by {|asso| asso.to_s_sort}, value_method: :id, label_method: :to_s_long, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/kku_strategics/chosen_select", locals: {object_name: :project, no_create: true} %>
+				
+		        <%= f.association :policy, collection: (Policy.all_enabled + (f.object.policy.nil? ? [] : [f.object.policy])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/policies/chosen_select", locals: {object_name: :project} %>
+		        
+		        <%= f.association :strategy_group, collection: (StrategyGroup.all_enabled + (f.object.strategy_group.nil? ? [] : [f.object.strategy_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/strategy_groups/chosen_select", locals: {object_name: :project} %>
+		        
+		        <% strategies = f.object.strategy_group ? f.object.strategy_group.strategies : [] %>
+		        <%= f.association :strategy, collection: (strategies + (f.object.strategy.nil? ? [] : [f.object.strategy])).uniq.sort_by {|asso| asso.to_s_with_year}, value_method: :id, label_method: :to_s_with_year, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/strategies/chosen_select", locals: {object_name: :project} %>
+		        
+		        <% tactics = f.object.strategy ? f.object.strategy.tactics : [] %>
+		        <%= f.association :tactic, collection: (tactics + (f.object.tactic.nil? ? [] : [f.object.tactic])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/tactics/chosen_select", locals: {object_name: :project} %>
+		        
+		        <% measures = f.object.tactic ? f.object.tactic.measures : [] %>
+		        <%= f.association :measure, collection: (measures + (f.object.tactic.nil? ? [] : [f.object.tactic])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, wrapper: :full, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/measures/chosen_select", locals: {object_name: :project} %>
+		        
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:responsibles) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/responsibles/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+		        
+				<%= f.input :rationale, wrapper: :full %>
+				
+				<%#= f.input :objective, wrapper: :full %>
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:objectives) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/objectives/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:time_plan) %></label>
+			        <div class="col-md-12">
+			        	<%= f.input :from_date, as: :date_custom, wrapper: :input_group_12, input_html: {value: @project.from_date ? @project.from_date.strftime("%d/%m/%Y") : ""} %>
+			        	<%= f.input :to_date, as: :date_custom, wrapper: :input_group_12, input_html: {value: @project.to_date ? @project.to_date.strftime("%d/%m/%Y") : ""} %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:budgets) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/budgets/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+	        	<%#= f.input :budget_amount, wrapper: :full %>
+
+		        <%= f.association :budget_group, collection: (BudgetGroup.all_enabled + (f.object.budget_group.nil? ? [] : [f.object.budget_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/budget_groups/chosen_select", locals: {object_name: :project, no_create: true} %>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:budget_plan) %></label>
+			        <div class="col-md-12">
+						<table class="table table-striped table-bordered table-hover">
+						    <thead>
+						        <tr>
+						            <th nowrap class="text-center" style="width:20%;">
+						            	<%= Project.human_attribute_name :budget_plan_q1 %><br/>
+						            	<%= Project.human_attribute_name :budget_plan_q1_month %>
+						            </th>
+						            <th nowrap class="text-center" style="width:20%;">
+						            	<%= Project.human_attribute_name :budget_plan_q2 %><br/>
+						            	<%= Project.human_attribute_name :budget_plan_q2_month %>
+						            </th>
+						            <th nowrap class="text-center" style="width:20%;">
+						            	<%= Project.human_attribute_name :budget_plan_q3 %><br/>
+						            	<%= Project.human_attribute_name :budget_plan_q3_month %>
+						            </th>
+						            <th nowrap class="text-center" style="width:20%;">
+						            	<%= Project.human_attribute_name :budget_plan_q4 %><br/>
+						            	<%= Project.human_attribute_name :budget_plan_q4_month %>
+						            </th>
+						            <th nowrap class="text-center" style="width:20%;">
+						            	<%= t(:total) %>
+						            </th>
+						        </tr>
+						    </thead>
+						    <tbody>
+					        	<tr>
+								    <td class="text-top">
+								        <%= f.input :budget_plan_q1, wrapper: :nested_form, input_html: {class: "text-right budget-plan"} %>
+								    </td>
+								    <td class="text-top">
+								        <%= f.input :budget_plan_q2, wrapper: :nested_form, input_html: {class: "text-right budget-plan"} %>
+								    </td>
+								    <td class="text-top">
+								        <%= f.input :budget_plan_q3, wrapper: :nested_form, input_html: {class: "text-right budget-plan"} %>
+								    </td>
+								    <td class="text-top">
+								        <%= f.input :budget_plan_q4, wrapper: :nested_form, input_html: {class: "text-right budget-plan"} %>
+								    </td>
+								    <th class="text-top">
+								        <%= f.input :budget_plan_total, wrapper: :nested_form, input_html: {class: "text-right", readonly: true} %>
+								    </th>
+					        	</tr>
+						    </tbody>
+						</table>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:expenses) %></label>
+			        <div class="col-md-12">
+						<table class="table table-striped table-bordered table-hover">
+						    <thead>
+						        <tr>
+						            <th nowrap style="width:120px;"><%= Expense.human_attribute_name :budget_type %></th>
+						            <th nowrap class="text-center" style="width:80px;"><%= Expense.human_attribute_name :date %></th>
+						            <th nowrap><%= Expense.human_attribute_name :description %></th>
+						            <th nowrap class="text-right" style="width:100px;"><%= Expense.human_attribute_name :amount %></th>
+						            <th nowrap style="width:120px;"><%= Expense.human_attribute_name :by %></th>
+						        </tr>
+						    </thead>
+						    <tbody>
+						    	<% 
+						    		expenses = (@project.expenses + @project.children_expenses).sort_by {|ex| [ex.date, ex.project]}
+						    		total_expense = @project.total_expense
+						    		total_budget = @project.budget_amount.to_f
+						    	%>
+						        <% expenses.each do |expense| %>
+						        	<tr>
+						        		<td class="text-top"><%= expense.budget_type %></td>
+						        		<td class="text-center text-top"><%= expense.date ? expense.date.strftime("%d/%m/%Y") : "" %></td>
+						        		<td class="text-top">
+						        			<%= expense.description %>
+						        			<% unless @project.id == expense.project_id %>
+							        			<div class="clearfix"></div>
+							        			<small class="text-grey">(<%= expense.project %>)</small>
+						        			<% end %>
+					        			</td>
+						        		<td class="text-right text-top"><%= expense.amount.to_s_decimal_comma %></td>
+						        		<td class="text-top"><%= expense.by %></td>
+						        	</tr>
+						        <% end %>
+						    </tbody>
+						    <tfoot>
+						    	<tr>
+						    		<th colspan="3" class="text-right"><%= Project.human_attribute_name(:total_expense_amount) %></th>
+						    		<th class="text-right"><%= total_expense.to_s_decimal_comma %></th>
+						    		<th></th>
+						    	</tr>
+						    	<% if action_name == "show" %>
+							    	<tr>
+							    		<th colspan="3" class="text-right"><%= Project.human_attribute_name(:budget_balance) %></th>
+							    		<th class="text-right"><%= (total_budget - total_expense).to_s_decimal_comma %></th>
+							    		<th></th>
+							    	</tr>
+						    	<% end %>
+						    </tfoot>
+						</table>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:benefits) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/benefits/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:indicators) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/indicators/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Activity.model_name.human %></label>
+			        <div class="col-md-12">
+			        	<% @project.activities.each do |activity| %>
+				        	<div class="well">
+				        		<table class="table">
+				        			<tr>
+				        				<td nowrap class="text-right text-top" style="width:100px;">
+				        					<b><%= Activity.human_attribute_name(:from_date) %>:</b>
+				        				</td>
+				        				<td class="text-top">
+				        					<%= activity.from_date.to_s %>
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td nowrap class="text-right text-top">
+				        					<b><%= Activity.human_attribute_name(:to_date) %>:</b>
+				        				</td>
+				        				<td class="text-top">
+				        					<%= activity.to_date.to_s %>
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td nowrap class="text-right text-top">
+				        					<b><%= Activity.human_attribute_name(:location) %>:</b>
+				        				</td>
+				        				<td class="text-top">
+				        					<%= activity.location %>
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td nowrap class="text-right text-top">
+				        					<b><%= Activity.human_attribute_name(:number_of_participant) %>:</b>
+				        				</td>
+				        				<td class="text-top">
+				        					<%= activity.number_of_participant %>
+				        				</td>
+				        			</tr>
+				        			<tr>
+				        				<td nowrap class="text-right text-top">
+				        					<b><%= Activity.human_attribute_name(:name) %>:</b>
+				        				</td>
+				        				<td class="text-top">
+				        					<% activity.name.to_s.split("\n").each do |ddd| %>
+				        						<%= ddd %><br/>
+				        					<% end %>
+				        				</td>
+				        			</tr>
+			        			</table>
+			        		</div>
+			        		<div class="clearfix"></div>
+			        	<% end %>
+				        <%= render partial: "/projects/activities/nested_form", locals: {f: f} if false %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:problem_suggesstions) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/problem_suggesstions/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+
+		        <div class="form-group">
+			        <label class="col-md-12 control-label text-left"><%= Project.human_attribute_name(:project_image) %></label>
+			        <div class="col-md-12">
+				        <%= render partial: "/projects/project_images/nested_form", locals: {f: f} %>
+		        	</div>
+		        </div>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Project, resource: @project, f: f,
+			            resources_url: projects_path(q: params[:q], page: params[:page]),
+			            resource_url: @project.new_record? ? nil : project_path(@project, q: params[:q], page: params[:page]),
+			            edit_resource_url: @project.new_record? ? nil : edit_project_path(@project, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>	
+
+<% unless action_name == "show" %>
+	<script type="text/javascript">
+	
+		function budget_amount_calculate(){
+	 		var sum = 0;
+			$('.budget-amount').each(function(){
+				
+				eid = $(this).attr('id');
+				deid = eid.replace('amount', '_destroy');
+				
+				if($('#' + deid).val() == "1"){
+					
+				}else{
+			 		vx = parseFloat($(this).val());
+			 		v = !isNaN(vx) ? vx : 0;
+				    sum += v;
+		   		}
+			});
+			$('#project_budget_amount').val(sum);
+		}
+	
+		function budget_plan_calculate(){
+	 		var sum = 0;
+	 		budget_amountx = parseFloat($('#project_budget_amount').val());
+	 		budget_amount = !isNaN(budget_amountx) ? budget_amountx : 0;
+		 		
+			$('.budget-plan').each(function(){
+		 		vx = parseFloat($(this).val());
+		 		v = !isNaN(vx) ? vx : 0;
+			    sum += v;	
+			});
+			
+			$('#project_budget_plan_total').val(sum);
+			if(sum > budget_amount){
+				$('#project_budget_plan_total').parent().parent().addClass('has-error');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-success');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-warning');
+			}else if(sum < budget_amount){
+				$('#project_budget_plan_total').parent().parent().addClass('has-warning');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-success');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-error');
+			}else{
+				$('#project_budget_plan_total').parent().parent().addClass('has-success');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-warning');
+				$('#project_budget_plan_total').parent().parent().removeClass('has-error');
+			}
+		}
+	
+        var init_budget_amount = function(){
+		 	$('.budget-amount').on('change, keyup', function(event){
+		 		budget_amount_calculate();
+	 			budget_plan_calculate();
+	        });
+        };
+        
+	 	$('.budget-plan, #project_budget_amount').on('change, keyup', function(event){
+	 		budget_plan_calculate();
+        });
+	</script>
+
+	<script type="text/javascript">
+		 jQuery(function($) {
+		 	$('#project_code').change(function(event){
+	
+		 		yx = parseInt($('#project_code').val().slice(0, 2));
+		 		y = !isNaN(yx) ? yx : 0;
+		 		
+		 		if(y == 0){
+		 			$('#indicator-target-title').html('<%= Indicator.human_attribute_name :target %>');
+		 			$('#indicator-result-1-title').html('<%= Indicator.human_attribute_name :result1 %>');
+		 			$('#indicator-result-2-title').html('<%= Indicator.human_attribute_name :result2 %>');
+		 			$('#indicator-result-3-title').html('<%= Indicator.human_attribute_name :result3 %>');
+		 		}else{
+		 			y += 2500;
+		 			y1 = y - 2;
+		 			y2 = y - 1;
+		 			y3 = y - 0;
+		 			$('#indicator-target-title').html('<%= Indicator.human_attribute_name :target %> ' + y);
+		 			$('#indicator-result-1-title').html(y1);
+		 			$('#indicator-result-2-title').html(y2);
+		 			$('#indicator-result-3-title').html(y3);
+		 		}
+		 		
+	        });
+		 	
+		 	$('#project_strategy_group_id').change(function(event){
+		 		$.ajax({
+	            	url: '<%= chose_strategy_group_projects_path %>',
+	    			type: 'post',
+	    			data: {strategy_group_id: $(this).val(), year: $('#project_year').val()},
+	                dataType: 'script'
+	            });
+	        });
+		 	
+		 	$('#project_strategy_id').change(function(event){
+		 		$.ajax({
+	            	url: '<%= chose_strategy_projects_path %>',
+	    			type: 'post',
+	    			data: {strategy_id: $(this).val()},
+	                dataType: 'script'
+	            });
+	        });
+		 	
+		 	$('#project_tactic_id').change(function(event){
+		 		$.ajax({
+	            	url: '<%= chose_tactic_projects_path %>',
+	    			type: 'post',
+	    			data: {tactic_id: $(this).val()},
+	                dataType: 'script'
+	            });
+	        });
+	        
+		 	$('#project_kku_strategic_pillar_id').change(function(event){
+		 		$.ajax({
+	            	url: '<%= chose_kku_strategic_pillar_projects_path %>',
+	    			type: 'post',
+	    			data: {kku_strategic_pillar_id: $(this).val()},
+	                dataType: 'script'
+	            });
+	        });
+	        
+		 });
+		 
+	</script>
+<% end %>

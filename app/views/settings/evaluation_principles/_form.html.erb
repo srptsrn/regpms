@@ -1,0 +1,42 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@evaluation_principle.respond_to?(:current_state) && @evaluation_principle.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @evaluation_principle], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: EvaluationPrinciple, resource: @evaluation_principle, f: f,
+	            resources_url: settings_evaluation_principles_path(q: params[:q], page: params[:page]),
+	            resource_url: @evaluation_principle.new_record? ? nil : settings_evaluation_principle_path(@evaluation_principle, q: params[:q], page: params[:page]),
+	            edit_resource_url: @evaluation_principle.new_record? ? nil : edit_settings_evaluation_principle_path(@evaluation_principle, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :evaluation, collection: (Evaluation.all + (f.object.evaluation.nil? ? [] : [f.object.evaluation])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/evaluations/chosen_select", locals: {object_name: :evaluation_principle, no_create: true} %>
+		        <%= f.association :task, collection: (Task.all + (f.object.task.nil? ? [] : [f.object.task])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/tasks/chosen_select", locals: {object_name: :evaluation_principle, no_create: true} %>
+				<%= f.input :principle1 %>
+				<%= f.input :principle2 %>
+				<%= f.input :principle3 %>
+				<%= f.input :principle4 %>
+				<%= f.input :principle5 %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: EvaluationPrinciple, resource: @evaluation_principle, f: f,
+			            resources_url: settings_evaluation_principles_path(q: params[:q], page: params[:page]),
+			            resource_url: @evaluation_principle.new_record? ? nil : settings_evaluation_principle_path(@evaluation_principle, q: params[:q], page: params[:page]),
+			            edit_resource_url: @evaluation_principle.new_record? ? nil : edit_settings_evaluation_principle_path(@evaluation_principle, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

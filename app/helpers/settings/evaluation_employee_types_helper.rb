@@ -1,0 +1,2 @@
+module Settings::EvaluationEmployeeTypesHelper
+end

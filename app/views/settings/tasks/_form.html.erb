@@ -1,0 +1,43 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@task.respond_to?(:current_state) && @task.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @task], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Task, resource: @task, f: f,
+	            resources_url: settings_tasks_path(q: params[:q], page: params[:page]),
+	            resource_url: @task.new_record? ? nil : settings_task_path(@task, q: params[:q], page: params[:page]),
+	            edit_resource_url: @task.new_record? ? nil : edit_settings_task_path(@task, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+	        	<%= f.input :sorting %>
+	        	<%= f.input :name %>
+		        <%= f.input :file, as: :file_custom %>
+		        
+		        <div class="form-group"><label class="col-md-offset-4 col-md-6"><%= Task.human_attribute_name(:principle) %></label><</div>
+	        	<%= f.input :principle1, as: :text_field_custom %>
+	        	<%= f.input :principle2, as: :text_field_custom %>
+	        	<%= f.input :principle3, as: :text_field_custom %>
+	        	<%= f.input :principle4, as: :text_field_custom %>
+	        	<%= f.input :principle5, as: :text_field_custom %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Task, resource: @task, f: f,
+			            resources_url: settings_tasks_path(q: params[:q], page: params[:page]),
+			            resource_url: @task.new_record? ? nil : settings_task_path(@task, q: params[:q], page: params[:page]),
+			            edit_resource_url: @task.new_record? ? nil : edit_settings_task_path(@task, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

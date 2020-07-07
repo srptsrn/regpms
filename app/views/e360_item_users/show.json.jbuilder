@@ -1,0 +1,1 @@
+json.extract! @e360_item_user, :id, :to_s, :e360_user_id, :e360_item_id, :score, :created_at, :updated_at

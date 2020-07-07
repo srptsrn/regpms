@@ -1,0 +1,1 @@
+json.extract! @position, :id, :to_s, :workflow_state, :workflow_state_updater_id, :name, :position_type_id, :created_at, :updated_at

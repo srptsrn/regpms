@@ -1,0 +1,21 @@
+<tr class="nested-fields">
+    <td>
+        <span class="label <%= state_label_class(f.object.current_state.to_sym) %>"><%=t "workflow.state.#{f.object.current_state.to_sym}" %></span>
+    </td>
+    <td>
+        <%= f.association :workflow_state_updater, collection: (WorkflowStateUpdater.limit(100) + (f.object.workflow_state_updater.nil? ? [] : [f.object.workflow_state_updater])).uniq, value_method: :id, label_method: :to_s, label: false, wrapper: false, "data-placeholder" => t(:choose) %>
+    </td>
+    <td>
+        <%= f.input_field :name, size: 20 %>
+    </td>
+    <td>
+        <%= f.input_field :sorting %>
+    </td>
+    <% unless action_name == "show" %>
+        <td>
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+        </td>
+    <% end %>
+</tr>

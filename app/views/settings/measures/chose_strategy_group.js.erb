@@ -1,0 +1,15 @@
+$("#measure_strategy_group_id").val("<%= @strategy_group ? @strategy_group.id : "" %>");
+$("#measure_strategy_group_id").trigger('chosen:updated');
+
+// remove all options
+$("#measure_strategy_id").empty();
+// insert blank option
+$("#measure_strategy_id").append($('<option></option>'));
+// insert new options
+<% if @strategy_group %>
+	<% @strategy_group.strategies.where(@year ? ["year = ?", @year] : nil).sort_by {|a| a.to_s_with_year}.each do |strategy| %>
+		$("#measure_strategy_id").append($('<option></option>').attr('value', <%= strategy.id %>).text('<%= strategy.to_s_with_year %>'));
+	<% end %>
+<% end %>
+// chosen update
+$("#measure_strategy_id").trigger('chosen:updated');

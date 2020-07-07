@@ -1,0 +1,2 @@
+module Projects::ObjectivesHelper
+end
