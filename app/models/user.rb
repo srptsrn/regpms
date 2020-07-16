@@ -225,33 +225,33 @@ class User < ActiveRecord::Base
     end
   end
 # ใช้อยู้แล้ววววว ถ้า error มาเปิด จะได้ของเดิม  
-#  def is_vice_director?(ev=nil)
-#    if ev.nil?
-#      return false
-#    elsif ev.is_360?
-#      return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
-#    else
-#      return Section.where(["workflow_state = ? AND vice_director_id = ? AND vice_director2_id = ? AND vice_director3_id = ?", :enabled, id]).size > 0
-#    end
-#
-#    # if ev.nil?
-#      # return false
-#    # else
-#      # return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
-#    # end
-#  end
+  def is_vice_director?(ev=nil)
+    if ev.nil?
+      return false
+    elsif ev.is_360?
+      return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
+    else
+      return Section.where(["workflow_state = ? AND vice_director_id = ?", :enabled, id]).size > 0
+    end
+
+     #if ev.nil?
+     #  return false
+     #else
+     #  return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
+     #end
+  end
 # จบ code ที่เปิดใช้ปกติ ##########################################
 
 #.................................................
-  def is_vice_director_id?(ev=nil)
-    if ev.nil?
-      return false
-    else
-      return ev.vice_director_id == id
-    end
-  end
+  #def is_vice_director_id?(ev=nil)
+  #  if ev.nil?
+  #    return false
+  #  else
+  #    return ev.vice_director_id == id
+  #  end
+  #end
 
-  def is_vice_director2_id?(ev=nil)
+  def is_vice_director2?(ev=nil)
     if ev.nil?
       return false
     else
@@ -259,7 +259,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def is_vice_director3_id?(ev=nil)
+  def is_vice_director3?(ev=nil)
     if ev.nil?
       return false
     else
