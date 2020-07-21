@@ -254,16 +254,20 @@ class User < ActiveRecord::Base
   def is_vice_director2?(ev=nil)
     if ev.nil?
       return false
+    elsif ev.is_360?
+      return ev.vice_director2_id == id #|| ev.vice_director2_id == id || ev.vice_director3_id == id
     else
-      return ev.vice_director2_id == id
+      return Section.where(["workflow_state = ? AND vice_director2_id = ?", :enabled, id]).size > 0
     end
   end
 
   def is_vice_director3?(ev=nil)
     if ev.nil?
       return false
+    elsif ev.is_360?
+      return ev.vice_director3_id == id #|| ev.vice_director2_id == id || ev.vice_director3_id == id
     else
-      return ev.vice_director3_id == id
+      return Section.where(["workflow_state = ? AND vice_director3_id = ?", :enabled, id]).size > 0
     end
   end
 

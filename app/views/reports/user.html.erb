@@ -342,7 +342,7 @@
 	            		<% end %>
 	            	<% end %>
 	          	</tbody>
-	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? %>
+	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? || current_user.is_vice_director2 || current_user.is_vice_director3 %>
 		          	<tfoot>
 		          		<%
 		          			ability_leader_total, ability_leader_count 			= user.ability_leader_total_count(evaluation)

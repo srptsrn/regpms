@@ -1,5 +1,7 @@
 <div class="page-header">
 	<h1><%= t(:dashboard) %><small>...</small></h1>
+	<h1><%= @role == 'vice_director'%></h1>
+
 </div>
 
 <% news_fronts = NewsFront.all_published %>
@@ -49,6 +51,7 @@
 						</thead>
 						<tbody>
 							<% if evaluation.is_360? %>
+							
 								<% if current_user.is_director?(evaluation) %>
 									<tr>
 										<td>
@@ -72,7 +75,7 @@
 											<% end if current_user.is_director?(evaluation) %>
 										</td>
 									</tr>
-								<% elsif current_user.is_vice_director?(evaluation) %>
+								<% elsif current_user.is_vice_director?(evaluation) || current_user.is_vice_director2?(evaluation) || current_user.is_vice_director3?(evaluation)%>
 									<tr>
 										<td>
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director) %>
@@ -182,7 +185,6 @@
 										</td>
 									</tr>
 								<% end %>
-								<%if false%>
 								<% if current_user.is_vice_director2?(evaluation) %>
 									<tr>
 										<td>
@@ -214,7 +216,6 @@
 											<% end %>
 										</td>
 									</tr>
-								<% end %>
 								<% end %>
 								<% if current_user.is_secretary?(evaluation) %>
 									<tr>

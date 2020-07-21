@@ -237,7 +237,6 @@ class AssessController < OrbController
     if @role == "director" && current_user.is_director?(@current_evaluation)
       
     elsif @role == "vice_director" && current_user.is_vice_director?(@current_evaluation)
-    
     #.................................................
     elsif @role == "vice_director2" && current_user.is_vice_director2?(@current_evaluation)
     elsif @role == "vice_director3" && current_user.is_vice_director3?(@current_evaluation)
