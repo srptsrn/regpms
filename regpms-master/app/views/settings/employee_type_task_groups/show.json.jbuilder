@@ -1,0 +1,1 @@
+json.extract! @employee_type_task_group, :id, :to_s, :workflow_state, :workflow_state_updater_id, :sorting, :employee_type_id, :name, :created_at, :updated_at

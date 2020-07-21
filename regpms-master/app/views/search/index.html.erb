@@ -1,0 +1,75 @@
+<div class="page-header">
+	<h1><%= controller_name.capitalize %><small><%= action_name %></small></h1>
+</div>
+
+<!-- Widget Row Start grid -->
+<div class="row">
+  	<div class="col-md-12 bootstrap-grid"> 
+  		
+		<!--Search Field-->
+		<%= form_tag(search_url, {method: :get, class: "margin-bottom-10"}) do %>
+			<div class="input-group input-group-lg">
+	  			<!-- div class="input-group-btn">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Everywhere <span class="caret"></span></button>
+					<ul class="dropdown-menu">
+	  					<li><a href="#">Search Everywhere</a></li>
+	  					<li><a href="#">Search Media</a></li>
+						<li><a href="#">Search Documents</a></li>
+						<li><a href="#">Search Users</a></li>
+					</ul>
+	  			</div -->
+	  			<!-- /btn-group -->
+	  			<input name="search_all" type="text" placeholder="Enter keywords" class="form-control" value="<%= @search_all %>">
+  				<span class="input-group-btn">
+  					<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+  				</span> 
+			</div>
+		<% end %>
+
+		<!-- New widget -->
+		<div class="powerwidget cold-grey">
+	  		<div class="inner-spacer"> 
+				<!--/Search Field-->
+				<div class="search-results">
+					<ol>
+						<% @results.each do |result| %>
+							<li>
+	  							<div class="search-result-block">
+									<div class="search-result clearfix"> 
+										<span class="badge pull-right"><i class="fa fa-refresh"></i> <%= result.updated_at ? result.updated_at : "xx.xx.xxxx" %></span>
+										<h3><%= link_to result.title, result.result_url %></h3>
+										<% if result.result_icon == "user" %>
+											<div class="user-block hover-fader">
+												<% user = User.exists?(result.result_id) ? User.find(result.result_id) : nil %>
+												<%= image_tag (user ? user.avatar(:thumb) : "/files/missing/users/thumb.png") %>
+											</div>
+	                    				<% elsif result.result_icon == "ticket" %>
+	  										<div class="file-type"><span><i class="fa fa-ticket"></i></span></div>
+	                    				<% elsif result.result_icon == "file" %>
+	  										<div class="file-type"><span><i class="fa fa-search"></i></span></div>
+	  									<% end %>
+	  									<div class="url text-green">
+	  										<strong><%= request.base_url %><%= result.result_url %></strong> 
+	  										<!-- a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></a>
+											<ul class="dropdown-menu" role="menu">
+	  											<li><a href="#">Cashed Version</a></li>
+	  											<li><a href="#">Share Page</a></li>
+												<li><a href="#">Similar Pages</a></li>
+											</ul -->
+	  									</div>
+	  									<p><%= result.description %></p>
+									</div>
+	  							</div>
+							</li>
+						<% end %>
+	              	</ol>
+	        	</div>
+	                
+	            <!--Pagination-->
+				<%= will_paginate @results %>
+	            <!--/Pagination--> 
+                
+      		</div>
+      	</div>
+	</div>
+</div>

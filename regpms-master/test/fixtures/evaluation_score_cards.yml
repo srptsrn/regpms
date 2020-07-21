@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  user_id: 
+  committee_id: 
+  role: MyString
+  task_score: 1.5
+  ability_score: 1.5
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  evaluation_id: 
+  user_id: 
+  committee_id: 
+  role: MyString
+  task_score: 1.5
+  ability_score: 1.5

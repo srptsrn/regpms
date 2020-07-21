@@ -1,0 +1,50 @@
+<% if current_user %>
+	<div class="simple-testimonials"> 
+		<div class="col-md-12">
+			<div class="cbp-qtcontent">
+		  		<div class="user-img"><%= image_tag current_user.avatar.url(:thumb), {alt: current_user} %></div>
+		  		<blockquote>
+		        	<h3 class="margin-top-20" title="<%= current_user %>" style="overflow:hidden; text-overflow:ellipsis;"><%= current_user %></h3>
+		        	<p title="<%= current_user.email %>" style="overflow:hidden; text-overflow:ellipsis;"><%= current_user.email %></p>
+		        	<p>
+	          			<%= link_to "#signout", {class: "btn btn-xs btn-default", "data-toggle" => "modal"} do %>
+	          				<i class="fa fa-power-off"></i> Sign Out
+	      				<% end %>
+      				</p>
+		      	</blockquote>
+			</div>
+		</div>
+	</div>
+<% else %>
+	<h4><%= t(:login_form) %></h4>
+	<%= simple_form_for(:user, url: session_path(:user), html: {id: "login-form", class: "orb-form"}) do |f| %>
+		<fieldset>
+			<%= f.input :login, wrapper: :login, required: true, autofocus: true, hint: "<i class='fa fa-user'></i>".html_safe, input_html: {placeholder: "Login"} %>
+			<div class="margin-bottom-10"></div>
+			<%= f.input :password, wrapper: :login, required: true, hint: "<i class='fa fa-lock'></i>".html_safe, input_html: {placeholder: "Password"} %>
+			<div class="margin-bottom-10"></div>
+	  		<section>
+	            <div class="row">
+	              	<div class="col col-xs-12">
+	                	<label class="checkbox pull-left">
+	                		<input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me">
+	                  		<i></i>Keep me logged in
+	              		</label>
+	                	<div class="note pull-right">
+				        	<%= link_to new_password_path(:user), {"title" => "Forgot your password?"} do %>
+				        		Forgot password?
+				        	<% end %>
+	                	</div>
+	            	</div>
+	        	</div>
+	      	</section>
+			<div class="margin-bottom-10"></div>
+		</fieldset>
+	    <%= f.button :button, class: "btn btn-primary" do %>
+	    	Sign in
+	    <% end %>
+		<%= link_to new_registration_path(:user), {"title" => "Create new account"} do %>
+			Register
+		<% end %>
+	<% end %>
+<% end %>

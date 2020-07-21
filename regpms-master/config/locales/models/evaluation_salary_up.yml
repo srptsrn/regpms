@@ -1,0 +1,83 @@
+en:
+  activerecord:
+    models:
+      evaluation_salary_up: EvaluationSalaryUp
+    attributes:
+      evaluation_salary_up:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        percent_of_change: Percent of change
+        total_amount: Total amount
+        total_eligible_amount: Total eligible amount
+        point_level1: Point level1
+        point_level2: Point level2
+        point_level3: Point level3
+        point_level4: Point level4
+        point_level5: Point level5
+        point_level1_label: ต้องปรับปรุง
+        point_level2_label: พอใช้
+        point_level3_label: ดี
+        point_level4_label: ดีมาก
+        point_level5_label: ดีเด่น
+        min_change1: Min change1
+        min_change2: Min change2
+        min_change3: Min change3
+        min_change4: Min change4
+        min_change5: Min change5
+        max_change1: Max change1
+        max_change2: Max change2
+        max_change3: Max change3
+        max_change4: Max change4
+        max_change5: Max change5
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      evaluation_salary_up: EvaluationSalaryUp
+    attributes:
+      evaluation_salary_up:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: รอบการประเมิน
+        percent_of_change: ค่าร้อยละการปรับ
+        total_amount: ฐานเงินรวม
+        total_quota_amount: วงเงินปรับรวม
+        total_eligible_amount: วงเงินผู้ได้รับการปรับ
+        percent_of_eligible: ร้อยละจากฐานผู้ได้ปรับ
+        point_level: ระดับคะแนน
+        point_level1: ระดับคะแนน 1
+        point_level2: ระดับคะแนน 2
+        point_level3: ระดับคะแนน 3
+        point_level4: ระดับคะแนน 4
+        point_level5: ระดับคะแนน 5
+        point_level_label: ผลการประเมิน
+        point_level1_label: ต้องปรับปรุง
+        point_level2_label: พอใช้
+        point_level3_label: ดี
+        point_level4_label: ดีมาก
+        point_level5_label: ดีเด่น
+        min_change: ขั้นต่ำ
+        min_change1: ขั้นต่ำ 1
+        min_change2: ขั้นต่ำ 2
+        min_change3: ขั้นต่ำ 3
+        min_change4: ขั้นต่ำ 4
+        min_change5: ขั้นต่ำ 5
+        max_change: ขั้นสูง
+        max_change1: ขั้นสูง 1
+        max_change2: ขั้นสูง 2
+        max_change3: ขั้นสูง 3
+        max_change4: ขั้นสูง 4
+        max_change5: ขั้นสูง 5
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        
+        total_salary_min_up: รวมเงินจากกำหนดขั้นต่ำ
+        total_quota_amount2: เหลือวงเงินสำหรับปรับ
+        percent_of_quota_amount2: ค่าร้อยละวงเงินสำหรับปรับ
+        avg_point: คะแนนเฉลี่ย

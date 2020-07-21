@@ -1,0 +1,42 @@
+<tr id="job-plan-row-<%= job_plan.id %>">
+	<td id="job-plan-name-<%= job_plan.id %>" class="text-top">
+		<%= text_area "job_plan_#{job_plan.id}", :weight, {value: job_plan.name, placeholder: "กิจกรรม / โครงการ / งาน", class: "form-control", id: "job_plan_#{job_plan.id}_name"} %>
+	</td>
+	<td class="text-center text-top"><%= radio_button "xjob_plan_#{job_plan.id}", :expect, 1, {checked: job_plan.expect.to_i == 1, id: "xjob_plan_#{job_plan.id}_expect_1", onclick: "$('#job_plan_#{job_plan.id}_expect').val(1);"} %></td>
+	<td class="text-center text-top"><%= radio_button "xjob_plan_#{job_plan.id}", :expect, 2, {checked: job_plan.expect.to_i == 2, id: "xjob_plan_#{job_plan.id}_expect_2", onclick: "$('#job_plan_#{job_plan.id}_expect').val(2);"} %></td>
+	<td class="text-center text-top"><%= radio_button "xjob_plan_#{job_plan.id}", :expect, 3, {checked: job_plan.expect.to_i == 3, id: "xjob_plan_#{job_plan.id}_expect_3", onclick: "$('#job_plan_#{job_plan.id}_expect').val(3);"} %></td>
+	<td class="text-center text-top"><%= radio_button "xjob_plan_#{job_plan.id}", :expect, 4, {checked: job_plan.expect.to_i == 4, id: "xjob_plan_#{job_plan.id}_expect_4", onclick: "$('#job_plan_#{job_plan.id}_expect').val(4);"} %></td>
+	<td class="text-center text-top"><%= radio_button "xjob_plan_#{job_plan.id}", :expect, 5, {checked: job_plan.expect.to_i == 5, id: "xjob_plan_#{job_plan.id}_expect_5", onclick: "$('#job_plan_#{job_plan.id}_expect').val(5);"} %></td>
+	<td class="text-right text-top">
+		<%= hidden_field "job_plan_#{job_plan.id}", :expect, {value: job_plan.expect} %>
+		<%= text_field "job_plan_#{job_plan.id}", :weight, {value: job_plan.weight ? job_plan.weight.to_s_decimal : nil, placeholder: "น้ำหนัก ", class: "form-control", style: "text-align:right;", id: "job_plan_#{job_plan.id}_weight"} %>
+	</td>
+	<% if @current_evaluation.is_director_confirm_range && job_plan.current_state.to_sym == :enabled %>
+		<td class="text-top">
+			<div id="job-plan-update-button-<%= job_plan.id %>" class="btn btn-success pull-left" title="บันทึก">
+				<i class="fa fa-save"></i> <%= t(:save) %>
+			</div>
+			<script type="text/javascript">
+				 jQuery(function($) {
+				 	$('#job-plan-update-button-<%= job_plan.id %>').click(function(event){
+				 		$.ajax({
+			            	url: '<%= update_job_plan_director_confirms_url %>',
+			    			type: 'post',
+			    			data: {job_plan_id: <%= job_plan.id %>, name: $("#job_plan_<%= job_plan.id %>_name").val(), expect: $("#job_plan_<%= job_plan.id %>_expect").val(), weight: $("#job_plan_<%= job_plan.id %>_weight").val()},
+			                dataType: 'script'
+			            });
+			        });
+		        });
+	        </script>
+		</td>
+	<% else %>
+		<td class="text-top"><span class="label <%= state_label_class(job_plan.workflow_state.to_sym) %>"><%=t "workflow.state.#{job_plan.workflow_state}" %></span></td>
+	<% end %>
+</tr>
+<script type="text/javascript">
+					$('textarea').each(function () {
+					  input_auto_height(this);
+					}).on('input', function () {
+					  input_auto_height(this);
+					});
+</script>

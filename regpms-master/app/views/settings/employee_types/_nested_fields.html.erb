@@ -1,0 +1,20 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_employee_types_attributes_#{f_index}".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :sorting, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+        </td>
+    <% end %>
+</tr>

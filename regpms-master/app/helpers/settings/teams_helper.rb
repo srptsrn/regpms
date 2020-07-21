@@ -1,0 +1,2 @@
+module Settings::TeamsHelper
+end

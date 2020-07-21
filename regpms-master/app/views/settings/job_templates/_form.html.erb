@@ -1,0 +1,44 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@job_template.respond_to?(:current_state) && @job_template.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @job_template], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: JobTemplate, resource: @job_template, f: f,
+	            resources_url: settings_job_templates_path(q: params[:q], page: params[:page]),
+	            resource_url: @job_template.new_record? ? nil : settings_job_template_path(@job_template, q: params[:q], page: params[:page]),
+	            edit_resource_url: @job_template.new_record? ? nil : edit_settings_job_template_path(@job_template, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :job_template_group, collection: (JobTemplateGroup.all + (f.object.job_template_group.nil? ? [] : [f.object.job_template_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/job_template_groups/chosen_select", locals: {object_name: :job_template, no_create: true} %>
+	        	<%= f.input :name %>
+	        	<%= f.input :unit %>
+	        	<%= f.input :duration %>
+	        	<%= f.input :is_job_plan, as: :boolean_custom %>
+	        	<%= f.input :is_job_routine, as: :boolean_custom %>
+	        	<%= f.input :is_job_vice, as: :boolean_custom %>
+	        	<%= f.input :is_job_development, as: :boolean_custom %>
+	        	
+	        	<%= render partial: "/settings/job_result_templates/nested_form", locals: {f: f} %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: JobTemplate, resource: @job_template, f: f,
+			            resources_url: settings_job_templates_path(q: params[:q], page: params[:page]),
+			            resource_url: @job_template.new_record? ? nil : settings_job_template_path(@job_template, q: params[:q], page: params[:page]),
+			            edit_resource_url: @job_template.new_record? ? nil : edit_settings_job_template_path(@job_template, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

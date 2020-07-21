@@ -1,0 +1,8 @@
+<% if @error_message.blank? %>
+	$('#job-routine-result-files-<%= @job_routine_result.id %>').append("<%=j render(partial: "row_job_routine_result_file", locals: {job_routine_result_file: @job_routine_result_file}) %>");
+	$('#new_job_routine_result_file_<%= @job_routine_result.id %>_file').val('');
+	$('#new_job_routine_result_file_<%= @job_routine_result.id %>_description').val('');
+	$('#job-routine-result-file-<%= @job_routine_result_file.id %>').effect("slide", 1000);
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>

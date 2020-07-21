@@ -1,0 +1,37 @@
+<div class="page-header">
+	<h1><%= t(:pf) %> บันทึกข้อมูลแทนบุคลากร<small><%= @current_evaluation.pf_start_date ? @current_evaluation.pf_start_date.strftime("%d/%m/%Y") : "" %> - <%= @current_evaluation.pf_end_date ? @current_evaluation.pf_end_date.strftime("%d/%m/%Y") : "" %></small></h1>
+</div>
+
+<div class="powerwidget red" role="widget">
+	<div class="inner-spacer" role="content">
+        <%= search_form_for @q, url: x_pfs_url, id: 'quick-search', class: "form-horizontal pull-right no-padding col-sm-9 col-md-6 col-lg-4 #{'hide' if params[:advance]}" do |f| %>
+      		<div class="input-group">
+				<%= f.text_field :firstname_or_lastname_cont, :autofocus => true, class: "form-control", placeholder: "#{t(:search)} ..." %>
+				<span class="input-group-addon btn" onclick="$('#quick-search').submit();"><i class="fa fa-search"></i></span>
+            </div>
+        <% end %>
+        <div class="clearfix margin-bottom-20"></div>
+        
+		<table class="table table-striped margin-0px">
+          	<thead>
+            	<tr>
+            		<th style="width:50px; text-align:right;"></th>
+                    <th><%= EvaluationUser.human_attribute_name(:user) %></th>
+            	</tr>
+          	</thead>
+          	<tbody>
+          		<% count = 0 %>
+      			<% @users.sort_by {|u| u.to_s}.each do |user| %>
+            		<tr>
+            			<td style="vertical-align:top; text-align:right;"><%= count += 1 %>.</td>
+						<td class="text-top">
+							<%= link_to user.prefix_firstname_lastname, x_user_pfs_url(user, q: params[:q]) %>
+						</td>
+                	</tr>
+            	<% end %>
+          	</tbody>
+        </table>
+        <%= will_paginate @users %>
+        
+  	</div>
+</div>

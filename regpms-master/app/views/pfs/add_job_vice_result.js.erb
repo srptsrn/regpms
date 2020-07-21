@@ -1,0 +1,11 @@
+<% if @error_message.blank? %>
+	$('#job-vice-result-list-<%= @job_vice.id %>').append("<%=j render(partial: "row_job_vice_result", locals: {job_vice_result: @job_vice_result}) %>");
+	$('#new_job_vice_result_<%= @job_vice.id %>_name').val('');
+	$('#new_job_vice_result_<%= @job_vice.id %>_job_result_template_id').val('');
+	$('#new_job_vice_result_<%= @job_vice.id %>_job_result_template_id').trigger('chosen:updated');
+	$('#job-vice-result-row-<%= @job_vice_result.id %>').effect("highlight", 1000);
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>
+
+init_input_chosen();

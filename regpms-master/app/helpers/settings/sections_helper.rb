@@ -1,0 +1,2 @@
+module Settings::SectionsHelper
+end

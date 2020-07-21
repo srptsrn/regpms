@@ -1,0 +1,36 @@
+en:
+  activerecord:
+    models:
+      news_calendar: News Calendar
+    attributes:
+      news_calendar:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        start_at: Start at
+        end_at: End at
+        title: Title
+        detail: Detail
+        published_at: Published at
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        today_news: Today
+th:
+  activerecord:
+    models:
+      news_calendar: ปฏิทินข่าว
+    attributes:
+      news_calendar:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        start_at: เริ่ม
+        end_at: สิ้นสุด
+        title: เรื่อง
+        detail: รายละเอียด
+        published_at: เผยแพร่เมื่อ
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        today_news: กิจกรรมวันนี้

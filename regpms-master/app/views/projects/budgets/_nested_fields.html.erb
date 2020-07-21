@@ -1,0 +1,31 @@
+<!-- replace 'project' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "project_budgets_attributes_#{f_index}".to_sym
+	project_select_id = "project_budgets_attributes_#{f_index}_project_id".to_sym
+	budget_type_select_id = "project_budgets_attributes_#{f_index}_budget_type_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :sorting, wrapper: :nested_form, input_html: {class: "text-right"} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :budget_type, wrapper: :nested_form, collection: (BudgetType.all + (f.object.budget_type.nil? ? [] : [f.object.budget_type])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/settings/budget_types/chosen_select", locals: {object_name: :budget, no_create: true, select_id: budget_type_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.input :description, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :amount, wrapper: :nested_form, input_html: {class: "text-right budget-amount"} %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-danger budget-amount-delete" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#project_budgets_attributes_<%= f.index %>_project").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#project_budgets_attributes_<%= f.index %>_budget_type").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

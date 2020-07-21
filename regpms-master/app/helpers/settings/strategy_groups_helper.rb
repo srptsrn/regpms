@@ -1,0 +1,2 @@
+module Settings::StrategyGroupsHelper
+end

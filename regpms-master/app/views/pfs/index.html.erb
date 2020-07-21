@@ -1,0 +1,112 @@
+<% is_pf_range = @current_evaluation.pf_start_date <= Date.current && @current_evaluation.pf_end_date >= Date.current %>
+<div class="page-header">
+	<h2 class="pull-left">
+		แบบรายงานผลการปฏิบัติงาน รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %>
+		<div class="h4">
+			<%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+		</div>
+		<div class="h4">
+			เปิดให้กรอกข้อตกลง ตั้งแต่วันที่ <%= @current_evaluation.pf_start_date.to_s_thai %> ถึง <%= @current_evaluation.pf_end_date.to_s_thai %>
+		</div>
+	</h2>
+	<%= link_to x_pfs_url, {class: "btn btn-danger pull-right margin-left-10"} do %>
+		กรอก PF แทนบุคคลอื่น
+	<% end if can?(:x, :pf) && false %>
+	<%= link_to print_pfs_url(current_user), {target: "_blank", class: "btn btn-info pull-right"} do %>
+		<i class="fa fa-print"></i>
+		Print
+	<% end %>
+	<div class="clearfix"></div>
+</div>
+<div class="row">
+	<div class="col-md-12 bootstrap-grid">
+		<div class="panel">
+			<div class="panel-body">
+				<table class="table">
+			      	<tbody>
+			      		<tr>
+			      			<td>
+								<div class="pull-left" style="width:120px; font-weight:bold;">ชื่อ-สกุล: </div>
+								<div class="pull-left"><%= current_user.prefix_firstname_lastname %></div>
+								<div class="clearfix"></div>
+								
+								<div class="pull-left" style="width:120px; font-weight:bold;"><%= User.human_attribute_name(:employee_type) %>: </div>
+								<div class="pull-left"><%= current_user.employee_type %></div>
+								<div class="clearfix"></div>
+								
+								<div class="pull-left" style="width:120px; font-weight:bold;"><%= User.human_attribute_name(:position) %>: </div>
+								<div class="pull-left"><%= current_user.position %></div>
+								<div class="clearfix"></div>
+								
+								<div class="pull-left" style="width:120px; font-weight:bold;"><%= Section.model_name.human %>: </div>
+								<div class="pull-left"><%= current_user.sections.collect {|s| s.to_s}.join(', ') %></div>
+								<div class="clearfix"></div>
+			      			</td>
+			      		</tr>
+		      		</tbody>
+		  		</table>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#<%= JobRoutine.model_name %>-block"><%= JobRoutine.model_name.human %></a></li>
+					<li><a data-toggle="tab" href="#<%= JobVice.model_name %>-block"><%= JobVice.model_name.human %></a></li>
+					<li><a data-toggle="tab" href="#<%= JobPlan.model_name %>-block"><%= JobPlan.model_name.human %></a></li>
+					<li><a data-toggle="tab" href="#<%= JobDevelopment.model_name %>-block"><%= JobDevelopment.model_name.human %></a></li>
+					<li class="hide"><a data-toggle="tab" href="#help-block">วิธีกรอกข้อมูล</a></li>
+				</ul>
+				<div id="tab-blocks" class="tab-content">
+					<div id="<%= JobPlan.model_name %>-block" class="tab-pane">
+						<%= render partial: "list_job_plan" %>
+					</div>
+					<div id="<%= JobRoutine.model_name %>-block" class="tab-pane active">
+						<%= render partial: "list_job_routine" %>
+					</div>
+					<div id="<%= JobVice.model_name %>-block" class="tab-pane">
+						<%= render partial: "list_job_vice" %>
+					</div>
+					<div id="<%= JobDevelopment.model_name %>-block" class="tab-pane">
+						<%= render partial: "list_job_development" %>
+					</div>
+					<div id="help-block" class="tab-pane">
+						<div class="well">
+							<b>วิธีเพิ่มรายการ PF :</b><br/>
+							1. เลือกงานที่ต้องการ หรือ กรอกเองกรณีไม่มีให้เลือก<br/>
+							2. คลิกปุ่ม <span class="btn btn-xs btn-info"><i class="fa fa-plus"></i></span> เพื่อเพิ่มลงในรายการ<br/>
+							<br/><br/>
+							<b>วิธีแก้ไขชื่องาน PF :</b><br/>
+							1. คลิกปุ่ม <span class="text-orange"><i class="fa fa-pencil"></i></span> ท้ายชื่อรายการ PF ที่ต้องการแก้ไขชื่อ<br/>
+							2. พิมพ์ข้อความต้องการแก้ไข<br/>
+							3. คลิกปุ่ม <span class="btn btn-xs btn-success"><i class="fa fa-save"></i></span> ท้ายชื่อ PF ที่แก้ไข เพื่อบันทึกข้อมูลที่แก้ไข<br/>
+							<br/><br/>
+							<b>วิธีแก้ไขจำนวนชิ้นงาน PF :</b><br/>
+							1. พิมพ์จำนวนชิ้นงาน ท้ายรายการ PF ที่ต้องการแก้ไข<br/>
+							2. ระบบจะบันทึกอัตโนมัติ เมื่อพิมพ์เสร็จ<br/>
+							<br/><br/>
+							<b>วิธีลบรายการ PF :</b><br/>
+							1. คลิกปุ่ม <span class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></span> ท้ายรายการ PF ที่ต้องการลบ<br/>
+							2. คลิกปุ่ม "OK" หรือ "ตกลง" เพื่อยืนยันการลบ<br/>
+							<br/><br/>
+							<b>วิธีแนบหลักฐาน PF :</b><br/>
+							1. คลิกปุ่ม Browse เพื่อเลือกไฟล์หลักฐานจากคอมพิวเตอร์<br/>
+							2. พิมพ์ชื่อไฟล์หรือรายละเอียดที่ต้องการใส่<br/>
+							3. คลิกปุ่ม <span class="btn btn-xs btn-success"><i class="fa fa-upload"></i></span> เพื่อเพิ่มลงในรายการ<br/>
+							<br/><br/>
+							<b>วิธีลบหลักฐาน PF :</b><br/>
+							1. คลิกปุ่ม <span class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i></span> หน้ารายการหลักฐานที่ต้องการลบ<br/>
+							2. คลิกปุ่ม "OK" หรือ "ตกลง" เพื่อยืนยันการลบ<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	 jQuery(function($) {
+	 	$('.nav-tabs li a').click(function(event){
+	 		block_width = $('#tab-blocks').width();
+	 		$('.chosen-container').width(block_width - 200 + 'px');
+        });
+    });
+</script>
+
+<%#= render partial: "/documentaries/leaves" %>

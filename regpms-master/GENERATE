@@ -1,0 +1,262 @@
+rails g model edpex_kku_group no:string name:text
+rails g orb:scaffold_controller edpex_kku_group no:string name:text
+
+rails g model edpex_kku year:integer edpex_kku_group:references no:string name:text description:text
+rails g orb:scaffold_controller edpex_kku year:integer edpex_kku_group:references no:string name:text description:text
+
+rails g model edpex_kku_item edpex_kku:references no:string name:text target:float year1:float year2:float year3:float year4:float year5:float year:float institute:string
+rails g orb:scaffold_controller edpex_kku_item edpex_kku:references no:string name:text target:float year1:float year2:float year3:float year4:float year5:float year:float institute:string
+
+####################################################################################################
+
+rails g model strategy_group workflow_state:string workflow_state_updater:references no:integer name:string
+rails g orb:scaffold_controller strategy_group workflow_state:string workflow_state_updater:references no:integer name:string --namespace=settings
+
+rails g model measure workflow_state:string workflow_state_updater:references tactic:references no:integer name:string
+rails g orb:scaffold_controller measure workflow_state:string workflow_state_updater:references tactic:references no:integer name:string --namespace=settings
+
+rails g model kku_strategic_pillar workflow_state:string workflow_state_updater:references no:integer name:string
+rails g orb:scaffold_controller kku_strategic_pillar workflow_state:string workflow_state_updater:references no:integer name:string --namespace=settings
+
+rails g model kku_strategic workflow_state:string workflow_state_updater:references kku_strategic_pillar:references no:integer name:string
+rails g orb:scaffold_controller kku_strategic workflow_state:string workflow_state_updater:references kku_strategic_pillar:references no:integer name:string --namespace=settings
+
+####################################################################################################
+
+rails g model evaluation_salary_up workflow_state:string workflow_state_updater:references evaluation:references percent_of_change:float total_amount:float total_eligible_amount:float point_level1:float point_level2:float point_level3:float point_level4:float point_level5:float min_change1:float min_change2:float min_change3:float min_change4:float min_change5:float max_change1:float max_change2:float max_change3:float max_change4:float max_change5:float --force
+rails g orb:scaffold_controller evaluation_salary_up workflow_state:string workflow_state_updater:references evaluation:references percent_of_change:float total_amount:float total_eligible_amount:float point_level1:float point_level2:float point_level3:float point_level4:float point_level5:float min_change1:float min_change2:float min_change3:float min_change4:float min_change5:float max_change1:float max_change2:float max_change3:float max_change4:float max_change5:float --force
+
+rails g model evaluation_salary_up_user workflow_state:string workflow_state_updater:references evaluation:references evaluation_salary_up:references user:references position_level:references salary:float base_salary:float base_salary_min:float base_salary_max:float is_eligible:boolean is_work_hour_passed:boolean lost_count:integer late_count:integer leave_count:float point:float percent_of_min_up:float salary_min_up:float percent_of_up:float salary_up:float --force
+rails g orb:scaffold_controller evaluation_salary_up_user workflow_state:string workflow_state_updater:references evaluation:references evaluation_salary_up:references user:references position_level:references salary:float base_salary:float base_salary_min:float base_salary_max:float is_eligible:boolean is_work_hour_passed:boolean lost_count:integer late_count:integer leave_count:float point:float percent_of_min_up:float salary_min_up:float percent_of_up:float salary_up:float --force
+
+rails g model base_salary workflow_state:string workflow_state_updater:references evaluation:references position_level:references min_low:float max_low:float base_low:float min_high:float max_high:float base_high:float remark:text
+rails g orb:scaffold_controller base_salary workflow_state:string workflow_state_updater:references evaluation:references position_level:references min_low:float max_low:float base_low:float min_high:float max_high:float base_high:float remark:text --namespace=settings
+
+rails g model evaluation_score_card workflow_state:string workflow_state_updater:references evaluation:references user:references committee:references role:string task_score:float ability_score:float
+rails g orb:scaffold_controller evaluation_score_card workflow_state:string workflow_state_updater:references evaluation:references user:references committee:references role:string task_score:float ability_score:float
+
+####################################################################################################
+
+rails g model job_plan_log job_plan:references name:text expect:integer weight:float
+rails g model job_routine_log job_routine:references name:text expect:integer weight:float
+rails g model job_vice_log job_vice:references name:text expect:integer weight:float
+rails g model job_development_log job_development:references name:text expect:integer weight:float
+
+rails g model evaluation_user_final workflow_state:string workflow_state_updater:references evaluation:references director:references user:references director_at:datetime user_at:datetime final_task_score:float final_ability_score:float leader_task_score:float leader_ability_score:float staff_task_score:float staff_ability_score:float
+
+####################################################################################################
+
+rails g model e360_item workflow_state:string workflow_state_updater:references evaluation:references sorting:integer name:text --force
+rails g orb:scaffold_controller e360_item workflow_state:string workflow_state_updater:references evaluation:references sorting:integer name:text --namespace=settings --force
+
+rails g model e360_user workflow_state:string workflow_state_updater:references evaluation:references user:references committee:references role:string
+rails g orb:scaffold_controller e360_user workflow_state:string workflow_state_updater:references evaluation:references user:references committee:references role:string
+
+rails g model e360_item_user e360_user:references e360_item:references score:integer
+rails g orb:scaffold_controller e360_item_user e360_user:references e360_item:references score:integer
+
+####################################################################################################
+
+rails g model strategy workflow_state:string workflow_state_updater:references sorting:integer name:text
+rails g orb:scaffold_controller strategy workflow_state:string workflow_state_updater:references sorting:integer name:text --namespace=settings
+
+rails g model tactic workflow_state:string workflow_state_updater:references sorting:integer strategy:references name:text
+rails g orb:scaffold_controller tactic workflow_state:string workflow_state_updater:references sorting:integer strategy:references name:text --namespace=settings
+
+rails g model evaluation_principle workflow_state:string workflow_state_updater:references evaluation:references task:references principle1:text principle2:text principle3:text principle4:text principle5:text
+rails g orb:scaffold_controller evaluation_principle workflow_state:string workflow_state_updater:references evaluation:references task:references principle1:text principle2:text principle3:text principle4:text principle5:text --namespace=settings
+
+rails g model position_level workflow_state:string workflow_state_updater:references name:string sorting:integer
+rails g orb:scaffold_controller position_level workflow_state:string workflow_state_updater:references name:string sorting:integer --namespace=settings
+
+rails g model employee_type_user workflow_state:string workflow_state_updater:references employee_type:references user:references evaluation:references
+rails g orb:scaffold_controller employee_type_user workflow_state:string workflow_state_updater:references  employee_type:references user:references evaluation:references --namespace=settings
+
+rails g model activity_file workflow_state:string workflow_state_updater:references activity:references file:attachment
+rails g orb:scaffold_controller activity_file workflow_state:string workflow_state_updater:references activity:references file:attachment --namespace=projects
+
+rails g model budget_group workflow_state:string workflow_state_updater:references name:string
+rails g orb:scaffold_controller budget_group workflow_state:string workflow_state_updater:references name:string --namespace=settings
+
+rails g model policy workflow_state:string workflow_state_updater:references policy:references code:string name:text
+rails g orb:scaffold_controller policy workflow_state:string workflow_state_updater:references policy:references code:string name:text --namespace=settings
+
+rails g model budget_type workflow_state:string workflow_state_updater:references name:string
+rails g orb:scaffold_controller budget_type workflow_state:string workflow_state_updater:references name:string --namespace=settings
+
+rails g model project workflow_state:string workflow_state_updater:references project:references code:string name:text policy:references rationale:text objective:text from_date:date to_date:date budget_amount:float
+rails g orb:scaffold_controller project workflow_state:string workflow_state_updater:references project:references code:string name:text policy:references rationale:text objective:text from_date:date to_date:date budget_amount:float
+
+rails g model responsible workflow_state:string workflow_state_updater:references project:references sorting:integer user:references prefix:string firstname:string lastname:string position:string
+rails g orb:scaffold_controller responsible workflow_state:string workflow_state_updater:references project:references sorting:integer user:references prefix:string firstname:string lastname:string position:string --namespace=projects
+
+rails g model budget workflow_state:string workflow_state_updater:references project:references sorting:integer budget_type:references description:text amount:float
+rails g orb:scaffold_controller budget workflow_state:string workflow_state_updater:references project:references sorting:integer budget_type:references description:text amount:float --namespace=projects
+
+rails g model expense workflow_state:string workflow_state_updater:references project:references sorting:integer budget_type:references date:date description:text amount:float by:string
+rails g orb:scaffold_controller expense workflow_state:string workflow_state_updater:references project:references sorting:integer budget_type:references date:date description:text amount:float by:string --namespace=projects
+
+rails g model benefit workflow_state:string workflow_state_updater:references project:references sorting:integer description:text
+rails g orb:scaffold_controller benefit workflow_state:string workflow_state_updater:references project:references sorting:integer description:text --namespace=projects
+
+rails g model indicator workflow_state:string workflow_state_updater:references project:references sorting:integer description:text target:float result1:float result2:float result3:float
+rails g orb:scaffold_controller indicator workflow_state:string workflow_state_updater:references project:references sorting:integer description:text target:float result1:float result2:float result3:float --namespace=projects
+
+rails g model activity workflow_state:string workflow_state_updater:references project:references sorting:integer name:text from_date:date to_date:date location:text number_of_participant:integer description:text
+rails g orb:scaffold_controller activity workflow_state:string workflow_state_updater:references project:references sorting:integer name:text from_date:date to_date:date location:text number_of_participant:integer description:text --namespace=projects
+
+rails g model problem_suggesstion workflow_state:string workflow_state_updater:references project:references sorting:integer description:text
+rails g orb:scaffold_controller problem_suggesstion workflow_state:string workflow_state_updater:references project:references sorting:integer description:text --namespace=projects
+
+rails g model project_image workflow_state:string workflow_state_updater:references project:references image:attachment
+rails g orb:scaffold_controller project_image workflow_state:string workflow_state_updater:references project:references image:attachment --namespace=projects
+
+rails g model objective workflow_state:string workflow_state_updater:references project:references sorting:integer description:text
+rails g orb:scaffold_controller objective workflow_state:string workflow_state_updater:references project:references sorting:integer description:text --namespace=projects
+
+######################################################################################################################################################
+######################################################################################################################################################
+######################################################################################################################################################
+######################################################################################################################################################
+######################################################################################################################################################
+
+# settings
+rails g controller settings
+
+rails g model job_template_group workflow_state:string workflow_state_updater:references name:string sorting:integer
+rails g orb:scaffold_controller job_template_group workflow_state:string workflow_state_updater:references name:string sorting:integer --namespace=settings
+
+rails g model job_template workflow_state:string workflow_state_updater:references job_template_group:references name:string unit:string duration:integer is_job_routine:boolean is_job_vice:boolean is_job_development:boolean
+rails g orb:scaffold_controller job_template workflow_state:string workflow_state_updater:references job_template_group:references name:string unit:string duration:integer is_job_routine:boolean is_job_vice:boolean is_job_development:boolean --namespace=settings
+
+rails g model job_result_template workflow_state:string workflow_state_updater:references job_template:references name:string unit:string duration:integer
+rails g orb:scaffold_controller job_result_template workflow_state:string workflow_state_updater:references job_template:references name:string unit:string duration:integer --namespace=settings
+
+-----
+
+rails g model evaluation workflow_state:string workflow_state_updater:references year:integer episode:integer pd_start_date:date pd_end_date:date pf_start_date:date pf_end_date:date confirm_start_date:date confirm_end_date:date evaluation_start_date:date evaluation_end_date:date director:references vice_director:references secretary:references
+rails g orb:scaffold_controller evaluation workflow_state:string workflow_state_updater:references year:integer episode:integer pd_start_date:date pd_end_date:date pf_start_date:date pf_end_date:date confirm_start_date:date confirm_end_date:date evaluation_start_date:date evaluation_end_date:date director:references vice_director:references secretary:references --namespace=settings
+
+rails g model committee workflow_state:string workflow_state_updater:references evaluation:references user:references
+rails g orb:scaffold_controller committee workflow_state:string workflow_state_updater:references evaluation:references user:references --namespace=settings
+
+rails g model employee_type workflow_state:string workflow_state_updater:references name:string sorting:integer
+rails g orb:scaffold_controller employee_type workflow_state:string workflow_state_updater:references name:string sorting:integer --namespace=settings
+
+rails g model evaluation_employee_type workflow_state:string workflow_state_updater:references employee_type:references evaluation:references leader_ratio:float committee_ratio:float task_ratio:float ability_ratio:float
+rails g orb:scaffold_controller evaluation_employee_type workflow_state:string workflow_state_updater:references employee_type:references evaluation:references leader_ratio:float committee_ratio:float task_ratio:float ability_ratio:float --namespace=settings
+
+rails g model section workflow_state:string workflow_state_updater:references name:string leader:references vice_leader:references
+rails g orb:scaffold_controller section workflow_state:string workflow_state_updater:references name:string leader:references vice_leader:references --namespace=settings
+
+rails g model section_user workflow_state:string workflow_state_updater:references section:references user:references
+rails g orb:scaffold_controller section_user workflow_state:string workflow_state_updater:references section:references user:references --namespace=settings
+
+rails g model faculty workflow_state:string workflow_state_updater:references name:string dean:references leader:references
+rails g orb:scaffold_controller faculty workflow_state:string workflow_state_updater:references name:string dean:references leader:references --namespace=settings
+
+rails g model faculty_user workflow_state:string workflow_state_updater:references faculty:references user:references
+rails g orb:scaffold_controller faculty_user workflow_state:string workflow_state_updater:references faculty:references user:references --namespace=settings
+
+rails g model team workflow_state:string workflow_state_updater:references name:string leader:references
+rails g orb:scaffold_controller team workflow_state:string workflow_state_updater:references name:string leader:references --namespace=settings
+
+rails g model team_user workflow_state:string workflow_state_updater:references team:references user:references
+rails g orb:scaffold_controller team_user workflow_state:string workflow_state_updater:references team:references user:references --namespace=settings
+
+rails g model position_type workflow_state:string workflow_state_updater:references name:string sorting:integer
+rails g orb:scaffold_controller position_type workflow_state:string workflow_state_updater:references name:string sorting:integer --namespace=settings
+
+rails g model position workflow_state:string workflow_state_updater:references name:string position_type:references
+rails g orb:scaffold_controller position workflow_state:string workflow_state_updater:references name:string position_type:references --namespace=settings
+
+rails g model capacity workflow_state:string workflow_state_updater:references name:string file:attachment
+rails g orb:scaffold_controller capacity workflow_state:string workflow_state_updater:references name:string file:attachment --namespace=settings
+
+rails g model position_capacity_group workflow_state:string workflow_state_updater:references sorting:integer position:references name:string
+rails g orb:scaffold_controller position_capacity_group workflow_state:string workflow_state_updater:references sorting:integer position:references name:string --namespace=settings
+
+rails g model position_capacity workflow_state:string workflow_state_updater:references sorting:integer position_capacity_group:references capacity:references weight:float expect:float
+rails g orb:scaffold_controller position_capacity workflow_state:string workflow_state_updater:references sorting:integer position_capacity_group:references capacity:references weight:float expect:float --namespace=settings
+
+rails g model task workflow_state:string workflow_state_updater:references sorting:integer name:string file:attachment
+rails g orb:scaffold_controller task workflow_state:string workflow_state_updater:references sorting:integer name:string file:attachment --namespace=settings
+
+rails g model employee_type_task_group workflow_state:string workflow_state_updater:references sorting:integer employee_type:references name:string
+rails g orb:scaffold_controller employee_type_task_group workflow_state:string workflow_state_updater:references sorting:integer employee_type:references name:string --namespace=settings
+
+rails g model employee_type_task workflow_state:string workflow_state_updater:references sorting:integer employee_type_task_group:references task:references weight:float
+rails g orb:scaffold_controller employee_type_task workflow_state:string workflow_state_updater:references sorting:integer employee_type_task_group:references task:references weight:float --namespace=settings
+
+# assess
+rails g model position_capacity_user workflow_state:string workflow_state_updater:references position_capacity:references user:references evaluation:references committee:references role:string expect:float weight:float score:integer score_real_expect:float score_real_100:float score_weight:float score_real:float
+rails g orb:scaffold_controller position_capacity_user workflow_state:string workflow_state_updater:references position_capacity:references user:references evaluation:references committee:references role:string expect:float weight:float score:integer score_real_expect:float score_real_100:float score_weight:float score_real:float
+
+rails g model employee_type_task_user workflow_state:string workflow_state_updater:references employee_type_task:references user:references evaluation:references committee:references role:string weight:float score:integer score_real:float
+rails g orb:scaffold_controller employee_type_task_user workflow_state:string workflow_state_updater:references employee_type_task:references user:references evaluation:references committee:references role:string weight:float score:integer score_real:float
+
+rails g model evaluation_user workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string comment1:text comment2:text position_capacity_total:float employee_type_task_total:float
+rails g orb:scaffold_controller evaluation_user workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string comment1:text comment2:text position_capacity_total:float employee_type_task_total:float
+
+# jobs
+rails g controller jobs
+
+rails g model job_routine workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_routine workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model job_routine_file workflow_state:string workflow_state_updater:references job_routine:references file:attachment description:text
+rails g orb:scaffold_controller job_routine_file workflow_state:string workflow_state_updater:references job_routine:references file:attachment description:text --namespace=jobs
+
+rails g model job_vice workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_vice workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model job_vice_file workflow_state:string workflow_state_updater:references job_vice:references file:attachment description:text
+rails g orb:scaffold_controller job_vice_file workflow_state:string workflow_state_updater:references job_vice:references file:attachment description:text --namespace=jobs
+
+rails g model job_development workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+rails g orb:scaffold_controller job_development workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model job_development_file workflow_state:string workflow_state_updater:references job_development:references file:attachment description:text --namespace=jobs
+rails g orb:scaffold_controller job_development_file workflow_state:string workflow_state_updater:references job_development:references file:attachment description:text --namespace=jobs
+
+rails g model job_plan workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_plan workflow_state:string workflow_state_updater:references user:references evaluation:references job_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model job_plan_file workflow_state:string workflow_state_updater:references job_plan:references file:attachment description:text
+rails g orb:scaffold_controller job_plan_file workflow_state:string workflow_state_updater:references job_plan:references file:attachment description:text --namespace=jobs
+
+
+# -----
+
+rails g model                   job_plan_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_plan:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_plan_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_plan:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model                   job_plan_result_file workflow_state:string workflow_state_updater:references job_plan_result:references file:attachment description:text
+rails g orb:scaffold_controller job_plan_result_file workflow_state:string workflow_state_updater:references job_plan_result:references file:attachment description:text --namespace=jobs
+
+rails g model                   job_routine_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_routine:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_routine_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_routine:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model                   job_routine_result_file workflow_state:string workflow_state_updater:references job_routine_result:references file:attachment description:text
+rails g orb:scaffold_controller job_routine_result_file workflow_state:string workflow_state_updater:references job_routine_result:references file:attachment description:text --namespace=jobs
+
+rails g model                   job_vice_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_vice:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_vice_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_vice:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model                   job_vice_result_file workflow_state:string workflow_state_updater:references job_vice_result:references file:attachment description:text
+rails g orb:scaffold_controller job_vice_result_file workflow_state:string workflow_state_updater:references job_vice_result:references file:attachment description:text --namespace=jobs
+
+rails g model                   job_development_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_development:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references
+rails g orb:scaffold_controller job_development_result workflow_state:string workflow_state_updater:references user:references evaluation:references job_development:references job_result_template:references name:string duration:integer expect_qty:float qty:float unit:string description:text approver:references --namespace=jobs
+
+rails g model                   job_development_result_file workflow_state:string workflow_state_updater:references job_development_result:references file:attachment description:text
+rails g orb:scaffold_controller job_development_result_file workflow_state:string workflow_state_updater:references job_development_result:references file:attachment description:text --namespace=jobs
+
+
+
+# assesment
+rails g model assessment workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string score111:integer score112:integer score113:integer score114:integer score211:integer score212:integer score213:integer score214:integer score215:integer score221:integer score222:integer score223:integer score224:integer score225:integer score226:integer comment1:text comment2:text
+rails g orb:scaffold_controller assessment workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string score111:integer score112:integer score113:integer score114:integer score211:integer score212:integer score213:integer score214:integer score215:integer score221:integer score222:integer score223:integer score224:integer score225:integer score226:integer comment1:text comment2:text
+
+rails g model assessment2 workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string score111:integer score112:integer score113:integer score114:integer score121:integer score122:integer score123:integer score124:integer score211:integer score212:integer score213:integer score214:integer score215:integer score221:integer score222:integer score223:integer score224:integer comment1:text comment2:text --force
+rails g orb:scaffold_controller assessment2 workflow_state:string workflow_state_updater:references user:references evaluation:references committee:references role:string score111:integer score112:integer score113:integer score114:integer score121:integer score122:integer score123:integer score124:integer score211:integer score212:integer score213:integer score214:integer score215:integer score221:integer score222:integer score223:integer score224:integer comment1:text comment2:text --force

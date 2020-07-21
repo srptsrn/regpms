@@ -1,0 +1,2 @@
+module Jobs::JobViceResultFilesHelper
+end

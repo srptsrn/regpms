@@ -1,0 +1,7 @@
+<% if @error_message.blank? %>
+	$('#job-vice-result-row-<%= @job_vice_result.id %>').replaceWith("<%=j render(partial: "row_job_vice_result", locals: {job_vice_result: @job_vice_result, edit: "1"}) %>");
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>
+
+init_input_chosen();

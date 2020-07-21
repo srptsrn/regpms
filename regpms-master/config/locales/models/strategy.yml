@@ -1,0 +1,31 @@
+en:
+  activerecord:
+    models:
+      strategy: Strategy
+    attributes:
+      strategy:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        sorting: Sorting
+        name: Name
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        year: ปีงบประมาณ
+th:
+  activerecord:
+    models:
+      strategy: ยุทธศาสตร์สำนักฯ
+    attributes:
+      strategy:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        sorting: ยุทธศาสตร์ที่
+        name: ยุทธศาสตร์
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        year: ปีงบประมาณ
+        strategy_group: ส่วนแผน

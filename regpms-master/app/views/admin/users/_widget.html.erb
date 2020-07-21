@@ -1,0 +1,81 @@
+<section id="widget_users" class="panel">
+    <header class="panel-heading">
+        <%= User.model_name.human %>
+        <span class="pull-right">
+            <div class="input-group m-bot15 no-margin">
+                <%= text_field_tag :widget_users_search_input, nil, class: 'form-control input-sm' %>
+              	<span class="input-group-addon btn-white">
+            		<i class="fa fa-search"></i>
+          		</span>
+            </div>
+        </span>
+		<div class="clearfix"></div>
+    </header>
+    <div class="panel-body">
+        <div class="unseen">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th nowrap><%= User.human_attribute_name(:username) %></th>
+                        <th nowrap><%= User.human_attribute_name(:gender) %></th>
+                        <th nowrap><%= User.human_attribute_name(:nickname) %></th>
+                        <th nowrap><%= User.human_attribute_name(:firstname) %></th>
+                        <th nowrap><%= User.human_attribute_name(:lastname) %></th>
+                        <th nowrap><%= User.human_attribute_name(:phone) %></th>
+                        <th nowrap><%= User.human_attribute_name(:email) %></th>
+                        <th nowrap><%= User.human_attribute_name(:locale) %></th>
+                        <th nowrap><%= User.human_attribute_name(:timezone) %></th>
+                    </tr>
+                </thead>
+                <tbody id="widget_users_result">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    var widget_users_search = function(search_query){
+        $.ajax({
+            type: 'GET',
+            url: '<%= admin_users_url %>',
+            data: search_query,
+            dataType: 'json',
+            success: function(data) {
+                var data_html = '';
+                $.each(data, function(index, result) {
+                    data_html += '<tr>';
+                    data_html += '<td>' + (result.username || '') + '</td>';
+                    data_html += '<td>' + (result.gender || '') + '</td>';
+                    data_html += '<td>' + (result.nickname || '') + '</td>';
+                    data_html += '<td>' + (result.firstname || '') + '</td>';
+                    data_html += '<td>' + (result.lastname || '') + '</td>';
+                    data_html += '<td>' + (result.phone || '') + '</td>';
+                    data_html += '<td>' + (result.email || '') + '</td>';
+                    data_html += '<td>' + (result.locale || '') + '</td>';
+                    data_html += '<td>' + (result.timezone || '') + '</td>';
+                    data_html += '</tr>';
+                });  
+                $('#widget_users_result').html(data_html);
+            }
+        });
+    }
+    jQuery(function($) {
+        widget_users_search({
+            q: {
+                username_or_gender_or_nickname_or_firstname_or_lastname_or_email_or_locale_or_timezone_cont: ''
+            },
+            limit: 10
+        });
+        $('#widget_users_search_input').keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                widget_users_search({
+                    q: {
+                        username_or_gender_or_nickname_or_firstname_or_lastname_or_email_or_locale_or_timezone_cont: $('#widget_users_search_input').val()
+                    },
+                    limit: 10
+                });
+            }
+        });
+    });
+</script>

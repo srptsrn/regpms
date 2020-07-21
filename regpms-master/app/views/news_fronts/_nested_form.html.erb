@@ -1,0 +1,35 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th nowrap><%= NewsFront.human_attribute_name :workflow_state %></th>
+            <th nowrap><%= NewsFront.human_attribute_name :workflow_state_updater %></th>
+            <th nowrap><%= NewsFront.human_attribute_name :title %></th>
+            <th nowrap><%= NewsFront.human_attribute_name :detail %></th>
+            <th nowrap><%= NewsFront.human_attribute_name :image %></th>
+            <th nowrap><%= NewsFront.human_attribute_name :published_at %></th>
+            <% unless action_name == "show" %>
+                <th style="width:30px;">
+                    <%= link_to_add_association f, :news_fronts, partial: "/news_fronts/nested_fields", class: "btn btn-sm btn-success",
+                    "data-association-insertion-node" => "#news_front_fields",
+                    "data-association-insertion-method" => :append do %>
+                    <i class='fa fa-plus'></i>
+                    <% end %>
+                </th>
+            <% end %>
+        </tr>
+    </thead>
+    <tbody id="news_front_fields">
+        <%= f.simple_fields_for :news_fronts do |news_front| %>
+            <%= render '/news_fronts/nested_fields', :f => news_front %>
+        <% end %>
+    </tbody>
+</table>
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#news_front_fields').on('cocoon:after-insert', function(e, insertedItem) {
+            init_input_date_picker();
+            init_input_time_picker();
+            init_input_datetime_picker();
+        });
+    });
+</script>

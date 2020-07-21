@@ -1,0 +1,45 @@
+en:
+  activerecord:
+    models:
+      evaluation_score_card: EvaluationScoreCard
+    attributes:
+      evaluation_score_card:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        user: User
+        committee: Committee
+        role: Role
+        task_score: Task score
+        ability_score: Ability score
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        comment1: จุดเด่น และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข
+        comment2: ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา
+th:
+  activerecord:
+    models:
+      evaluation_score_card: ใบประเมิน
+    attributes:
+      evaluation_score_card:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: รอบการประเมิน
+        user: ผู้ถูกประเมิน
+        committee: ผู้ประเมิน
+        role: ประเมินในฐานนะ
+        task_score: ผลสัมฤทธิ์ของงาน
+        ability_score: พฤติกรรมการปฏิบัติงาน
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+
+        task_score_table: "ผลสัมฤทธิ์<br/>ของงาน"
+        ability_score_table: "พฤติกรรม<br/>การปฏิบัติงาน"
+        total_score_table: "รวม"
+        
+        comment1: จุดเด่น และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข
+        comment2: ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา

@@ -1,0 +1,44 @@
+en:
+  activerecord:
+    models:
+      message: Message
+    attributes:
+      message:
+        topic: Message Header
+        body: Message
+        user: Author
+        date: Date
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        
+        new_message: New Message
+        
+        inbox: Inbox
+        draft: Draft
+        sent: Sent
+        archive: Archive
+        trash: Trash
+th:
+  activerecord:
+    models:
+      message: ข้อความ
+    attributes:
+      message:
+        topic: หัวเรื่อง
+        body: ข้อความ
+        user: ผู้ส่ง
+        date: วันที่
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        
+        new_message: ข้อความใหม่
+        
+        inbox: กล่องขาเข้า
+        draft: ร่าง
+        sent: ส่งแล้ว
+        archive: เก็บ
+        trash: ถังขยะ

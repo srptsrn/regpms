@@ -1,0 +1,1 @@
+json.extract! @employee_type_task_user, :id, :to_s, :workflow_state, :workflow_state_updater_id, :employee_type_task_id, :user_id, :evaluation_id, :committee_id, :role, :weight, :score, :score_real, :created_at, :updated_at

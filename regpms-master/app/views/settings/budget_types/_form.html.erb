@@ -1,0 +1,34 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@budget_type.respond_to?(:current_state) && @budget_type.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @budget_type], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: BudgetType, resource: @budget_type, f: f,
+	            resources_url: settings_budget_types_path(q: params[:q], page: params[:page]),
+	            resource_url: @budget_type.new_record? ? nil : settings_budget_type_path(@budget_type, q: params[:q], page: params[:page]),
+	            edit_resource_url: @budget_type.new_record? ? nil : edit_settings_budget_type_path(@budget_type, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+	        	<%= f.input :name %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: BudgetType, resource: @budget_type, f: f,
+			            resources_url: settings_budget_types_path(q: params[:q], page: params[:page]),
+			            resource_url: @budget_type.new_record? ? nil : settings_budget_type_path(@budget_type, q: params[:q], page: params[:page]),
+			            edit_resource_url: @budget_type.new_record? ? nil : edit_settings_budget_type_path(@budget_type, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

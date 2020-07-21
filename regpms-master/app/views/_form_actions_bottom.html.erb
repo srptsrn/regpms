@@ -1,0 +1,42 @@
+<% unless (action_name == "show") || resource.respond_to?(:current_state) %>
+    <%= f.button :button, class: "btn #{event_btn_class(:submit)} margin-right-10" do %>
+        <%= event_icon_tag(:submit) %>
+        <%= t(:submit) %>
+    <% end if can?(:update, resource) %>
+<% end %>
+
+<% unless action_name == "show" %>
+    <% if can?(:destroy, resource) && !resource.new_record? %>
+        <% if (!resource.respond_to?(:current_state) || !resource.current_state.meta[:no_destroy]) && (resource_class.reflect_on_all_associations(:has_many).select{|r| ![:delete_all, :destroy].include?(r.options[:dependent])}.map{|r| (resource.respond_to?(r.name) ? resource.send(r.name).count : 0)}.sum == 0) %>
+            <%= link_to resource_url, method: :delete, data: { confirm: t(:confirm_to_delete) }, :class => "btn #{event_btn_class(:delete)} margin-right-10" do %>
+                <%= event_icon_tag(:delete) %>
+                <%= t(:delete) %>
+            <% end %>
+        <% else %>
+            <span class="btn btn-light disabled margin-right-10">
+                <%= event_icon_tag(:delete) %>
+                <%= t(:delete) %>
+            </span>
+        <% end %>
+    <% end %>
+<% end %>
+
+<% if resource.respond_to?(:current_state) %>
+    <% available_events = resource.class.form_action_events(action_name) if resource.class.respond_to?(:form_action_events) %>
+    <% available_events ||= resource.current_state.events.keys %>
+    <% resource.current_state.events.each_key do |event| %>
+        <% if available_events.include?(event) %>
+            <% if can?(event, resource) %>
+                <%= f.button :button, value: event, class: "btn #{event_btn_class(event)} margin-right-10", confirm: %Q{#{t(:confirm)} #{t("workflow.event.#{event}")}?} do %>
+                    <%= event_icon_tag(event) %>
+                    <%= t("workflow.event.#{event}") %>
+                <% end %>
+            <% else %>
+                <span class="btn btn-light disabled margin-right-10">
+                    <%= event_icon_tag(event) %>
+                    <%= t("workflow.event.#{event}") %>
+                </span>
+            <% end %>
+        <% end %>
+    <% end %>
+<% end %>

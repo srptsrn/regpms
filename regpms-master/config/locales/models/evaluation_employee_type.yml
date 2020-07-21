@@ -1,0 +1,55 @@
+en:
+  activerecord:
+    models:
+      evaluation_employee_type: EvaluationEmployeeType
+    attributes:
+      evaluation_employee_type:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        employee_type: Employee type
+        evaluation: Evaluation
+        leader_ratio: Leader ratio
+        committee_ratio: Committee ratio
+        task_ratio: Task ratio
+        ability_ratio: Ability ration
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      evaluation_employee_type: ร้อยละ / สัดส่วน การคิดคะแนน
+    attributes:
+      evaluation_employee_type:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        employee_type: ประเภทบุคลากร
+        evaluation: รอบการประเมิน
+        director_ratio: ผู้อำนวยการ
+        vice_director_ratio: รองผู้อำนวยการ
+        vice_director2_ratio: รองผู้อำนวยการ
+        vice_director3_ratio: รองผู้อำนวยการ
+        secretary_ratio: หัวหน้าสำนักงานผู้อำนวยการ
+        section_leader_ratio: หัวหน้ากลุ่มภารกิจ
+        section_vice_leader_ratio: ผู้ช่วยหัวหน้ากลุ่มภารกิจ
+        leader_ratio: ผู้บังคับบัญชาขั้นต้น
+        committee_ratio: คณะกรรมการประเมิน
+        task_ratio: ผลสัมฤทธิ์ของงาน
+        ability_ratio: พฤติกรรมการปฏิบัติราชการ
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+
+        director_ratio_nested: ผู้อำนวยการ
+        vice_director_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>ที่เกี่ยวข้อง
+        vice_director2_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>1
+        vice_director3_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>2
+        secretary_ratio_nested: หัวหน้า<br/>สำนักงาน<br/>ผู้อำนวยการ
+        section_leader_ratio_nested: หัวหน้า<br/>งาน
+        section_vice_leader_ratio_nested: ผู้ช่วย<br/>หัวหน้า<br/>กลุ่มภารกิจ
+        leader_ratio_nested: ผู้บังคับบัญชา<br/>ขั้นต้น
+        committee_ratio_nested: คณะกรรมการ<br/>ประเมิน
+        task_ratio_nested: ผลสัมฤทธิ์<br/>ของงาน
+        ability_ratio_nested: พฤติกรรม<br/>การปฏิบัติ<br/>ราชการ

@@ -1,0 +1,25 @@
+<div class="page-header">
+	<h1><%= Expense.model_name.human %><small><%= action_name %></small></h1>
+</div>
+			      
+<!-- Widget Row Start grid -->
+<div class="row">
+	<div class="col-md-12 bootstrap-grid">
+		<%= form_tag(import_save_projects_expenses_url, {method: :post, multipart: true}) do %>
+			<div style="width:150px;" class="pull-left margin-right-5">
+				<%= file_field_tag :file, {class: "form-control"} %>
+			</div>
+			<div class="pull-left">
+				<%= submit_tag "Import", {class: "btn btn-primary"} %>
+			</div>
+		<% end %>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<!-- /Widgets Row End Grid-->
+
+<div class="row">
+	<div class="col-md-12 bootstrap-grid">
+		<%= @log.html_safe %>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<% if @error_message.blank? %>
+	// remove all options
+	$("#new_job_development_job_template_id").empty();
+	// insert blank option
+	$("#new_job_development_job_template_id").append($('<option></option>'));
+	// insert new options
+	<% if @job_template_group %>
+		<% @job_template_group.job_templates.all_job_developments.sort_by {|a| a.name}.each do |job_template| %>
+			$("#new_job_development_job_template_id").append($('<option></option>').attr('value', <%= job_template.id %>).text('<%= job_template.to_s %>'));
+		<% end %>
+	<% end %>
+	// chosen update
+	$("#new_job_development_job_template_id").trigger('chosen:updated');
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>
+
+init_input_chosen();

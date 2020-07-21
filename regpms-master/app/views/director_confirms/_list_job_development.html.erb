@@ -1,0 +1,88 @@
+<% is_director_confirm ||= false %>
+<% evaluation_principle = EvaluationPrinciple.joins("JOIN tasks on tasks.id = evaluation_principles.task_id").where(["evaluation_principles.evaluation_id = ? AND sorting = ?", @current_evaluation.id, 4]).first %>
+<% if evaluation_principle %>
+	<div class="well">
+		ระดับความสำเร็จในการดำเนินการงานที่ได้รับมอบหมาย<br/>
+		<%= EvaluationPrinciple.human_attribute_name(:principle1) %> <%= evaluation_principle.principle1 %><br/>
+		<%= EvaluationPrinciple.human_attribute_name(:principle2) %> <%= evaluation_principle.principle2 %><br/>
+		<%= EvaluationPrinciple.human_attribute_name(:principle3) %> <%= evaluation_principle.principle3 %><br/>
+		<%= EvaluationPrinciple.human_attribute_name(:principle4) %> <%= evaluation_principle.principle4 %><br/>
+		<%= EvaluationPrinciple.human_attribute_name(:principle5) %> <%= evaluation_principle.principle5 %><br/>
+	</div>
+<% end %>
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			<th rowspan="2"><%= JobDevelopment.human_attribute_name(:job_template) %></th>
+			<th colspan="5" class="text-center"><%= JobDevelopment.human_attribute_name(:expect) %></th>
+			<th rowspan="2" style="width:100px; text-align:right;"><%= JobDevelopment.human_attribute_name(:weight) %></th>
+			<th rowspan="2" style="width:100px;">&nbsp;</th>
+		</tr>
+		<tr>
+			<th class="text-center" style="width:20px;">1</th>
+			<th class="text-center" style="width:20px;">2</th>
+			<th class="text-center" style="width:20px;">3</th>
+			<th class="text-center" style="width:20px;">4</th>
+			<th class="text-center" style="width:20px;">5</th>
+		</tr>
+	</thead>
+	<tbody id="job-development-list">
+		<% @user.job_developments.where(["evaluation_id = ?", @current_evaluation.id]).sort_by {|jj| [jj.created_at]}.each do |job_development| %>
+			<%= render partial: "row_job_development", locals: {job_development: job_development, is_director_confirm: is_director_confirm} %>
+		<% end %>
+	</tbody>
+	<% if @current_evaluation.is_director_confirm_range && !is_director_confirm %>
+		<tfoot>
+			<tr class="bg-cold-grey">
+				<td class="text-top">
+					<%= text_area :new_job_development, :name, {placeholder: "กิจกรรม / โครงการ / งาน", class: "form-control"} %>
+				</td>
+				<td class="text-center text-top">
+					<%= radio_button :xnew_job_development, :expect, 1, onclick: "$('#new_job_development_expect').val(1);" %>
+				</td>
+				<td class="text-center text-top">
+					<%= radio_button :xnew_job_development, :expect, 2, onclick: "$('#new_job_development_expect').val(2);" %>
+				</td>
+				<td class="text-center text-top">
+					<%= radio_button :xnew_job_development, :expect, 3, onclick: "$('#new_job_development_expect').val(3);" %>
+				</td>
+				<td class="text-center text-top">
+					<%= radio_button :xnew_job_development, :expect, 4, onclick: "$('#new_job_development_expect').val(4);" %>
+				</td>
+				<td class="text-center text-top">
+					<%= radio_button :xnew_job_development, :expect, 5, onclick: "$('#new_job_development_expect').val(5);" %>
+				</td>
+				<td class="text-top">
+					<%= hidden_field :new_job_development, :expect %>
+					<%= text_field :new_job_development, :weight, {placeholder: "น้ำหนัก ", class: "form-control", style: "text-align:right;"} %>
+				</td>
+				<td colspan="2" class="text-top">
+					<div id="job-development-add-button" class="btn btn-info">
+						<i class="fa fa-plus"></i> เพิ่ม
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	<% end %>
+</table>
+<script type="text/javascript">
+	 jQuery(function($) {
+	 	$('#job-development-add-button').click(function(event){
+	 		$.ajax({
+            	url: '<%= add_job_development_director_confirms_url %>',
+    			type: 'post',
+    			data: {job_template_id: $('#new_job_development_job_template_id').val(), expect_qty: $('#new_job_development_expect_qty').val(), name: $('#new_job_development_name').val(), expect: $('#new_job_development_expect').val(), weight: $('#new_job_development_weight').val()},
+                dataType: 'script'
+            });
+        });
+	 	$('#new_job_development_job_template_group_id').change(function(event){
+	 		$.ajax({
+            	url: '<%= chose_job_template_group_job_development_director_confirms_url %>',
+    			type: 'post',
+    			data: {job_template_group_id: $(this).val()},
+                dataType: 'script'
+            });
+        });
+    });
+</script>
+<div class="clearfix"></div>

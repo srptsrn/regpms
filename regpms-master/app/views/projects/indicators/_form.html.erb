@@ -1,0 +1,42 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@indicator.respond_to?(:current_state) && @indicator.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["projects", @indicator], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Indicator, resource: @indicator, f: f,
+	            resources_url: projects_indicators_path(q: params[:q], page: params[:page]),
+	            resource_url: @indicator.new_record? ? nil : projects_indicator_path(@indicator, q: params[:q], page: params[:page]),
+	            edit_resource_url: @indicator.new_record? ? nil : edit_projects_indicator_path(@indicator, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :project, collection: (Project.all + (f.object.project.nil? ? [] : [f.object.project])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/projects/chosen_select", locals: {object_name: :indicator, no_create: true} %>
+	        	<%= f.input :sorting %>
+				<%= f.input :description %>
+	        	<%= f.input :target %>
+	        	<%= f.input :unit %>
+	        	<%= f.input :result1 %>
+	        	<%= f.input :result2 %>
+	        	<%= f.input :result3 %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Indicator, resource: @indicator, f: f,
+			            resources_url: projects_indicators_path(q: params[:q], page: params[:page]),
+			            resource_url: @indicator.new_record? ? nil : projects_indicator_path(@indicator, q: params[:q], page: params[:page]),
+			            edit_resource_url: @indicator.new_record? ? nil : edit_projects_indicator_path(@indicator, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

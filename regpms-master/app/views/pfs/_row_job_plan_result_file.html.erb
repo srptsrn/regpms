@@ -1,0 +1,57 @@
+<div id="job-plan-result-file-<%= job_plan_result_file.id %>" class="margin-top-5 no-padding">
+	<% if params[:edit_file] %>
+		<%= form_tag(update_job_plan_result_file_pfs_url(job_plan_result_file_id: job_plan_result_file.id), {class: "margin-top-5", multipart: true, remote: true, id: "job-plan-result-file-upload-#{job_plan_result_file.id}"}) do %>
+			<table style="width:100%;">
+				<tr>
+					<td style="width:80px; vertical-align:top;">
+						<%= file_field "job_plan_result_file_#{job_plan_result_file.id}", :file, {class: "form-control no-padding", onchange: "if($('#job_plan_result_file_#{job_plan_result_file.id}_description').val() == ''){$('#job_plan_result_file_#{job_plan_result_file.id}_description').val(this.value);}"} %>
+					</td>
+					<td>
+						<%= text_area "job_plan_result_file_#{job_plan_result_file.id}", :description, {value: job_plan_result_file.description, class: "form-control", placeholder: "คำอธิบายหรือชื่อไฟล์"} %>
+					</td>
+					<td style="width:50px; vertical-align:top;">
+						<div id="job-plan-result-file-<%= job_plan_result_file.id %>-upload" class="btn btn-success" onclick="if($('#job_plan_result_file_<%= job_plan_result_file.id %>_description').val() == ''){ alert('โปรดใส่คำอธิบายก่อน'); }else{ $('#job-plan-result-file-upload-<%= job_plan_result_file.id %>').submit(); }">
+							<i class="fa fa-upload"></i>
+						</div>
+					</td>
+				</tr>
+			</table>
+		<% end %>
+	<% else %>
+		<% if @current_evaluation.is_pf_range && job_plan_result_file.job_plan_result.current_state.to_sym == :enabled %>
+			<div id="job-plan-result-file-remove-button-<%= job_plan_result_file.id %>" class="text-danger pull-left">
+				<i class="fa fa-trash-o"></i>
+			</div>
+		<% end %>
+		<div class="pull-left col-xs-11">
+			<% if job_plan_result_file.file.present? %>
+				<%= link_to job_plan_result_file.file.url, {id: "job-plan-result-file-#{job_plan_result_file.id}", target: "_blank"} do %>
+					<%= job_plan_result_file.description.to_s.gsub("\r\n", "<br/>").html_safe %>
+				<% end %>
+				<i class="fa fa-paperclip"></i>
+			<% else %>
+				<%= job_plan_result_file.description.to_s.gsub("\r\n", "<br/>").html_safe %>
+			<% end %>
+			<%= link_to edit_job_plan_result_file_pfs_url(job_plan_result_file_id: job_plan_result_file.id, edit_file: true), {remote: true, class: "text-orange", title: "คลิกเพื่อแก้ไข"} do %>
+				<i class="fa fa-pencil"></i>
+			<% end if @current_evaluation.is_pf_range %>
+		</div>
+		<% if @current_evaluation.is_pf_range && job_plan_result_file.job_plan_result.current_state.to_sym == :enabled %>
+			<script type="text/javascript">
+				 jQuery(function($) {
+				 	$('#job-plan-result-file-remove-button-<%= job_plan_result_file.id %>').click(function(event){
+						if (confirm('ยืนยันลบไฟล์ ?')) {
+					 		$.ajax({
+				            	url: '<%= remove_job_plan_result_file_pfs_path %>',
+				    			type: 'post',
+				    			data: {job_plan_result_file_id: <%= job_plan_result_file.id %>},
+				                dataType: 'script'
+				            });
+			           	}
+			        });
+		        });
+		    </script>
+	    <% end %>
+	<% end %>
+</div>
+<div class="clearfix"></div>

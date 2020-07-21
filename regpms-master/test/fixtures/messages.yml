@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  message_id: 
+  user_id: 
+  topic: MyText
+  body: MyText
+  workflow_state: MyString
+  workflow_state_updater_id: 
+
+two:
+  message_id: 
+  user_id: 
+  topic: MyText
+  body: MyText
+  workflow_state: MyString
+  workflow_state_updater_id: 

@@ -1,0 +1,41 @@
+<%= link_to resource_url, {class: "btn btn-xs #{event_btn_class(:show)}", title: t(:show)} do %>
+    <%= event_icon_tag(:show) %>
+<% end if can?(:read, resource) %>
+
+<% edit_resource_url ||= nil %>
+<% if edit_resource_url %>
+	<%= link_to edit_resource_url, {class: "btn btn-xs #{event_btn_class(:edit)}", title: t(:edit)} do %>
+	    <%= event_icon_tag(:edit) %>
+	<% end if can?(:edit, resource) && (!resource.respond_to?(:current_state) || (resource.respond_to?(:current_state) && !resource.current_state.meta[:disabled])) %>
+<% end %>
+
+<% if can?(:destroy, resource) %>
+    <% if (!resource.respond_to?(:current_state) || !resource.current_state.meta[:no_destroy]) && (resource_class.reflect_on_all_associations(:has_many).select{|r| ![:delete_all, :destroy].include?(r.options[:dependent])}.map{|r| (resource.respond_to?(r.name) ? resource.send(r.name).count : 0)}.sum == 0) %>
+        <%= link_to resource_url, method: :delete, data: { confirm: t(:confirm_to_delete) }, :class => "btn btn-xs #{event_btn_class(:delete)}" do %>
+            <%= event_icon_tag(:delete) %>
+        <% end %>
+    <% else %>
+        <span class="btn btn-xs btn-light disabled" title="<%= t(:delete) %>">
+            <%= event_icon_tag(:delete) %>
+        </span>
+    <% end %>
+<% end %>
+
+<% if resource.respond_to?(:current_state) %>
+    <% available_events = resource.class.form_action_events(action_name) if resource.class.respond_to?(:form_action_events) %>
+    <% available_events ||= resource.current_state.events.keys %>
+    <% resource.current_state.events.each_key do |event| %>
+        <% if available_events.include?(event) %>
+        	<% if can?(event, resource) %>
+	            <%= link_to resource_url + "&button=#{event}", {class: "btn btn-xs #{event_btn_class(event)}", title: t("workflow.event.#{event}"), method: :put, data: { confirm: %Q{#{t :confirm} #{t "workflow.event.#{event}"}?} }} do %>
+	                <%= event_icon_tag(event) %>
+	            <% end %>
+            <% else %>
+	            <span class="btn btn-xs btn-light disabled" title="<%= t "workflow.event.#{event}" %>">
+	                <%= event_icon_tag(event) %>
+	            </span>
+            <% end %>
+        <% end %>
+        
+    <% end %>
+<% end %>

@@ -1,0 +1,2 @@
+module Settings::KkuStrategicPillarsHelper
+end

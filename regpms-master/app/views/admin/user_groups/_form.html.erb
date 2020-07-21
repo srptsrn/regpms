@@ -1,0 +1,71 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@user_group.respond_to?(:current_state) && @user_group.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["admin", @user_group], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: UserGroup, resource: @user_group, f: f,
+	            resources_url: admin_user_groups_path(q: params[:q], page: params[:page]),
+	            resource_url: @user_group.new_record? ? nil : admin_user_group_path(@user_group, q: params[:q], page: params[:page]),
+	            edit_resource_url: @user_group.new_record? ? nil : edit_admin_user_group_path(@user_group, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+	        	<%= f.input :name %>
+				
+	            <div class="form-group">
+	                <label for="user_group_roles_mask" class="control-label col-md-4"><%= UserGroup.human_attribute_name :roles %></label>
+	                <div class="col-md-6">
+	                    <div id="roles-toggle" data-toggle="buttons">
+		                	<% unless action_name == "show" %>
+		                        <% UserGroup.valid_roles.sort_by {|r| r.to_s}.each do |r|%>
+		                            <span class="btn btn-sm <%= (@user_group.has_role? r) ? "btn-primary active" : "btn-default"%> <%= 'disabled' if action_name == 'show' %>" type="button" style="margin-bottom:5px;"> 
+		                                <%= check_box_tag "user_group[roles][]", r, (@user_group.has_role? r) %>
+		                                <%= t r %>
+		                            </span>
+		                        <% end %>
+		                    <% else %>
+		                        <% UserGroup.valid_roles.sort_by {|r| r.to_s}.each do |r|%>
+		                            <span class="btn btn-sm <%= (@user_group.has_role? r) ? "btn-primary active" : "btn-default"%> <%= 'disabled' if action_name == 'show' %>" type="button" style="margin-bottom:5px;"> 
+		                                <%= check_box_tag "user_group[roles][]", r %>
+	                                	<%= t r %>
+		                            </span>
+		                        <% end %>
+		                    <% end %>
+	                    </div>
+	                </div>
+	            </div>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: UserGroup, resource: @user_group, f: f,
+			            resources_url: admin_user_groups_path(q: params[:q], page: params[:page]),
+			            resource_url: @user_group.new_record? ? nil : admin_user_group_path(@user_group, q: params[:q], page: params[:page]),
+			            edit_resource_url: @user_group.new_record? ? nil : edit_admin_user_group_path(@user_group, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		
+
+<% unless action_name == "show" %>
+	<script>     
+	    $('#roles-toggle span').on('click' , function(){
+            if( $(this).hasClass('active')){
+                $(this).removeClass('btn-primary');
+            	$(this).addClass('btn-default');
+			}else{
+	            $(this).addClass('btn-primary');
+                $(this).removeClass('btn-default');
+            }
+	    });
+	</script>
+<% end %>

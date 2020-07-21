@@ -1,0 +1,2 @@
+module Projects::IndicatorsHelper
+end

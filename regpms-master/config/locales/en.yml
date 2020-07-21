@@ -1,0 +1,135 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  hello: "Hello world"
+  
+  application_name: BAAD PMS
+  application_keyword: ibattz, BAAD PMS
+  application_author: ibattz
+  application_description: BAAD PMS
+
+  home: Home
+  dashboard: Home
+  administrator: Administrator
+  orb_template: ORB Template
+  profile: Profile
+  system: System
+  workflow_state: Workflow State
+  
+  search: Search
+  confirm_to_delete: Confirm to delete?
+  advanced: Advanced
+  choose: Choose...
+
+  search: Search
+  advance: Advance
+  back: Back
+  save: Save
+  submit: Submit
+  cancel: Cancel
+  confirm_to_delete: Confirm to delete?
+  delete: Delete
+  delete_selected: Delete selected
+  download_excel: Download excel
+  choose: Choose...
+  back_to_list: Back to list
+  all: All
+  change_file: Change file
+  select_file: Select file
+  change_image: Change image
+  select_image: Select image
+  version: Version
+  confirm: Confirm
+  add: Add
+  upload: Upload
+  
+  request_user_authority: Request user authority
+  give_user_authority: Give user authority
+  period: Period
+
+  status_history: Status history
+
+  new: New
+  show: Show
+  edit: Edit
+  create: Create
+  update: Update
+  by: By
+  from: From
+  to: To
+  from_date: From date
+  to_date: To date
+  and: And
+  or: Or
+  report: Report
+  
+  no_result_match: No results match
+  search_on_server: Search on server
+  create_new: Create new
+
+  setting: Setting
+  settings: Settings
+  admin: Admin
+  data_dictionary: Data Dictionary
+  news: News
+  backend: Backend
+  more: more...
+  login_form: Login Form
+  calendar_month: Calendar
+  reports: Reports
+  
+  # roles
+  ibattz: ibattz
+  systemadmin: System Administrator
+  manager: Manager
+  staff: Staff
+  member: Member
+  
+  # PD
+  pd: PD
+  clone_pd: Clone PD
+  
+  # PF
+  pf: PF
+  clone_pf: Clone PF
+  
+  assess_as: ประเมินในฐานะ
+  confirm_as: ยืนยันในฐานะ
+
+  manual: Manual
+  
+  generate_report: Generate Report
+  
+  reports_user: รายบุคคล
+  reports_employee_type: สรุปผลการประเมิน
+  reports_expenses_projects: สรุปงบรายจ่าย
+  reports_expenses_by_range_projects: งบรายจ่ายรายเดือน/ไตรมาส
+  report_title_expenes_projects_in_year: ตามปีงบประมาณ
+  report_title_expenes_projects_late_year: เหลื่อมปีงบประมาณ
+  reports_indicator: สรุปผลการดำเนินงาน
+  reports_edpex_kku: รายงาน EdPEx KKU
+  
+  project_root_only: แสดงเฉพาะโครงการหลัก
+  project_all: แสดงโครงการย่อย
+  show_project_name: แสดงชื่อโครงการ
+  hide_project_name: ซ่อนชื่อโครงการ
+  

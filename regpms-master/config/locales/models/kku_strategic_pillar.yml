@@ -1,0 +1,32 @@
+en:
+  activerecord:
+    models:
+      kku_strategic_pillar: KKU Strategic Pillar
+    attributes:
+      kku_strategic_pillar:
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        "no": No.
+        name: Name
+        from_year: From year
+        to_year: To year
+th:
+  activerecord:
+    models:
+      kku_strategic_pillar: เสาหลัก มข.
+    attributes:
+      kku_strategic_pillar:
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        "no": เสาหลักที่
+        name: ชื่อเสาหลัก
+        from_year: ใช้งานจากปี
+        to_year: ใช้งานถึงปี

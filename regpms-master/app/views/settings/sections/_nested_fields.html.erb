@@ -1,0 +1,29 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_sections_attributes_#{f_index}".to_sym
+	leader_select_id = "parent_object_sections_attributes_#{f_index}_leader_id".to_sym
+	vice_leader_select_id = "parent_object_sections_attributes_#{f_index}_vice_leader_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.association :leader, wrapper: :nested_form, collection: (Leader.all + (f.object.leader.nil? ? [] : [f.object.leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/leaders/chosen_select", locals: {object_name: :section, no_create: true, select_id: leader_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :vice_leader, wrapper: :nested_form, collection: (ViceLeader.all + (f.object.vice_leader.nil? ? [] : [f.object.vice_leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/vice_leaders/chosen_select", locals: {object_name: :section, no_create: true, select_id: vice_leader_select_id} %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_sections_attributes_<%= f.index %>_leader").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_sections_attributes_<%= f.index %>_vice_leader").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

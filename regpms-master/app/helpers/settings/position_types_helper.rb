@@ -1,0 +1,2 @@
+module Settings::PositionTypesHelper
+end

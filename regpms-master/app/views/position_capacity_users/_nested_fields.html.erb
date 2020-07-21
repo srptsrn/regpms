@@ -1,0 +1,62 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_position_capacity_users_attributes_#{f_index}".to_sym
+	position_capacity_select_id = "parent_object_position_capacity_users_attributes_#{f_index}_position_capacity_id".to_sym
+	user_select_id = "parent_object_position_capacity_users_attributes_#{f_index}_user_id".to_sym
+	evaluation_select_id = "parent_object_position_capacity_users_attributes_#{f_index}_evaluation_id".to_sym
+	committee_select_id = "parent_object_position_capacity_users_attributes_#{f_index}_committee_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.association :position_capacity, wrapper: :nested_form, collection: (PositionCapacity.all + (f.object.position_capacity.nil? ? [] : [f.object.position_capacity])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/position_capacities/chosen_select", locals: {object_name: :position_capacity_user, no_create: true, select_id: position_capacity_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :user, wrapper: :nested_form, collection: (User.all + (f.object.user.nil? ? [] : [f.object.user])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/users/chosen_select", locals: {object_name: :position_capacity_user, no_create: true, select_id: user_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :evaluation, wrapper: :nested_form, collection: (Evaluation.all + (f.object.evaluation.nil? ? [] : [f.object.evaluation])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/evaluations/chosen_select", locals: {object_name: :position_capacity_user, no_create: true, select_id: evaluation_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :committee, wrapper: :nested_form, collection: (Committee.all + (f.object.committee.nil? ? [] : [f.object.committee])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/committees/chosen_select", locals: {object_name: :position_capacity_user, no_create: true, select_id: committee_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.input :role, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :expect, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :weight, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :score, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :score_real_expect, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :score_real_100, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :score_weight, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :score_real, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_position_capacity_users_attributes_<%= f.index %>_position_capacity").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_position_capacity_users_attributes_<%= f.index %>_user").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_position_capacity_users_attributes_<%= f.index %>_evaluation").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_position_capacity_users_attributes_<%= f.index %>_committee").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

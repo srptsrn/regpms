@@ -1,0 +1,2 @@
+module Settings::PositionCapacitiesHelper
+end

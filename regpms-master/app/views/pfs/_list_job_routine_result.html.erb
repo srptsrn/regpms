@@ -1,0 +1,51 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th><%= JobRoutineResult.human_attribute_name(:name) %></th>
+			<th style="width:375px;"><%= JobRoutineResultFile.model_name.human %></th>
+			<% if @current_evaluation.is_pf_range %>
+				<th>&nbsp;</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="job-routine-result-list-<%= job_routine.id %>">
+		<% job_routine.job_routine_results.each do |job_routine_result| %>
+			<%= render partial: "row_job_routine_result", locals: {job_routine_result: job_routine_result} %>
+		<% end %>
+	</tbody>
+	<% if @current_evaluation.is_pf_range %>
+		<tfoot>
+			<tr>
+				<td colspan="2" style="background-color:#DDDDDD;">
+					<%= text_area "new_job_routine_result_#{job_routine.id}", :name, {class: "form-control", placeholder: "รายงานผลการปฏิบัติงานตามตัวชี้วัด/เกณฑ์การประเมิน..."} %>
+				</td>
+				<td style="width:50px; background-color:#DDDDDD;">
+					<div id="job-routine-result-add-button-<%= job_routine.id %>-other" class="btn btn-info">
+						<i class="fa fa-plus"></i> เพิ่ม
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+	<% end %>
+</table>
+<script type="text/javascript">
+	 jQuery(function($) {
+	 	$('#job-routine-result-add-button-<%= job_routine.id %>').click(function(event){
+	 		$.ajax({
+            	url: '<%= add_job_routine_result_pfs_path %>',
+    			type: 'post',
+    			data: {job_result_template_id: $('#new_job_routine_result_<%= job_routine.id %>_job_result_template_id').val(), job_routine_id: <%= job_routine.id %>},
+                dataType: 'script'
+            });
+        });
+	 	$('#job-routine-result-add-button-<%= job_routine.id %>-other').click(function(event){
+	 		$.ajax({
+            	url: '<%= add_job_routine_result_pfs_path %>',
+    			type: 'post',
+    			data: {name: $('#new_job_routine_result_<%= job_routine.id %>_name').val(), job_routine_id: <%= job_routine.id %>},
+                dataType: 'script'
+            });
+        });
+    });
+</script>
+<div class="clearfix"></div>

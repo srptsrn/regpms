@@ -1,0 +1,27 @@
+<!-- replace 'evaluation' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "evaluation_evaluation_principles_attributes_#{f_index}".to_sym
+	evaluation_select_id = "evaluation_evaluation_principles_attributes_#{f_index}_evaluation_id".to_sym
+	task_select_id = "evaluation_evaluation_principles_attributes_#{f_index}_task_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td style="vertical-align:top;">
+        <%= f.association :task, wrapper: :nested_form, collection: (Task.all + (f.object.task.nil? ? [] : [f.object.task])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/settings/tasks/chosen_select", locals: {object_name: :evaluation_principle, no_create: true, select_id: task_select_id} %>
+        <%= f.input :principle1, as: :text_field_custom, wrapper: :input_group_12 %>
+        <%= f.input :principle2, as: :text_field_custom, wrapper: :input_group_12 %>
+        <%= f.input :principle3, as: :text_field_custom, wrapper: :input_group_12 %>
+        <%= f.input :principle4, as: :text_field_custom, wrapper: :input_group_12 %>
+        <%= f.input :principle5, as: :text_field_custom, wrapper: :input_group_12 %>
+    </td>
+    <% unless action_name == "show" %>
+        <td style="vertical-align:top;">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#evaluation_evaluation_principles_attributes_<%= f.index %>_evaluation").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#evaluation_evaluation_principles_attributes_<%= f.index %>_task").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

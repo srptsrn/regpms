@@ -1,0 +1,2 @@
+module Projects::ResponsiblesHelper
+end

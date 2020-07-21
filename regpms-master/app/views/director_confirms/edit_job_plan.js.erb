@@ -1,0 +1,8 @@
+<% if @error_message.blank? %>
+
+	$('#job-plan-row-<%= @job_plan.id %>').replaceWith("<%=j render(partial: "row_job_plan_form", locals: {job_plan: @job_plan}) %>");
+	$('#job-plan-row-<%= @job_plan.id %>').effect("highlight");
+	
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>

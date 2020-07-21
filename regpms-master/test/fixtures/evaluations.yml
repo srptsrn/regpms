@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  year: 1
+  episode: 1
+  pd_start_date: 2015-04-25
+  pd_end_date: 2015-04-25
+  pf_start_date: 2015-04-25
+  pf_end_date: 2015-04-25
+  confirm_start_date: 2015-04-25
+  confirm_end_date: 2015-04-25
+  evaluation_start_date: 2015-04-25
+  evaluation_end_date: 2015-04-25
+  director_id: 
+  vice_director_id: 
+  secretary_id: 
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  year: 1
+  episode: 1
+  pd_start_date: 2015-04-25
+  pd_end_date: 2015-04-25
+  pf_start_date: 2015-04-25
+  pf_end_date: 2015-04-25
+  confirm_start_date: 2015-04-25
+  confirm_end_date: 2015-04-25
+  evaluation_start_date: 2015-04-25
+  evaluation_end_date: 2015-04-25
+  director_id: 
+  vice_director_id: 
+  secretary_id: 

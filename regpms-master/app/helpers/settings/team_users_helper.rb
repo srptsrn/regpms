@@ -1,0 +1,2 @@
+module Settings::TeamUsersHelper
+end

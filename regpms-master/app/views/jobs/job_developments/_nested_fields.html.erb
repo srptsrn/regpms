@@ -1,0 +1,56 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_job_developments_attributes_#{f_index}".to_sym
+	user_select_id = "parent_object_job_developments_attributes_#{f_index}_user_id".to_sym
+	evaluation_select_id = "parent_object_job_developments_attributes_#{f_index}_evaluation_id".to_sym
+	job_template_select_id = "parent_object_job_developments_attributes_#{f_index}_job_template_id".to_sym
+	approver_select_id = "parent_object_job_developments_attributes_#{f_index}_approver_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.association :user, wrapper: :nested_form, collection: (User.all + (f.object.user.nil? ? [] : [f.object.user])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/users/chosen_select", locals: {object_name: :job_development, no_create: true, select_id: user_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :evaluation, wrapper: :nested_form, collection: (Evaluation.all + (f.object.evaluation.nil? ? [] : [f.object.evaluation])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/evaluations/chosen_select", locals: {object_name: :job_development, no_create: true, select_id: evaluation_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.association :job_template, wrapper: :nested_form, collection: (JobTemplate.all + (f.object.job_template.nil? ? [] : [f.object.job_template])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/job_templates/chosen_select", locals: {object_name: :job_development, no_create: true, select_id: job_template_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :duration, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :expect_qty, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :qty, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :unit, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :description, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.association :approver, wrapper: :nested_form, collection: (Approver.all + (f.object.approver.nil? ? [] : [f.object.approver])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/approvers/chosen_select", locals: {object_name: :job_development, no_create: true, select_id: approver_select_id} %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_job_developments_attributes_<%= f.index %>_user").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_job_developments_attributes_<%= f.index %>_evaluation").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_job_developments_attributes_<%= f.index %>_job_template").chosen({width: "100%"}); }); });</script>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_job_developments_attributes_<%= f.index %>_approver").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

@@ -1,0 +1,42 @@
+en:
+  activerecord:
+    models:
+      edpex_kku_item: EdpexKkuItem
+    attributes:
+      edpex_kku_item:
+        edpex_kku: Edpex kku
+        no: No
+        name: Name
+        target: Target
+        year1: Year1
+        year2: Year2
+        year3: Year3
+        year4: Year4
+        year5: Year5
+        year: Year
+        institute: Institute
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      edpex_kku_item: ผล EdPEx KKU
+    attributes:
+      edpex_kku_item:
+        edpex_kku: EdPEx KKU
+        "no": ลำดับ
+        name: ตัววัด
+        target: เป้าหมาย
+        year1: ปีที่ 1
+        year2: ปีที่ 2
+        year3: ปีที่ 3
+        year4: ปีที่ 4
+        year5: ปีที่ 5
+        year: ปีปัจุบัน
+        institute: หน่วยงานที่รับผิดชอบ
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

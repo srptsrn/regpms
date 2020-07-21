@@ -1,0 +1,2 @@
+module Settings::FacultyUsersHelper
+end

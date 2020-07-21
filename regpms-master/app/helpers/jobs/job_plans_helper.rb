@@ -1,0 +1,2 @@
+module Jobs::JobPlansHelper
+end

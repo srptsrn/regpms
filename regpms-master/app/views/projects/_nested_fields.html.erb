@@ -1,0 +1,41 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_projects_attributes_#{f_index}".to_sym
+	policy_select_id = "parent_object_projects_attributes_#{f_index}_policy_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :code, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.association :policy, wrapper: :nested_form, collection: (Policy.all + (f.object.policy.nil? ? [] : [f.object.policy])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/policies/chosen_select", locals: {object_name: :project, no_create: true, select_id: policy_select_id} %>
+    </td>
+    <td class="text-top">
+        <%= f.input :rationale, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :objective, wrapper: :nested_form %>
+    </td>
+    <td class="text-top">
+        <%= f.input :from_date, wrapper: :nested_form, as: :date_custom, value: f.object.from_date ? f.object.from_date.strftime("%d/%m/%Y") : "" %>
+    </td>
+    <td class="text-top">
+        <%= f.input :to_date, wrapper: :nested_form, as: :date_custom, value: f.object.to_date ? f.object.to_date.strftime("%d/%m/%Y") : "" %>
+    </td>
+    <td class="text-top">
+        <%= f.input :budget_amount, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_projects_attributes_<%= f.index %>_policy").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>
