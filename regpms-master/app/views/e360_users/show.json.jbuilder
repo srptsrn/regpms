@@ -1,0 +1,1 @@
+json.extract! @e360_user, :id, :to_s, :workflow_state, :workflow_state_updater_id, :evaluation_id, :user_id, :committee_id, :role, :created_at, :updated_at

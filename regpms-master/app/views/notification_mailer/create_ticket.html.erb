@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @ticket.no %> : <%= @ticket.name %></h1>
+    <p>
+      	By : <%= @ticket.creator.to_s %><br>
+      	At : <%= @ticket.created_at.strftime("%d/%m/%Y %H:%M") %><br>
+    </p>
+    <p>
+    	Priority : <%= @ticket.priority.upcase %>
+    </p>
+    <p>
+    	Users : <%= @ticket.users.collect {|u| u.to_s}.join(', ') %>
+    </p>
+    <p>
+      	<%= @ticket.description %><br>
+    </p>
+  </body>
+</html>

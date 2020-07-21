@@ -1,0 +1,293 @@
+<div class="title">
+	ข้อตกลงและแบบการประเมินผลสัมฤทธิ์ของงานสำหรับพนักงานมหาวิทยาลัยและลูกจ้างของมหาวิทยาลัย สังกัดมหาวิทยาลัยขอนแก่น (องค์ประกอบที่ 1)<br/>
+	รอบการประเมิน ตั้งแต่วันที่ <%= @evaluation.start_date.to_s_thai({year_label: true}) %>  ถึง  วันที่  <%= @evaluation.end_date.to_s_thai({year_label: true}) %>
+</div>
+<div class="text-center">
+	<b>ชื่อผู้รับการประเมิน</b>  ..........<%= @user ? @user.prefix_firstname_lastname : "-" %>..........
+	<b>ตำแหน่ง</b>   ..........<%= @user ? @user.position : "-" %>..........
+	<b>สังกัด</b> ..........สำนักบริหารและพัฒนาวิชาการ..........
+	<br/>
+	<b>ชื่อผู้บังคับบัญชา/ผู้ประเมิน</b>  ..........<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "........................................" %>..........
+	<b>ตำแหน่ง/ระดับ</b> ..........<%= @evaluation.director ? @evaluation.director.position : "........................................" %>..........
+</div>
+<div class="clearfix margin-bottom-20"></div>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th rowspan="2">(1)<br/>กิจกรรม / โครงการ / งาน</th>
+			<th rowspan="2" style="width:275px;">(2)<br/>ตัวชี้วัด / เกณฑ์การประเมิน</th>
+			<th colspan="5">(3)<br/>ระดับค่าเป้าหมาย</th>
+			<th rowspan="2" style="width:70px;">(4)<br/>ค่าคะแนน<br/>ที่ได้</th>
+			<th rowspan="2" style="width:70px;">(5)<br/>น้ำหนัก<br/>(ความสำคัญ/<br/>ความยากง่าย<br/>ของงาน)</th>
+			<th rowspan="2" style="width:70px;">(6)<br/>ค่าคะแนน<br/>ถ่วงน้ำหนัก<br/>(4) X (5)<br/>100</th>
+		</tr>
+		<tr>
+			<th class="text-center" style="width:20px;">0</th>
+			<th class="text-center" style="width:20px;">1</th>
+			<th class="text-center" style="width:20px;">2</th>
+			<th class="text-center" style="width:20px;">3</th>
+			<th class="text-center" style="width:20px;">4</th>
+		</tr>
+	</thead>
+  	<tbody>
+		<% Task::GROUPS.each_index do |index| %>
+			<% 
+				task_group = Task::GROUPS[index]
+				task = Task.where(["sorting = ?", task_group.sorting]).first
+				jobs = task_group.klass.where(["evaluation_id = ? AND user_id = ? AND workflow_state IN (?)", @evaluation.id, @user.id, [:enabled, :confirmed]]).sort_by {|jj| [jj.created_at]} 
+			%>
+			<%# หัวข้อใหญ่กิจกรรม 1-4 %>
+			<tr>
+				<td class="text-top"><%= index + 1 %>. <%= task_group.name %> (ร้อยละ <%= task_group.weight.to_s_decimal_comma %>)</td>
+				<td class="text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"></td>
+				<td class="text-center text-top"><%= task_group.weight.to_s_decimal_comma %></td>
+				<td class="text-center text-top"></td>
+			</tr>
+  			<% count = 0 %>
+			<% jobs.each do |job| %>
+        		<tr>
+        			<td class="text-top padding-left-20">
+        				<%= index + 1 %>.<%= count += 1 %>
+						<% job.name.split("\n").each do |jn| %>
+							<%= jn %><br/>
+						<% end %>
+    				</td>
+					<td class="text-top">
+						<%= Task.human_attribute_name(:principle) %>
+						<ul class="no-margin padding-left-15" style="list-style:none;">
+							<li><%= Task.human_attribute_name(:principle1) %> <%= task.principle1 %></li>
+							<li><%= Task.human_attribute_name(:principle2) %> <%= task.principle2 %></li>
+							<li><%= Task.human_attribute_name(:principle3) %> <%= task.principle3 %></li>
+							<li><%= Task.human_attribute_name(:principle4) %> <%= task.principle4 %></li>
+							<li><%= Task.human_attribute_name(:principle5) %> <%= task.principle5 %></li>
+						</ul>
+					</td>
+<%# (3)ระดับค่าเป้าหมาย มีเครื่องหมายถูก %>
+					<td class="text-center text-top"><%= job.expect.to_i == 1 ? "&#x2713;".html_safe : "" %></td>
+					<td class="text-center text-top"><%= job.expect.to_i == 2 ? "&#x2713;".html_safe : "" %></td>
+					<td class="text-center text-top"><%= job.expect.to_i == 3 ? "&#x2713;".html_safe : "" %></td>
+					<td class="text-center text-top"><%= job.expect.to_i == 4 ? "&#x2713;".html_safe : "" %></td>
+					<td class="text-center text-top"><%= job.expect.to_i == 5 ? "&#x2713;".html_safe : "" %></td>
+<%# (4)ค่าคะแนนที่ได้ %>
+					<td class="text-center text-top"><%= job.self_point.to_s_decimal_comma %></td>
+					<td class="text-center text-top"><%= job.weight.to_s_decimal_comma %></td>
+<%# (6)ค่าคะแนนถ่วงน้ำหนัก(4) X (5)100 %>
+					<td class="text-center text-top"></td>
+            	</tr>
+    		<% end %>
+    	<% end %>
+    	<tr>
+    		<td colspan="8" class="text-right text-top">(7) ผลรวม</td>
+			<td class="text-center text-top">100.00</td>
+<%# (6)ค่าคะแนนถ่วงน้ำหนัก(4) X (5) / 100 %>
+			<td class="text-center text-top"></td>
+    	</tr>
+    	<tr>
+    		<td colspan="9" class="text-right text-top">
+				(8) สรุปคะแนนส่วนผลสัมฤทธิ์ของงาน =           
+				ผลรวมของค่าคะแนนถ่วงน้ำหนัก = 
+				<br/>
+				จำนวนระดับค่าเป้าหมาย = 5
+    		</td>
+<%# (6)ค่าคะแนนถ่วงน้ำหนัก(4) X (5)100 %>
+			<td class="text-center text-top"></td>
+    	</tr>
+    	<tr>
+    		<td colspan="10">
+    			(9)  ผู้ประเมินและผู้รับการประเมินได้ตกลงร่วมกันและเห็นพ้องกันแล้ว (ระบุข้อมูลใน (1) (2) (3) และ (5) ให้ครบ)     จึงลงลายมือชื่อไว้เป็นหลักฐาน  (ลงนามเมื่อจัดทำข้อตกลง)
+    			<div class="clearfix"></div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+					ลายมือชื่อ <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้ประเมิน)<br/>
+					(<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+      				วันที่ .......... เดือน ...........................................พ.ศ. .........................<br/>
+				</div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+    				ลายมือชื่อ  <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้รับการประเมิน)<br/>
+    				(<%= @user ? @user.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+    				วันที่ ........... เดือน .....................................................พ.ศ. ......................<br/>
+				</div>
+    			<div class="clearfix"></div>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td colspan="10">
+    			(10)  ความเห็นเพิ่มเติมของผู้ประเมิน (ระบุข้อมูลเมื่อสิ้นรอบการประเมิน)<br/>
+        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1)  จุดเด่น  และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข  .................................................................................................................................................................................................................................................................<br/> 
+       			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2)  ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา ................................................................................................................................................................................................................................................................<br/>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td colspan="10">
+				(11)  ผู้ประเมินและผู้รับการประเมินได้เห็นชอบผลการประเมินแล้ว (ระบุข้อมูลใน (4)  (6)  (7)  (8)   และ (10)  ให้ครบ)    จึงลงลายมือชื่อไว้เป็นหลักฐาน (ลงนามเมื่อสิ้นรอบการประเมิน)
+    			<div class="clearfix"></div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+					ลายมือชื่อ <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้ประเมิน)<br/>
+					(<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+      				วันที่ .......... เดือน ...........................................พ.ศ. .........................<br/>
+				</div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+    				ลายมือชื่อ  <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้รับการประเมิน)<br/>
+    				(<%= @user ? @user.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+    				วันที่ ........... เดือน .....................................................พ.ศ. ......................<br/>
+				</div>
+    			<div class="clearfix"></div>
+    		</td>
+    	</tr>
+  	</tbody>
+</table>
+<div class="clearfix margin-bottom-20"></div>
+<div style="page-break-after:always;"></div>
+<div class="title">
+	ข้อตกลงการประเมินพฤติกรรมการปฏิบัติงานสำหรับพนักงานมหาวิทยาลัยและลูกจ้างของมหาวิทยาลัย สังกัดมหาวิทยาลัยขอนแก่น (องค์ประกอบที่ 2)<br/>
+	รอบการประเมิน ตั้งแต่วันที่ <%= @evaluation.start_date.to_s_thai({year_label: true}) %>  ถึง  วันที่  <%= @evaluation.end_date.to_s_thai({year_label: true}) %>
+</div>
+<div class="text-center">
+	<b>ชื่อผู้รับการประเมิน</b>  ..........<%= @user ? @user.prefix_firstname_lastname : "-" %>..........
+	<b>ตำแหน่ง</b>   ..........<%= @user ? @user.position : "-" %>..........
+	<b>สังกัด</b> ..........สำนักบริหารและพัฒนาวิชาการ..........
+	<br/>
+	<b>ชื่อผู้บังคับบัญชา/ผู้ประเมิน</b>  ..........<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "........................................" %>..........
+	<b>ตำแหน่ง/ระดับ</b> ..........<%= @evaluation.director ? @evaluation.director.position : "........................................" %>..........
+</div>
+<div class="margin-top-20"></div>
+<% if @user.position %>
+	<% jjj = 0 %>
+	<% position_capacity_group_labels = ["ก", "ข"] %>
+	<% @user.position.position_capacity_groups.each_index do |i| %>
+		<% position_capacity_group = @user.position.position_capacity_groups[i] %>
+		<div class="pull-left" style="width:50%;">
+			<table cellpadding="0" cellspacing="0" align="center" style="width:450px;">
+				<thead>
+					<tr>
+						<th class="text-center"><%= position_capacity_group_labels[i] %>.<br/><%= position_capacity_group.name %><br/>(สำหรับบุคลากรทุกคน)</th>
+						<th class="text-center" style="width:60px;">(<%= jjj += 1 %>)<br/>ระดับ<br/>สมรรถนะ<br/>ที่คาดหวัง</th>
+						<th class="text-center" style="width:60px;">(<%= jjj += 1 %>)</br/>ระดับ<br/>สมรรถนะ</br/>ที่แสดงออก<br/></th>
+					</tr>
+				</thead>
+			  	<tbody>
+		  			<% position_capacity_group.position_capacities.each do |position_capacity| %>
+				  		<tr>
+				  			<td class="text-top">
+				  				<%= position_capacity_group_labels[i] %>. 
+				  				<%= position_capacity.sorting %>
+				  				<%= position_capacity.capacity %>
+				  			</td>
+				  			<td class="text-top text-center"><%= position_capacity.expect.to_i %></td>
+				  			<td class="text-top text-center"></td>
+				  		</tr>
+			  		<% end %>
+		  		</tbody>
+			</table>
+		</div>
+	<% end %>
+<% end %>
+<div class="clearfix margin-bottom-20"></div>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th rowspan="2">เกณฑ์การประเมิน</th>
+			<th colspan="3">(7) การประเมิน</th>
+		</tr>
+		<tr>
+			<th class="text-center" style="width:60px;">จำนวนสมรรถนะ</th>
+			<th class="text-center" style="width:60px;">คูณด้วย</th>
+			<th class="text-center" style="width:60px;">คะแนน</th>
+		</tr>
+	</thead>
+  	<tbody>
+		<tr>
+			<td class="text-top">จำนวนสมรรถนะหลัก /สมรรถนะประจำสายงาน /สมรรถนะทางการบริหาร ที่มีระดับสมรรถนะที่แสดงออก  สูงกว่าหรือเท่ากับ  ระดับสมรรถนะที่คาดหวัง      X  3  คะแนน</td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+		</tr>
+		<tr>
+			<td class="text-top">จำนวนสมรรถนะหลัก /สมรรถนะประจำสายงาน /สมรรถนะทางการบริหาร ที่มีระดับสมรรถนะที่แสดงออก  ต่ำกว่า  ระดับสมรรถนะที่คาดหวัง    1 ระดับ        X  2  คะแนน</td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+		</tr>
+		<tr>
+			<td class="text-top">จำนวนสมรรถนะหลัก /สมรรถนะประจำสายงาน /สมรรถนะทางการบริหาร ที่มีระดับสมรรถนะที่แสดงออก  ต่ำกว่า  ระดับสมรรถนะที่คาดหวัง    2 ระดับ        X  1  คะแนน</td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+		</tr>
+		<tr>
+			<td class="text-top">จำนวนสมรรถนะหลัก /สมรรถนะประจำสายงาน /สมรรถนะทางการบริหาร ที่มีระดับสมรรถนะที่แสดงออก  ต่ำกว่า  ระดับสมรรถนะที่คาดหวัง    3 ระดับ        X  0  คะแนน</td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+			<td class="text-center text-top"></td>
+		</tr>
+    	<tr>
+    		<td colspan="3" class="text-right text-top">(8) ผลรวมคะแนน</td>
+			<td class="text-center text-top"></td>
+    	</tr>
+    	<tr>
+    		<td colspan="3" class="text-right text-top">
+    			(9) สรุปคะแนนส่วนพฤติกรรมการปฏิบัติราชการ (สมรรถนะ) = ผลรวมคะแนนใน (8)                                                                                                                                             
+				<br/>
+				จำนวนสมรรถนะที่ใช้ในการประเมิน X 3  คะแนน
+    		</td>
+			<td class="text-center text-top"></td>
+    	</tr>
+    	<tr>
+    		<td colspan="4">
+    			(10)  ผู้ประเมินและผู้รับการประเมิน  ได้ตกลงร่วมกันและเห็นพ้องกันแล้ว (ระบุข้อมูลใน (1)  และหรือ (3)  และหรือ (5) ตามระดับสมรรถนะของตำแหน่งที่กำหนดให้ครบ) จึงลงลายมือชื่อไว้เป็นหลักฐาน  (ลงนามเมื่อจัดทำข้อตกลง)
+    			<div class="clearfix"></div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+					ลายมือชื่อ <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้ประเมิน)<br/>
+					(<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+      				วันที่ .......... เดือน ...........................................พ.ศ. .........................<br/>
+				</div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+    				ลายมือชื่อ  <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้รับการประเมิน)<br/>
+    				(<%= @user ? @user.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+    				วันที่ ........... เดือน .....................................................พ.ศ. ......................<br/>
+				</div>
+    			<div class="clearfix"></div>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td colspan="4">
+    			(11)  ความเห็นเพิ่มเติมของผู้ประเมิน (ระบุข้อมูลเมื่อสิ้นรอบการประเมิน)<br/>
+        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1)  จุดเด่น  และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข  .................................................................................................................................................................................................................................................................<br/> 
+       			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2)  ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา ................................................................................................................................................................................................................................................................<br/>
+    		</td>
+    	</tr>
+    	<tr>
+    		<td colspan="4">
+				(12)   ผู้ประเมินและผู้รับการประเมิน ได้เห็นชอบผลการประเมินแล้ว (ระบุข้อมูลใน (2)  และหรือ (4)  และหรือ (6) (7) (8) (9) และ (11) ให้ครบ)  จึงลงลายมือชื่อไว้เป็นหลักฐาน (ลงนามเมื่อสิ้นรอบการประเมิน)
+    			<div class="clearfix"></div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+					ลายมือชื่อ <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้ประเมิน)<br/>
+					(<%= @evaluation.director ? @evaluation.director.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+      				วันที่ .......... เดือน ...........................................พ.ศ. .........................<br/>
+				</div>
+    			<div class="signature pull-left text-center">
+    				<br/>
+    				ลายมือชื่อ  <%= image_tag "/files/missing/signature_blank.png", style: "margin-bottom:-20px;", alt: "" %> (ผู้รับการประเมิน)<br/>
+    				(<%= @user ? @user.prefix_firstname_lastname : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".html_safe %>)<br/>
+    				วันที่ ........... เดือน .....................................................พ.ศ. ......................<br/>
+				</div>
+    			<div class="clearfix"></div>
+    		</td>
+    	</tr>
+  	</tbody>
+</table>
+<div class="clearfix margin-bottom-20"></div>

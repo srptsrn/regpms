@@ -1,0 +1,2 @@
+module Settings::JobTemplateGroupsHelper
+end

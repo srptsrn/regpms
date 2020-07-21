@@ -1,0 +1,5 @@
+<% if @error_message.blank? %>
+	$('#job-plan-result-file-<%= @job_plan_result_file.id %>').effect("explode");
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>

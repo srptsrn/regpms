@@ -1,0 +1,7 @@
+<% if @error_message.blank? %>
+	$('#job-routine-result-row-<%= @job_routine_result.id %>').replaceWith("<%=j render(partial: "row_job_routine_result", locals: {job_routine_result: @job_routine_result, edit: "1"}) %>");
+<% else %>
+	alert('<%=h @error_message %>');
+<% end %>
+
+init_input_chosen();

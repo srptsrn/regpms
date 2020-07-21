@@ -1,0 +1,2 @@
+module Settings::EmployeeTypesHelper
+end

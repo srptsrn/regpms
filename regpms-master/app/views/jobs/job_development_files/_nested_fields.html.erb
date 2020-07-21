@@ -1,0 +1,21 @@
+<!-- replace 'job_development' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "job_development_job_development_files_attributes_#{f_index}".to_sym
+%> 
+<tr class="nested-fields">
+    <td class="text-top">
+        <%= f.input :file, wrapper: :nested_form, as: :file_custom %>
+    </td>
+    <td class="text-top">
+        <%= f.input :description, wrapper: :nested_form, input_html: {placeholder: "ต้องกรอกชื่อไฟล์หรือรายละเอียดลงในช่องนี้ด้วย"} %>
+    </td>
+    <% unless action_name == "show" %>
+        <td class="text-top">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#job_development_job_development_files_attributes_<%= f.index %>_job_development").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

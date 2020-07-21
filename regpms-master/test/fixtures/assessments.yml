@@ -1,0 +1,51 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  user_id: 
+  evaluation_id: 
+  committee_id: 
+  role: MyString
+  score111: 1
+  score112: 1
+  score113: 1
+  score114: 1
+  score211: 1
+  score212: 1
+  score213: 1
+  score214: 1
+  score215: 1
+  score221: 1
+  score222: 1
+  score223: 1
+  score224: 1
+  score225: 1
+  score226: 1
+  comment1: MyText
+  comment2: MyText
+
+two:
+  workflow_state: MyString
+  workflow_state_updater_id: 
+  user_id: 
+  evaluation_id: 
+  committee_id: 
+  role: MyString
+  score111: 1
+  score112: 1
+  score113: 1
+  score114: 1
+  score211: 1
+  score212: 1
+  score213: 1
+  score214: 1
+  score215: 1
+  score221: 1
+  score222: 1
+  score223: 1
+  score224: 1
+  score225: 1
+  score226: 1
+  comment1: MyText
+  comment2: MyText

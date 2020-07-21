@@ -1,0 +1,66 @@
+en:
+  activerecord:
+    models:
+      evaluation_salary_up_user: EvaluationSalaryUpUser
+    attributes:
+      evaluation_salary_up_user:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        evaluation_salary_up: Evaluation salary up
+        user: User
+        position_level: Position level
+        salary: Salary
+        base_salary: Base salary
+        base_salary_min: Base salary min
+        base_salary_max: Base salary max
+        is_eligible: Is eligible
+        is_work_hour_passed: Is work hour passed
+        lost_count: Lost count
+        late_count: Late count
+        leave_count: Leave count
+        point: Point
+        percent_of_min_up: Percent of min up
+        salary_min_up: Salary min up
+        percent_of_up: Percent of up
+        salary_up: Salary up
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        extra_money: ค่าตอบแทนพิเศษ
+th:
+  activerecord:
+    models:
+      evaluation_salary_up_user: EvaluationSalaryUpUser
+    attributes:
+      evaluation_salary_up_user:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: Evaluation
+        evaluation_salary_up: Evaluation salary up
+        user: บุคลากร
+        position_level: ระดับตำแหน่ง
+        salary: เงินเดือน
+        base_salary: ฐานการคำนวณ
+        base_salary_min: ขั้นต่ำ
+        base_salary_max: ขั้นสูง
+        is_eligible: การพิจารณา
+        is_work_hour_passed: Is work hour passed
+        lost_count: จำนวนขาด (วัน)
+        late_count: จำนวนสาย (วัน)
+        leave_count: จำนวนลา (วน)
+        point: คะแนนการประเมิน
+        percent_of_min_up: ร้อยละตามกำหนดขั้นต่ำ
+        salary_min_up: เงินตามกำหนดขั้นต่ำ
+        percent_of_up: ร้อยละบวกเพิ่ม
+        salary_up: เงินปรับเพิ่ม
+        total_percent_of_up: "%(แจ้ง)"
+        total_salary_up: รวมยอดปรับเพิ่ม
+        is_out_of_range: ตรวจสอบขั้นสูง
+        new_salary: รวมเงินเดือนใหม่
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        extra_money: ค่าตอบแทนพิเศษ

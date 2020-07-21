@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<meta name="keywords" content="<%= t(:application_keyword) %>">
+		<meta name="author" content="<%= t(:application_author) %>">
+		<meta name="description" content="<%= t(:application_description) %>">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><%= t(:application_name) %> | <%= controller_name.singularize.upcase.gsub('_', ' ') %> : <%= action_name %></title>
+		
+		<link href="/orb/css/styles.css" rel="stylesheet" type="text/css">
+		<% theme = current_user && !current_user.theme.blank? ? current_user.theme : "defalut" %>
+		<link href="/orb/css/styles-<%= theme %>.css" rel="stylesheet" type="text/css">
+		
+		<link href="/orb/css/vendors/bootstrap-fileupload/bootstrap-fileupload.css" rel="stylesheet" type="text/css">
+		
+		<link href="/orb/css/vendors/date-time/bootstrap-datepicker.css" rel="stylesheet" type="text/css">
+		<link href="/orb/css/vendors/date-time/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+		<link href="/orb/css/vendors/date-time/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="/orb/css/vendors/chosen/chosen.orb.css" rel="stylesheet" type="text/css">
+		
+		<link href="/orb/css/vendors/x-editable/select2-bootstrap.orb.css" rel="stylesheet" type="text/css">
+		<link href="/orb/css/vendors/x-editable/select2.orb.css" rel="stylesheet" type="text/css">
+		
+		<link rel="shortcut icon" type="/orb/image/x-icon" href="favicon.ico" />
+		<script type="text/javascript" src="/orb/js/vendors/modernizr/modernizr.custom.js"></script>
+		
+		<!--JQuery--> 
+		<script type="text/javascript" src="/orb/js/vendors/jquery/jquery.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/jquery/jquery-ui.min.js"></script> 
+		
+        <%= javascript_include_tag "application", debug: false %>
+        <%= csrf_meta_tags %>
+        
+        <script>
+		    function input_auto_height(e) {
+			    $(e).css({'height':'auto','overflow-y':'hidden'}).height(e.scrollHeight);
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+	
+		<%= yield %>
+					
+		
+		<!--Scripts--> 
+		<!--GMaps--> 
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> 
+		
+		<!--GMap--> 
+		<script type="text/javascript" src="/orb/js/vendors/gmap/jquery.gmap.js"></script> 
+		
+		<!--EasyPieChart--> 
+		<script type="text/javascript" src="/orb/js/vendors/easing/jquery.easing.1.3.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/easypie/jquery.easypiechart.min.js"></script> 
+		
+		<!--Fullscreen--> 
+		<script type="text/javascript" src="/orb/js/vendors/fullscreen/screenfull.min.js"></script> 
+		
+		<!--NanoScroller--> 
+		<script type="text/javascript" src="/orb/js/vendors/nanoscroller/jquery.nanoscroller.min.js"></script> 
+		
+		<!--Sparkline--> 
+		<script type="text/javascript" src="/orb/js/vendors/sparkline/jquery.sparkline.min.js"></script> 
+		
+		<!--Horizontal Dropdown--> 
+		<script type="text/javascript" src="/orb/js/vendors/horisontal/cbpHorizontalSlideOutMenu.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/classie/classie.js"></script> 
+		
+		<!--PowerWidgets--> 
+		<script type="text/javascript" src="/orb/js/vendors/powerwidgets/powerwidgets.min.js"></script> 
+		
+		<!--Morris Chart--> 
+		<script type="text/javascript" src="/orb/js/vendors/raphael/raphael-min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/morris/morris.min.js"></script> 
+		
+		<!--FlotChart--> 
+		<script type="text/javascript" src="/orb/js/vendors/flotchart/jquery.flot.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/flotchart/jquery.flot.resize.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/flotchart/jquery.flot.axislabels.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/flotchart/jquery.flot-tooltip.js"></script> 
+		
+		<!--Chart.js--> 
+		<script type="text/javascript" src="/orb/js/vendors/chartjs/chart.min.js"></script> 
+		
+		<!--Calendar--> 
+		<script type="text/javascript" src="/orb/js/vendors/fullcalendar/fullcalendar.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/fullcalendar/gcal.js"></script> 
+		
+		<!--Bootstrap--> 
+		<script type="text/javascript" src="/orb/js/vendors/bootstrap/bootstrap.min.js"></script> 
+		
+		<!--Vector Map--> 
+		<script type="text/javascript" src="/orb/js/vendors/vector-map/jquery.vmap.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/vector-map/jquery.vmap.sampledata.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/vector-map/jquery.vmap.world.js"></script> 
+		
+		<!--ToDo--> 
+		<script type="text/javascript" src="/orb/js/vendors/todos/todos.js"></script> 
+		
+		<!--BootstrapFileupload--> 
+		<script type="text/javascript" src="/orb/js/vendors/bootstrap-fileupload/bootstrap-fileupload.js"></script> 
+		
+		<!--BootstrapDatepicker--> 
+		<script type="text/javascript" src="/orb/js/vendors/date-time/bootstrap-datepicker.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/date-time/bootstrap-timepicker.min.js"></script> 
+		<script type="text/javascript" src="/orb/js/vendors/date-time/bootstrap-datetimepicker.min.js"></script> 
+		
+		<!--Chosen--> 
+		<script type="text/javascript" src="/orb/js/vendors/chosen/chosen.jquery.min.js"></script>
+		
+		<!--Select2--> 
+		<script type="text/javascript" src="/orb/js/vendors/x-editable/select2.js"></script>
+				
+		<!--SkyCons--> 
+		<script type="text/javascript" src="/orb/js/vendors/skycons/skycons.js"></script> 
+		<script>
+		      var icons = new Skycons({"color": "#fff"}),
+		          list  = [
+		            "clear-day", "clear-night", "partly-cloudy-day",
+		            "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+		            "fog"
+		          ],
+		          i;
+		
+		      for(i = list.length; i--; )
+		        icons.set(list[i], list[i]);
+		
+		      icons.play();
+		    </script> 
+		
+		<!--Main App--> 
+		<script type="text/javascript" src="/orb/js/scripts.js"></script> 
+		
+		<!--/Scripts-->
+		    
+        <script type="text/javascript">
+        
+            var init_input_date_picker = function(){
+                $( "input.date_picker" ).datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose:true
+                    //isRTL:true,
+                });
+            };
+
+            var init_input_time_picker = function(){
+                $('input.time_picker').timepicker({
+                    format: 'hh:ii',
+                    minuteStep: 1,
+                    showSeconds: false,
+                    showMeridian: false,
+                    defaultTime: false,
+                    autoclose:true
+                });
+            };
+
+            var init_input_datetime_picker = function(){
+                $( "input.datetime_picker" ).datetimepicker({
+                    format: 'dd/mm/yyyy hh:ii',
+                    minuteStep: 1,
+                    showSeconds: false,
+                    showMeridian: false,
+                    autoclose:true
+                });
+             };
+
+            var init_input_chosen = function(){
+         		$(".chosen-select").chosen({allow_single_deselect: true});
+             };
+			 
+            jQuery(function($) {
+				
+                init_input_date_picker();
+                init_input_time_picker();
+                init_input_datetime_picker();
+				init_input_chosen();
+				
+            });
+	    
+			$(document).ready( function() {
+				$('textarea').each(function () {
+				  input_auto_height(this);
+				}).on('input', function () {
+				  input_auto_height(this);
+				});
+			});
+		    
+        </script>
+	
+	</body>
+</html>

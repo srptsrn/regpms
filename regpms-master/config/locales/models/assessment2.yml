@@ -1,0 +1,97 @@
+en:
+  activerecord:
+    models:
+      assessment2: Assessment2
+    attributes:
+      assessment2:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        user: User
+        evaluation: Evaluation
+        committee: Committee
+        role: Role
+        score111: Score111
+        score112: Score112
+        score113: Score113
+        score114: Score114
+        score121: Score121
+        score122: Score122
+        score123: Score123
+        score124: Score124
+        score211: Score211
+        score212: Score212
+        score213: Score213
+        score214: Score214
+        score215: Score215
+        score221: Score221
+        score222: Score222
+        score223: Score223
+        score224: Score224
+        comment1: Comment1
+        comment2: Comment2
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      assessment2: ประเมินพฤติกรรมการปฏิบัติราชการของข้าราชการพลเรือน (2)
+    attributes:
+      assessment2:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        user: ผู้ถูกประเมิน
+        evaluation: รอบการประเมิน
+        committee: ผู้ประเมิน
+        role: ประเมินในบทบาท
+        
+        title1: กิจกรรม/โครงงาน/งาน
+        score_range1: ค่าคะแนนที่ได้
+        weight1: ค่าถ่วงน้ำหนัก
+        score_real1: คะแนนหลังถ่วงน้ำหนัก
+        score_total1: รวม
+        
+        title2: กิจกรรม/โครงงาน/งาน
+        score_expect2: สมรรถนะที่คาดหวัง
+        score_range2: ค่าคะแนนที่ได้
+        weight2: ค่าถ่วงน้ำหนัก
+        score_real_2: คะแนนที่ได้
+        score_real_expect_2: เต็ม 3
+        score_real_100_2: เต็ม 100
+        score_real2: คะแนนหลังถ่วงน้ำหนัก
+        score_total2: รวม
+        
+        score1: ประเมินผลสัมฤทธิ์ของการปฏิบัติงาน
+        score11: ปริมาณงาน 
+        score111: งานตามแผนยุทธศาสตร์ 
+        score112: งานประจำ 
+        score113: งานเชิงพัฒนา 
+        score114: งานรอง 
+        score12: คุณภาพงาน
+        score121: ความถูกต้อง 
+        score122: การตรงต่อเวลา 
+        score123: การใช้ทรัพยากร 
+        score124: ผลงานตรงตามเป้าหมายหรือวัตถุประสงค์ของหน่วยงาน
+        
+        score2: ประเมินพฤติกรรมการปฏิบัติราชการ 
+        score21: ก. สมรรถนะหลัก
+        score211: บริการที่ดี
+        score212: การสั่งสมความเชี่ยวชาญในงานอาชีพ
+        score213: การมุ่งผลสัมฤทธิ์
+        score214: ความร่วมแรงร่วมใจ (การทำงานเป็นทีม)
+        score215: การยึดมั่นในความถูกต้องชอบธรรมและจริยธรรม
+        score22: ข. สมรรถนะประจำกลุ่มงาน
+        score221: ความเข้าใจผู้อื่น
+        score222: ความคิดสร้างสรรค์ (การดำเนินการเชิงรุก)
+        score223: การตรวจสอบความถูกต้องตามกระบวนงาน
+        score224: การควบคุมตนเอง 
+        
+        comment: ความคิดเห็นเพิ่มเติม
+        comment1: จุดเด่น และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข 
+        comment2: ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา
+        
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

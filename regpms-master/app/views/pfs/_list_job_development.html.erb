@@ -1,0 +1,16 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th><%= JobDevelopment.human_attribute_name(:job_template) %></th>
+			<th style="width:100px; text-align:right;"><%= JobDevelopment.human_attribute_name(:expect) %></th>
+			<th style="width:100px; text-align:right;"><%= JobDevelopment.human_attribute_name(:weight) %></th>
+			<th colspan="2" style="width:100px; text-align:right;"><%= JobDevelopment.human_attribute_name(:self_point) %></th>
+		</tr>
+	</thead>
+	<tbody id="job-development-list">
+		<% current_user.job_developments.where(["evaluation_id = ?", @current_evaluation.id]).sort_by {|jj| [jj.created_at]}.each do |job_development| %>
+			<%= render partial: "row_job_development", locals: {job_development: job_development} %>
+		<% end %>
+	</tbody>
+</table>
+<div class="clearfix"></div>

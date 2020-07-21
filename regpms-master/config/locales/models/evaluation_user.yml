@@ -1,0 +1,45 @@
+en:
+  activerecord:
+    models:
+      evaluation_user: EvaluationUser
+    attributes:
+      evaluation_user:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        user: User
+        evaluation: Evaluation
+        committee: Committee
+        role: Role
+        comment1: Comment1
+        comment2: Comment2
+        position_capacity_total: Position capacity total
+        employee_type_task_total: Employee type task total
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        
+        r4: รง.ปม.4
+th:
+  activerecord:
+    models:
+      evaluation_user: ผลการประเมิน
+    attributes:
+      evaluation_user:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        user: ผู้ถูกประเมิน
+        evaluation: รอบการประเมิน
+        committee: ผู้ประเมิน
+        role: ประเมินในฐานนะ
+        comment: ความคิดเห็นเพิ่มเติม
+        comment1: จุดเด่น และ/หรือ สิ่งที่ควรปรับปรุงแก้ไข 
+        comment2: ข้อเสนอแนะเกี่ยวกับวิธีส่งเสริมและพัฒนา
+        position_capacity_total: Position capacity total
+        employee_type_task_total: Employee type task total
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        
+        r4: รง.ปม.4

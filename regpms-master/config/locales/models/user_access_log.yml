@@ -1,0 +1,36 @@
+en:
+  activerecord:
+    models:
+      user_access_log: UserAccessLog
+    attributes:
+      user_access_log:
+        user: User
+        username: Username
+        ip: Ip
+        controller_name: Controller name
+        action_name: Action name
+        params: Params
+        params_id: Params
+        log_time: Log time
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      user_access_log: UserAccessLog
+    attributes:
+      user_access_log:
+        user: User
+        username: Username
+        ip: Ip
+        controller_name: Controller name
+        action_name: Action name
+        params: Params
+        params_id: Params
+        log_time: Log time
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

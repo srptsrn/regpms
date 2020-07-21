@@ -1,0 +1,71 @@
+<div class="page-header">
+	<h3 class="pull-left">
+		ยืนยันข้อตกลง รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %>
+		<div class="h4">
+			<%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+		</div>
+		<div class="h4">
+			เปิดให้ยืนยันข้อตกลง ตั้งแต่วันที่ <%= @current_evaluation.director_confirm_start_date.to_s_thai %> ถึง <%= @current_evaluation.director_confirm_end_date.to_s_thai %>
+		</div>
+	</h3>
+	<div class="clearfix"></div>
+</div>
+<div class="row">
+	<div class="col-md-12 bootstrap-grid">
+		<div class="panel">
+			<div class="panel-body">
+				<table class="table table-hover margin-0px">
+		          	<thead>
+		            	<tr>
+		            		<th style="width:50px; text-align:right;"></th>
+		                    <th><%= t(:personel) %></th>
+		                    <th class="text-center" style="width:150px;">&nbsp;</th>
+		                    <th class="text-center" style="width:150px;">ผู้อำนวยการยืนยันเมื่อ</th>
+		                    <th class="text-center" style="width:150px;">บุคลากรรับทราบเมื่อ</th>
+		            	</tr>
+		          	</thead>
+		          	<tbody>
+		          		<% count = 0 %>
+		          		<% Section.all_enabled.sort_by {|u| u.name}.each do |section| %>
+          					<tr>
+          						<td colspan="5" class="bg-black text-white">
+          							<%= section.name %>
+          						</td>
+          					</tr>
+		          			<% section.section_users.each do |section_user| %>
+		          				<% 
+		          					user = section_user.user
+		          					evaluation_user_final = user.evaluation_user_final(@current_evaluation) 
+		          				%>
+		          				<% if user %>
+				            		<tr id="user-<%= user.id %>">
+				            			<td style="vertical-align:top; text-align:right;"><%= count += 1 %>.</td>
+										<td class="text-top">
+											<%= link_to user.prefix_firstname_lastname, pd_director_confirms_url(@current_evaluation, user) %><br/>
+											<small>
+												<% user.position_boards.each do |pb| %>
+													<%= pb %><br/>
+												<% end %>
+												<%= user.position %><br/>
+												<%= user.employee_type %>
+											</small>
+										</td>
+										<td class="text-top text-center">
+											<%= link_to "รายละเอียดข้อตกลง", pd_director_confirms_url(@current_evaluation, user) %>
+										</td>
+										<td class="text-top text-center">
+											<%= evaluation_user_final && evaluation_user_final.director_at ? evaluation_user_final.director_at.strftime("%d/%m/%Y %H:%M") : "" %>
+										</td>
+										<td class="text-top text-center">
+											<%= evaluation_user_final && evaluation_user_final.user_at ? evaluation_user_final.user_at.strftime("%d/%m/%Y %H:%M") : "" %>
+										</td>
+				                	</tr>
+			                	<% end %>
+		                	<% end %>
+	                	<% end %>
+		          	</tbody>
+		        </table>
+			</div>
+		</div>
+	</div>
+</div>

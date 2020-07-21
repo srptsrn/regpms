@@ -1,0 +1,59 @@
+<% if false %>
+	
+	<h2>Forgot your password?</h2>
+	
+	<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+	  <%= f.error_notification %>
+	
+	  <div class="form-inputs">
+	    <%= f.input :email, required: true, autofocus: true %>
+	  </div>
+	
+	  <div class="form-actions">
+	    <%= f.button :submit, "Send me reset password instructions" %>
+	  </div>
+	<% end %>
+	
+	<%= render "users/shared/links" %>
+
+<% elsif controller.send(:_layout) == "orb_login" %>
+
+	<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, id: "login-form", class: "orb-form"}) do |f| %>
+
+    	<header>
+			<div class="image-block"><img src="/logo_th.png" alt="User" /></div>
+      		Forgot your password?
+  		</header>
+  		
+    	<fieldset>
+			<%= f.input :email, wrapper: :login, required: true, autofocus: true, hint: "<i class='fa fa-envelope'></i>".html_safe, input_html: {placeholder: "E-mail"} %>
+		    <%= f.button :button, class: "btn btn-primary col col-xs-12" do %>
+		    	Send me reset password instructions
+		    <% end %>
+        	<div class="note pull-right">
+	        	<%= link_to new_session_path(resource_name), {"title" => "Signin?"} do %>
+	        		<< back to login
+	        	<% end %>
+        	</div>
+    	</fieldset>
+		      
+      <% end %>
+
+<% elsif controller.send(:_layout) == "orb_frontend" %>
+
+	<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, id: "login-form", class: "orb-form"}) do |f| %>
+
+    	<header>
+      		Forgot your password?
+  		</header>
+  		
+    	<fieldset>
+			<%= f.input :email, wrapper: :login, required: true, autofocus: true, hint: "<i class='fa fa-envelope'></i>".html_safe, input_html: {placeholder: "E-mail"} %>
+		    <%= f.button :button, class: "btn btn-primary col col-xs-12" do %>
+		    	Send me reset password instructions
+		    <% end %>
+    	</fieldset>
+		      
+      <% end %>
+
+<% end %>

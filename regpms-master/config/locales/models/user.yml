@@ -1,0 +1,70 @@
+en:
+  activerecord:
+    models:
+      user: User
+    attributes:
+      user:
+        username: Username
+        email: Email
+        password: Password
+        password_confirmation: Password confirmation
+        roles: Roles
+        role_names: Roles
+        role_names_join: Roles
+        avatar: Avatar
+        user_group: User Group
+        timezone: Timezone
+        locale: Locale
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        created_by: Created by
+        updated_by: Updated by
+        created_at: Created at
+        updated_at: Updated at
+        last_accessed: Last accessed at
+        
+        pid: Citizen ID
+        prefix: Prefix
+        firstname: Firstname
+        lastname: Lastname
+        location: Location
+        position: Position
+        section: Section
+        employee_type: Employee Type
+        
+        firstname_lastname: Name
+th:
+  activerecord:
+    models:
+      user: ผู้ใช้ระบบ
+    attributes:
+      user:
+        username: ชื่อผู้ใช้ระบบ
+        email: อีเมล์
+        password: รหัสผ่าน
+        password_confirmation: ยืนยันรหัสผ่าน
+        roles: บทบาท
+        role_names: บทบาท
+        role_names_join: บทบาท
+        avatar: ภาพแทนตัว
+        user_group: กลุ่มผู้ใช้ระบบ
+        timezone: เขตเวลา
+        locale: ภาษา
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        last_accessed: ใช้งานล่าสุดเมื่อ
+        
+        pid: เลขประจำตัวประชาชน
+        prefix: คำนำหน้า
+        firstname: ชื่อ
+        lastname: นามสกุล
+        location: สังกัด
+        position: ตำแหน่ง
+        section: กลุ่มภาระกิจ
+        employee_type: ประเภทบุคลากร
+
+        firstname_lastname: ชื่อ-นามสกุล

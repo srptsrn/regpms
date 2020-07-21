@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  'no': MyString
+  name: MyString
+  description: MyText
+  priority: MyString
+  workflow_state: MyString
+  workflow_state_updater_id: 
+
+two:
+  'no': MyString
+  name: MyString
+  description: MyText
+  priority: MyString
+  workflow_state: MyString
+  workflow_state_updater_id: 

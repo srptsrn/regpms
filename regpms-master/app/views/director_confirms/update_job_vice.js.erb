@@ -1,0 +1,28 @@
+<% if @error_message.blank? %>
+
+	$('#job-vice-row-<%= @job_vice.id %>').replaceWith("<%=j render(partial: "row_job_vice", locals: {job_vice: @job_vice}) %>");
+	$('#job-vice-row-<%= @job_vice.id %>').effect("highlight");
+	
+<% else %>
+	
+	if($('#job_vice_<%= @job_vice.id %>_name').val() == ''){
+		$('#job_vice_<%= @job_vice.id %>_name').parent().addClass('has-error');
+	}else{
+		$('#job_vice_<%= @job_vice.id %>_name').parent().removeClass('has-error');
+	}
+	
+	if($('#job_vice_<%= @job_vice.id %>_expect').val() == ''){
+		$('#job_vice_<%= @job_vice.id %>_expect').parent().addClass('has-error');
+	}else{
+		$('#job_vice_<%= @job_vice.id %>_expect').parent().removeClass('has-error');
+	}
+	
+	if($('#job_vice_<%= @job_vice.id %>_weight').val() == ''){
+		$('#job_vice_<%= @job_vice.id %>_weight').parent().addClass('has-error');
+	}else{
+		$('#job_vice_<%= @job_vice.id %>_weight').parent().removeClass('has-error');
+	}
+	
+	alert('<%=h @error_message %>\r\n<%= @job_vice.errors.full_messages.join("\\r\\n") %>');
+	
+<% end %>

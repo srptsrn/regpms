@@ -1,0 +1,1 @@
+json.extract! @evaluation_score_card, :id, :to_s, :workflow_state, :workflow_state_updater_id, :evaluation_id, :user_id, :committee_id, :role, :task_score, :ability_score, :created_at, :updated_at

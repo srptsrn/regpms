@@ -1,0 +1,6 @@
+$("#<%= params[:user_select_id] %>").val("<%= @user ? @user.id : "" %>");
+$("#<%= params[:user_select_id] %>").trigger('chosen:updated');
+
+$("#<%= params[:prefix_form_id] %>").val("<%= @user ? @user.prefix : "" %>");
+$("#<%= params[:firstname_form_id] %>").val("<%= @user ? @user.firstname : "" %>");
+$("#<%= params[:lastname_form_id] %>").val("<%= @user ? @user.lastname : "" %>");

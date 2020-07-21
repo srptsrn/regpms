@@ -1,0 +1,15 @@
+$("#project_tactic_id").val("<%= @tactic ? @tactic.id : "" %>");
+$("#project_tactic_id").trigger('chosen:updated');
+
+// remove all options
+$("#project_measure_id").empty();
+// insert blank option
+$("#project_measure_id").append($('<option></option>'));
+// insert new options
+<% if @tactic %>
+	<% @tactic.measures.sort_by {|a| a.no}.each do |measure| %>
+		$("#project_measure_id").append($('<option></option>').attr('value', <%= measure.id %>).text('<%= measure.to_s %>'));
+	<% end %>
+<% end %>
+// chosen update
+$("#project_measure_id").trigger('chosen:updated');

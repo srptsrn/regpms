@@ -1,0 +1,34 @@
+en:
+  activerecord:
+    models:
+      e360_user: E360User
+    attributes:
+      e360_user:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        user: User
+        committee: Committee
+        role: Role
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+        total: Total
+th:
+  activerecord:
+    models:
+      e360_user: E360
+    attributes:
+      e360_user:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: Evaluation
+        user: User
+        committee: Committee
+        role: Role
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ
+        total: รวม

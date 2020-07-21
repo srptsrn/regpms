@@ -1,0 +1,100 @@
+<% @result_checkinouts ||= {} %>
+<% @result_checkinouts["checkinouts"] ||= [] %>
+<% @result_holidays ||= {} %>
+<% @result_holidays["holidays"] ||= [] %>
+<div class="row">
+	<div class="inner-spacer">
+		<div class="col-md-12 bootstrap-grid">
+			<div class="powerwidget dark-blue no-margin">
+		  		<header>
+		    		<h2>การเข้างาน<small><%= %{#{@query_start_date ? @query_start_date.strftime("%d/%m/%Y") : ""} - #{@query_end_date ? @query_end_date.strftime("%d/%m/%Y") : ""}} %>...</small></h2>
+		  		</header>
+				<div class="inner-spacer">
+					<table class="table table-striped table-hover margin-0px">
+				      	<thead>
+				        	<tr>
+				                <th style="width:20%; text-align:center;">ปกติ</th>
+				                <th style="width:20%; text-align:center;">สาย</th>
+				                <th style="width:20%; text-align:center;">ไม่มีข้อมูล</th>
+				                <th style="width:20%; text-align:center;">ลา</th>
+				                <th style="width:20%; text-align:center;">หยุด</th>
+				        	</tr>
+				      	</thead>
+				      	<tbody>
+				    		<tr>
+								<td class="text-center"><%= @result_checkinouts["checkinouts"].select {|gatestatement| !gatestatement["is_checkin_late"] && !gatestatement["checkin"].blank?}.size %></td>
+								<td class="text-center"><%= @result_checkinouts["checkinouts"].select {|gatestatement| gatestatement["is_checkin_late"]}.size %></td>
+								<td class="text-center"><%= @result_checkinouts["checkinouts"].select {|gatestatement| gatestatement["checkin"].blank?}.size %></td>
+								<td class="text-center"><%= @result_checkinouts["checkinouts"].sum {|gatestatement| gatestatement["leave_weight"].to_f} %></td>
+								<td class="text-center"><%= @result_holidays["holidays"].size %></td>
+				        	</tr>
+				        	<tr><td colspan="5" style="text-align:right;"><%= link_to "แสดงรายละเอียด", "#", {class: "btn btn-xs btn-default", id: "checkinout-link"} %></td></tr>
+				      	</tbody>
+				    </table>
+				</div>
+				
+				<div class="inner-spacer">
+					<table id="checkinout-details" class="table table-hover margin-0px no-padding hide">
+				      	<thead>
+				        	<tr>
+				                <th></th>
+				                <th style="width:50px;"></th>
+				                <th style="width:100px;">วันที่</th>
+				                <th style="width:120px; text-align:center;">เวลาเข้า<br/>06:00 - 09:00</th>
+				                <th style="width:120px; text-align:center;">เวลาออก<br/>16:30 - 23:59</th>
+				                <th>หมายเหตุ</th>
+				        	</tr>
+				      	</thead>
+				      	<tbody>
+				      		<% i = 0 %>
+							<% @result_checkinouts["checkinouts"].each do |gatestatement| %>
+								<% ddd = Date.strptime(gatestatement["date"], "%d/%m/%Y") %>
+								<% 
+									hd = @result_holidays["holidays"].select {|hhhhh| hhhhh["date"] == gatestatement["date"]}.first
+									hd_css = ""
+									hd_css = "background-color:#F6CECE;" unless hd.nil?
+									hd_css = "background-color:#F5A9A9;" if ddd.wday == 0 || ddd.wday == 6
+								%>
+				        		<tr>
+									<td style="<%= hd_css %>"><%= i += 1 %></td>
+									<td style="<%= hd_css %>"><%= Date::ABBR_DAYNAMES[ddd.wday] %></td>
+									<td style="<%= hd_css %>"><%= gatestatement["date"] %></td>
+									<td style="<%= hd_css %> text-align:center;">
+										<% if gatestatement["leave_period"].to_s == "F" || gatestatement["leave_period"].to_s == "M" %>
+											<span class="btn btn-xs btn-warning">
+												<%= gatestatement["checkin"].blank? ? '-' : gatestatement["checkin"] %><br/>
+												leave
+											</span>
+										<% else %>
+											<span class="btn btn-xs btn-<%= gatestatement["checkin"].blank? || gatestatement["is_checkin_late"] ? 'danger' : 'success' %>">
+												<%= gatestatement["checkin"].blank? ? '-' : gatestatement["checkin"] %>
+											</span>
+										<% end %>
+									</td>
+									<td style="<%= hd_css %> text-align:center;">
+										<% if gatestatement["leave_period"].to_s == "F" || gatestatement["leave_period"].to_s == "A" %>
+											<span class="btn btn-xs btn-warning">
+												<%= gatestatement["checkout"].blank? ? '-' : gatestatement["checkout"] %><br/>
+												leave
+											</span>
+										<% else %>
+											<span class="btn btn-xs btn-<%= gatestatement["checkout"].blank? ? 'danger' : 'success' %>">
+												<%= gatestatement["checkout"].blank? ? '-' : gatestatement["checkout"] %>
+											</span>
+										<% end %>
+									</td>
+									<td style="<%= hd_css %>"><%= hd ? hd["name"] : "" %></td>
+				            	</tr>
+				        	<% end if @result_checkinouts["checkinouts"] %>
+				      	</tbody>
+				    </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#checkinout-link").click(function() {
+		$("#checkinout-details").toggleClass('hide');
+	});
+</script>

@@ -1,0 +1,61 @@
+<% if controller.send(:_layout) == "orb_frontend" %>
+	<% news_images = NewsImage.all_published %>
+	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+		<ol class="carousel-indicators">
+			<% news_images.each_index do |i| %>
+	  			<li data-target="#carousel-example-generic" data-slide-to="<%= i %>" class="<%= i == 0 ? 'active' : '' %>"></li>
+	  		<% end %>
+		</ol>
+		<div class="carousel-inner">
+			<% news_images.each_index do |i| %>
+				<div class="item <%= i == 0 ? 'active' : '' %>"> <%= image_tag news_images[i].image.url, {alt: news_images[i].published_at} %> </div>
+	  		<% end %>
+		</div>
+	</div>
+	
+	<div class="page-header">
+	  	<h3>
+	  		<%= NewsFront.model_name.human %>
+	  		<small>...</small>
+	  	</h3>
+	</div>
+	<div class="simple-testimonials"> 
+		<% NewsFront.front_published.each do |news_front| %>
+			<%= render partial: "news", locals: {news_front: news_front} %>
+	  	<% end %>
+	</div>
+	<div class="block">
+		<div class="col-md-12">
+			<%= link_to t(:more), news_frontend_url, {class: "btn btn-sm btn-default pull-right"} %>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+<% else %>
+
+	<div class="goods-grid">
+    	<h2><%= NewsFront.model_name.human %></h2>
+    	<legend></legend>
+		<% NewsFront.front_published.each do |news_front| %>
+	    	<div class="col-xs-6 col-sm-4 col-md-3">
+	          	<div class="thumbnail">
+	        		<%= link_to news_frontend_url(news_front, page: params[:page]) do %>
+		        		<div class="padding-10px"> 
+		        			<center>
+		      					<%= image_tag news_front.image.url(:front), {alt: news_front.title, class: "no-padding", style: "border-radius:50%; border:5px solid #333333;;"} %>
+		              			<h5 style="height:31px; overflow:hidden; text-overflow:ellipsis;"><%= news_front.title %></h5>
+		              			<div style="height:55px; overflow:hidden;"><%= news_front.detail.gsub("\r", "<br/>").html_safe %></div>
+		      				</center>
+	          			</div>
+	  				<% end %>
+	          	</div>
+	        </div>
+	  	<% end %>
+  	</div>
+	<div class="block">
+		<div class="col-md-12">
+			<%= link_to t(:more), news_frontend_url, {class: "btn btn-sm btn-default pull-right"} %>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	
+<% end %>

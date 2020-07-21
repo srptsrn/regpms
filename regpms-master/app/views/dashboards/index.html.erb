@@ -1,0 +1,397 @@
+<div class="page-header">
+	<h1><%= t(:dashboard) %><small>...</small></h1>
+</div>
+
+<% news_fronts = NewsFront.all_published %>
+<% if news_fronts.size > 0 %>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-20" style="text-align:left;">
+			
+			<% news_fronts.each do |news_front| %>
+				<div class="well">
+					<h5><%= news_front.title %></h5>
+					<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= news_front.detail %></div>
+					<div>
+						<%= link_to news_front.image.url, {class: "btn btn-sm btn-default margin-top-10"} do %>
+							<i class="fa fa-save"></i>
+							<%= news_front.image.original_filename %>
+						<% end if news_front.image.present? %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+<% end %>
+
+<% evaluations = Evaluation.order("year, episode").where(["evaluation_start_date <= ? AND evaluation_end_date >= ?", Date.current, Date.current]) %>
+<% if evaluations.size > 0 %>
+	<div class="row">
+		<div class="col-xs-12">
+			<table class="table table-hover">
+				<% evaluations.each do |evaluation| %>
+					<% if evaluation.evaluation_employee_types.size > 0 && current_user.is_assessor?(evaluation) %>
+						<thead>
+							<tr>
+								<th colspan="2" class="text-white" style="background-color:#3b8dbd;">
+									<div class="pull-left">
+										<h4 class="no-margin">
+											รอบการประเมิน ตั้งแต่วันที่ <%= evaluation.start_date.to_s_thai %> ถึง <%= evaluation.end_date.to_s_thai %>
+											<%= evaluation.is_360? ? "(360 องศา)" : "" %>
+										</h4>
+										สำหรับ <%= evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+									</div>
+									
+									<div class="btn btn-default pull-right">
+										<%= evaluation.to_s %>
+									</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% if evaluation.is_360? %>
+								<% if current_user.is_director?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:director) %>
+										</td>
+										<td>
+											<%= link_to salary_calculator_assess_url("director", evid: evaluation.id), {class: "btn btn-sm btn-primary margin-left-5 pull-right"} do %>
+												คำนวนเงินเดือน
+											<% end if evaluation.is_salary_up %>
+											
+											<%= link_to cards_summary_assess_url("director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to cards_assess_url("director", evid: evaluation.id), {class: "btn btn-sm btn-success margin-left-5 pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+											
+											<%= link_to director_confirms_url(evaluation), {class: "btn btn-sm btn-warning margin-left-5 pull-right"} do %>
+												ยืนยันข้อตกลง
+											<% end if current_user.is_director?(evaluation) %>
+										</td>
+									</tr>
+								<% elsif current_user.is_vice_director?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to cards_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% elsif current_user.is_vice_director2?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director2) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to cards_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% elsif current_user.is_vice_director3?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director3) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to cards_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% elsif current_user.is_secretary?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:secretary) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to cards_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% else %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : บุคลากร
+										</td>
+										<td>
+											<%= link_to cards_assess_url("staff", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+							<% else %>
+								<% if current_user.is_director?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:director) %>
+										</td>
+										<td>
+											
+											<%= link_to cards_summary_assess_url("director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to assess_url("director", evid: evaluation.id), {class: "btn btn-sm btn-success margin-left-5 pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+											
+											<%= link_to director_confirms_url(evaluation), {class: "btn btn-sm btn-warning margin-left-5 pull-right"} do %>
+												ยืนยันข้อตกลง
+											<% end if current_user.is_director?(evaluation) %>
+										</td>
+									</tr>
+								<% end %>
+								<% if current_user.is_vice_director?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+								<%if false%>
+								<% if current_user.is_vice_director2?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director2) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+								<% if current_user.is_vice_director3?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director3) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+								<% end %>
+								<% if current_user.is_secretary?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:secretary) %>
+										</td>
+										<td>
+											<%= link_to cards_summary_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+											
+											<%= link_to assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+								<% if current_user.is_committee?(evaluation) %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Committee.model_name.human %>
+										</td>
+										<td>
+											<%= link_to assess_url("committee", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+							
+								<% Section.order(:name).where(["name NOT LIKE ? AND leader_id = ?", "%รองผู้อำนวยการ%", current_user.id]).each do |section| %>
+									<tr>
+										<td>
+											<%= t(:assess_as) %> : <%= Section.human_attribute_name(:leader) %> <%= section %>
+										</td>
+										<td>
+											<%= link_to assess_url("section_leader", section_id: section.id, evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+							
+								<% Section.order(:name).where(["name NOT LIKE ? AND vice_leader_id = ?", "%รองผู้อำนวยการ%", current_user.id]).each do |section| %>
+									<tr class="hide">
+										<td>
+											<%= t(:assess_as) %> : <%= Section.human_attribute_name(:vice_leader) %> <%= section %>
+										</td>
+										<td>
+											<%= link_to assess_url("section_vice_leader", section_id: section.id, evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+												เริ่มประเมิน
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
+									
+							<% end %>
+						
+						</tbody>
+					<% end %>
+				<% end %>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% projects = current_user.projects %>
+<% if projects.size > 0 %>
+	<% years = projects.collect {|pj| pj.year}.uniq.sort.reverse %>
+	<div class="row">
+		<div class="bootstrap-grid col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-20" style="text-align:left;">
+			<div class="powerwidget red">
+				<header role="heading">
+					<h2><%= Project.model_name.human %><small>ที่รับผิดชอบ</small></h2>
+				</header>
+				<div class="inner-spacer nopadding">
+					<div class="tabbable tabs-left">
+						<ul class="nav nav-tabs">
+							<% years.each do |year| %>
+								<% ps = projects.select {|p| p.year == year} %>
+								<li class="<%= years.first == year ? 'active' : '' %>">
+									<a href="#project-<%= year %>" data-toggle="tab">
+										<%= year + 543 %> 
+										<% if ps.size > 0 %>
+											<span class="label label-default"><%= ps.size %></span>
+										<% end %>
+									</a>
+								</li>
+							<% end %>
+						</ul>
+						<div class="tab-content">
+						<% years.each do |year| %>
+							<div class="tab-pane <%= years.first == year ? 'active' : '' %>" id="project-<%= year %>">
+								<% ps = projects.select {|p| p.year == year} %>
+								<table class="table">
+									<tbody>
+										<% ps.each do |project| %>
+											<tr>
+												<td class="text-top" rowspan="2"><%= "<span class=' text-danger'><i class='fa fa-warning'></i></span>".html_safe if project.activities.size == 0 %></td>
+												<td class="text-top" rowspan="2" nowrap><%= link_to project.code, project_url(project) %></td>
+												<td class="text-top"><%= link_to project.name, project_url(project) %></td>
+												<td class="text-top">
+													<span class="pull-right label <%= state_label_class(project.workflow_state.to_sym) %>"><%=t "workflow.state.#{project.workflow_state}" %></span>
+												</td>
+											</tr>
+											<tr>
+												<td class="text-top">
+													<ul>
+														<% project.activities.each do |activity| %>
+															<li><%= link_to activity, projects_activity_url(activity), {} %></li>
+														<% end %>
+													</ul>
+													<%= link_to new_projects_activity_url(project_id: project.id), {class: "btn btn-success btn-xs", style: "margin-left:40px;"} do %>
+														<i class="fa fa-plus"></i> <%= Activity.model_name.human %>
+													<% end %>
+												</td>
+												<td></td>
+											</tr>
+										<% end %>
+									</tbody>
+								</table>
+							</div>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>
+
+
+<% if false %>
+<%
+	evaluations = Evaluation.limit(6).order("year desc, episode desc").reverse
+%>
+<table class="table table-hover table-bordered">
+	<thead>
+		<tr>
+			<th></th>
+			<% evaluations.each do |evaluation| %>
+				<th nowrap class="text-center" style="width:175px;"><%= evaluation.to_s %></th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><span class="disabled btn btn-sm btn-info">PD :</span></td>
+			<% evaluations.each do |evaluation| %>
+				<td nowrap class="text-center <%= evaluation.current_state.to_sym == :enabled ? "bg-info" : "" %>">
+					<%= evaluation.pd_start_date ? evaluation.pd_start_date.strftime("%d/%m/%Y") : "" %> - <%= evaluation.pd_end_date ? evaluation.pd_end_date.strftime("%d/%m/%Y") : "" %>
+				</td>
+			<% end %>
+		</tr>
+		<tr>
+			<td><span class="disabled btn btn-sm btn-primary">PF :</span></td>
+			<% evaluations.each do |evaluation| %>
+				<td nowrap class="text-center <%= evaluation.current_state.to_sym == :enabled ? "bg-info" : "" %>">
+					<%= evaluation.pf_start_date ? evaluation.pf_start_date.strftime("%d/%m/%Y") : "" %> - <%= evaluation.pf_end_date ? evaluation.pf_end_date.strftime("%d/%m/%Y") : "" %>
+				</td>
+			<% end %>
+		</tr>
+		<tr>
+			<td><span class="disabled btn btn-sm btn-warning">ยืนยันงาน :</span></td>
+			<% evaluations.each do |evaluation| %>
+				<td nowrap class="text-center <%= evaluation.current_state.to_sym == :enabled ? "bg-info" : "" %>">
+					<%= evaluation.confirm_start_date ? evaluation.confirm_start_date.strftime("%d/%m/%Y") : "" %> - <%= evaluation.confirm_end_date ? evaluation.confirm_end_date.strftime("%d/%m/%Y") : "" %>
+				</td>
+			<% end %>
+		</tr>
+		<tr>
+			<td><span class="disabled btn btn-sm btn-success">ประเมิน :</span></td>
+			<% evaluations.each do |evaluation| %>
+				<td nowrap class="text-center <%= evaluation.current_state.to_sym == :enabled ? "bg-info" : "" %>">
+					<%= evaluation.evaluation_start_date ? evaluation.evaluation_start_date.strftime("%d/%m/%Y") : "" %> - <%= evaluation.evaluation_end_date ? evaluation.evaluation_end_date.strftime("%d/%m/%Y") : "" %>
+				</td>
+			<% end %>
+		</tr>
+	</tbody>
+</table>
+<% end %>

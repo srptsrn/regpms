@@ -1,0 +1,405 @@
+<% user = @user %>
+<div class="page-header">
+	<h1>
+		ประเมินรายบุคคล
+		<small>
+			<%
+				subtitle = "..."
+      			if @role == "director"
+      				subtitle = "#{Evaluation.human_attribute_name(:director)}"
+      			elsif @role == "vice_director"
+					  subtitle = "#{Evaluation.human_attribute_name(:vice_director)}"
+				elsif @role == "vice_director2"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director2)}"
+				elsif @role == "vice_director3"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director3)}"
+				elsif @role == "secretary"
+      				subtitle = "#{Evaluation.human_attribute_name(:secretary)}"
+      			elsif @role == "committee"
+      				subtitle = "#{Committee.model_name.human}"
+      			elsif @role == "section_leader"
+      				subtitle = "#{Section.human_attribute_name(:leader)} #{@section}"
+      			elsif @role == "section_vice_leader"
+      				subtitle = "#{Section.human_attribute_name(:vice_leader)} #{@section}"
+      			elsif @role == "team_leader"
+      				subtitle = "#{Team.human_attribute_name(:leader)} #{@team}"
+      			elsif @role == "faculty_leader"
+      				subtitle = "#{Faculty.human_attribute_name(:leader)} #{@faculty}"
+      			elsif @role == "faculty_dean"
+      				subtitle = "#{Faculty.human_attribute_name(:dean)} #{@faculty}"
+      			end
+  			%>
+  			ประเมินในฐานะ : <%= subtitle %>
+		</small>
+	</h1>
+	<h4>รอบการประเมิน ตั้งแต่วันที่ <%= @current_evaluation.start_date.to_s_thai %> ถึง <%= @current_evaluation.end_date.to_s_thai %></h4>
+	สำหรับ <%= @current_evaluation.evaluation_employee_types.collect {|evet| evet.employee_type.to_s}.join(", ") %>
+</div>
+
+<div class="powerwidget red" @role="widget">
+	<header role="heading">
+		<h2><%= user %><small>...</small></h2>
+	</header>
+	
+	<div class="inner-spacer" @role="content">
+		
+		<%= link_to assess_url(@role, section_id: @section, team_id: @team, faculty_id: @faculty), {class: "btn #{event_btn_class(:back)}"} do %>
+			<%= event_icon_tag(:back) %>  <%= t(:back) %>
+		<% end %>
+		<legend></legend>
+		
+		<div class="well">
+			<div class="pull-right">
+      			<div class="user-img"><%= image_tag user.avatar.url(:thumb), {alt: "User Picture"} %></div>
+			</div>
+			
+			<div class="pull-left">
+				<div class="pull-left padding-5" style="width:150px; text-align:right; font-weight:bold;"><%= User.human_attribute_name(:employee_type) %>: </div>
+				<div class="pull-left padding-5"><%= user.employee_type %></div>
+				<div class="clearfix"></div>
+				
+				<div class="pull-left padding-5" style="width:150px; text-align:right; font-weight:bold;"><%= User.human_attribute_name(:position) %>: </div>
+				<div class="pull-left padding-5"><%= (user.position_boards + [user.position]).join(', ') %></div>
+				<div class="clearfix"></div>
+				
+				<div class="pull-left padding-5" style="width:150px; text-align:right; font-weight:bold;"><%= Section.model_name.human %>: </div>
+				<div class="pull-left padding-5"><%= user.sections.collect {|s| s.to_s}.join(', ') %></div>
+				<div class="clearfix"></div>
+				
+				<div class="hide pull-left padding-5" style="width:150px; text-align:right; font-weight:bold;"><%= Team.model_name.human %>: </div>
+				<div class="hide pull-left padding-5"><%= user.teams.collect {|s| s.to_s}.join(', ') %></div>
+				<div class="hide clearfix"></div>
+				
+				<div class="hide pull-left padding-5" style="width:150px; text-align:right; font-weight:bold;"><%= Faculty.model_name.human %>: </div>
+				<div class="hide pull-left padding-5"><%= user.faculties.collect {|s| s.to_s}.join(', ') %></div>
+				<div class="hide clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		
+		<table class="table table-striped table-hover margin-0px hidden-xs">
+          	<thead>
+            	<tr>
+            		<th rowspan="2" style="width:40px;"></th>
+                    <th rowspan="2"><%= Task.model_name.human %></th>
+              		<th colspan="5" class="text-center"><%= "ค่าคะแนนที่ได้" %></th>
+              		<th rowspan="2" style="text-align:center; width:80px;"><%= "ค่าถ่วงน้ำหนัก" %></th>
+              		<th rowspan="2" style="text-align:center; width:85px;"><%= "คะแนนหลังถ่วงน้ำหนัก" %></th>
+            	</tr>
+            	<tr>
+              		<th style="text-align:center; width:30px;">0</th>
+              		<th style="text-align:center; width:30px;">1</th>
+              		<th style="text-align:center; width:30px;">2</th>
+              		<th style="text-align:center; width:30px;">3</th>
+              		<th style="text-align:center; width:30px;">4</th>
+            	</tr>
+          	</thead>
+          	<tbody>
+          		<% count = 0 %>
+				<% user.employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+            		
+					<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+	          			<tr>
+            			<td colspan="9"><%= employee_type_task %></td>
+						<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :weight, {value: employee_type_task.weight, class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+								<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score_real, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+							<%
+								employee_type_task_user = EmployeeTypeTaskUser.where(["employee_type_task_id = ? AND user_id = ? AND evaluation_id = ? AND committee_id = ? AND role = ?", employee_type_task.id, user.id, @current_evaluation.id, current_user.id, @role]).first
+								checked_1 = employee_type_task_user && employee_type_task_user.score == 1
+								checked_2 = employee_type_task_user && employee_type_task_user.score == 2
+								checked_3 = employee_type_task_user && employee_type_task_user.score == 3
+								checked_4 = employee_type_task_user && employee_type_task_user.score == 4
+								checked_5 = employee_type_task_user && employee_type_task_user.score == 5
+							%>
+							<tr>
+								<td class="text-right"><%= count += 1 %>.</td>
+								<td class="text-top"><%= employee_type_task %></td>
+								<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range} %></td>
+								<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range} %></td>
+								<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							</tr>
+        				</tr>
+            		<% end %>
+            	<% end %>
+          	</tbody>
+          	<tfoot>
+        		<tr>
+					<th colspan="7"><%= Assessment.human_attribute_name(:score_total1) %></th>
+					<th class="text-center"><%= text_field "employee_type_task_user_#{user.id}", :score1_weight_total, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></th>
+					<th class="text-center"><%= text_field "employee_type_task_user_#{user.id}", :score1_real_total, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></th>
+            	</tr>
+          	</tfoot>
+        </table>
+        <div class="clearfix margin-bottom-20"></div>
+        
+		<table class="table table-striped table-hover margin-0px hidden-xs">
+          	<thead>
+            	<tr>
+            		<th rowspan="2" style="width:40px;"></th>
+                    <th rowspan="2"><%= Capacity.model_name.human %></th>
+              		<th rowspan="2" style="text-align:center; width:50px;"><%= "สมรรถนะที่คาดหวัง" %></th>
+              		<th colspan="6" class="text-center"><%= "สมรรถนะที่แสดงออก" %></th>
+              		<th colspan="2" class="text-center"><%= "คะแนนที่ได้" %></th>
+              		<th rowspan="2" style="text-align:center; width:80px;"><%= "ค่าถ่วงน้ำหนัก" %></th>
+              		<th rowspan="2" style="text-align:center; width:85px;"><%= "คะแนนหลังถ่วงน้ำหนัก" %></th>
+            	</tr>
+            	<tr>
+              		<th style="text-align:center; width:30px;">0</th>
+              		<th style="text-align:center; width:30px;">1</th>
+              		<th style="text-align:center; width:30px;">2</th>
+              		<th style="text-align:center; width:30px;">3</th>
+              		<th style="text-align:center; width:30px;">4</th>
+              		<th style="text-align:center; width:30px;">5</th>
+              		<th style="text-align:center; width:60px;"><%= "เต็ม ค่าคาดหวัง" %></th>
+              		<th style="text-align:center; width:80px;"><%= "เต็ม 100" %></th>
+            	</tr>
+          	</thead>
+          	<tbody>
+          		<% count = 0 %>
+				<% user.position.position_capacity_groups.each do |position_capacity_group| %>
+            		<tr>
+            			<th colspan="9"><%= position_capacity_group %></th>
+        			</tr>
+					<% position_capacity_group.position_capacities.each do |position_capacity| %>
+	          			<%
+	          				position_capacity_user = PositionCapacityUser.where(["position_capacity_id = ? AND user_id = ? AND evaluation_id = ? AND committee_id = ? AND role = ?", position_capacity.id, user.id, @current_evaluation.id, current_user.id, @role]).first
+	          				checked_0 = position_capacity_user && position_capacity_user.score == 0
+	          				checked_1 = position_capacity_user && position_capacity_user.score == 1
+	          				checked_2 = position_capacity_user && position_capacity_user.score == 2
+	          				checked_3 = position_capacity_user && position_capacity_user.score == 3
+	          				checked_4 = position_capacity_user && position_capacity_user.score == 4
+	          				checked_5 = position_capacity_user && position_capacity_user.score == 5
+	          			%>
+	            		<tr>
+	            			<td class="text-right"><%= count += 1 %>.</td>
+							<td class="text-top">
+								<%= position_capacity %>
+								<%= position_capacity.file.nil? ? "" : (position_capacity.file.present? ? link_to("<i class='fa fa-save'></i> #{Capacity.human_attribute_name(:file)}".html_safe, position_capacity.file.url, {target: "blank", class: "pull-right"}) : "")  %>
+							</td>
+							<td style="vertical-align:top; text-align:center;">
+								<%= position_capacity.expect %>
+								<%= hidden_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :expect, {value: position_capacity.expect} %>
+								<%= hidden_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :weight, {value: position_capacity.weight} %>
+							</td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 0, {checked: checked_0, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "position_capacity_user_#{user.id}_#{position_capacity.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= text_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :score_real_expect, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+							<td class="text-center"><%= text_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :score_real_100, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+							<td class="text-center"><%= text_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :score_weight, {value: position_capacity.weight, class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+							<td class="text-center"><%= text_field "position_capacity_user_#{user.id}_#{position_capacity.id}", :score_real, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
+	                	</tr>
+	            	<% end %>
+            	<% end %>
+          	</tbody>
+          	<tfoot>
+        		<tr>
+					<th colspan="11"><%= Assessment.human_attribute_name(:score_total2) %></th>
+					<th class="text-center"><%= text_field "position_capacity_user_#{user.id}", :score2_weight_total, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></th>
+					<th class="text-center"><%= text_field "position_capacity_user_#{user.id}", :score2_real_total, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></th>
+            	</tr>
+          	</tfoot>
+        </table>
+        <div class="clearfix margin-bottom-20"></div>
+        
+        <span class="hidden-xs">
+        	<%= render partial: "/evaluation_users/form", locals: {xform: true} %>
+        </span>
+        
+        <div class="hidden-sm hidden-md hidden-lg text-center margin-bottom-20">
+        	<%= t(:small_device_error) %>
+    	</div>
+
+  	</div>
+</div>
+
+<% unless action_name == "show" %>
+	<script type="text/javascript">
+	
+		function autoCalculateScore () {
+		    	
+			<% user.employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+				<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+	          		
+      				<% iii = "#{user.id}_#{employee_type_task.id}" %>
+    	
+			    	v<%= iii %>w = parseFloat($('#employee_type_task_user_<%= iii %>_weight').val());
+			    	v<%= iii %> = 0;
+			    	v<%= iii %>r = 0;
+			        if ($('#employee_type_task_user_<%= iii %>_score_1').is(':checked')) { v<%= iii %> = 1; }
+			        if ($('#employee_type_task_user_<%= iii %>_score_2').is(':checked')) { v<%= iii %> = 2; }
+			        if ($('#employee_type_task_user_<%= iii %>_score_3').is(':checked')) { v<%= iii %> = 3; }
+			        if ($('#employee_type_task_user_<%= iii %>_score_4').is(':checked')) { v<%= iii %> = 4; }
+			        if ($('#employee_type_task_user_<%= iii %>_score_5').is(':checked')) { v<%= iii %> = 5; }
+			        
+			        v<%= iii %>r = (v<%= iii %>w / 5) * v<%= iii %>;
+			        $('#employee_type_task_user_<%= iii %>_score_real').val(v<%= iii %>r.toFixed(5));
+	        
+	        	<% end %>
+	        <% end %>
+	        
+	        $('#employee_type_task_user_<%= user.id %>_score1_weight_total').val(
+	        	(
+					<% user.employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+						<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+		      				<% iii = "#{user.id}_#{employee_type_task.id}" %>
+			        		v<%= iii %>w + 
+			        	<% end %>
+		        	<% end %>
+		        	0
+		        ).toFixed(2)
+	        );
+	        
+	        $('#employee_type_task_user_<%= user.id %>_score1_real_total').val(
+	        	(
+					<% user.employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
+						<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
+		      				<% iii = "#{user.id}_#{employee_type_task.id}" %>
+			        		v<%= iii %>r + 
+			        	<% end %>
+		        	<% end %>
+		        	0
+		        ).toFixed(2)
+	        );
+	        
+		}
+	
+		function saveScore (user_id, employee_type_task_id) {
+			
+			score = 0
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_1').is(':checked')) { score = 1; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_2').is(':checked')) { score = 2; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_3').is(':checked')) { score = 3; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_4').is(':checked')) { score = 4; }
+			if ($('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_5').is(':checked')) { score = 5; }
+			
+	 		$.ajax({
+            	url: '<%= employee_type_task_user_save_assess_url(@role) %>',
+    			type: 'post',
+    			data: {
+				      employee_type_task_id: employee_type_task_id,  
+				      user_id: user_id,  
+				      evaluation_id: <%= @current_evaluation.id %>, 
+				      score: score, 
+				      role: '<%= @role %>',  
+				      section_id: <%= @section ? @section.id : "null" %>,  
+				      team_id: <%= @team ? @team.id : "null" %>,  
+				      faculty_id: <%= @faculty ? @faculty.id : "null" %>,  
+				      weight: $('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_weight').val(), 
+				      score_real: $('#employee_type_task_user_' + user_id + '_' + employee_type_task_id  + '_score_real').val()
+			      },
+                dataType: 'script'
+            });
+		}
+	
+		function autoCalculateScore2 () {
+		    	
+			<% user.position.position_capacity_groups.each do |position_capacity_group| %>
+				<% position_capacity_group.position_capacities.each do |position_capacity| %>
+	          		
+      				<% iii = "#{user.id}_#{position_capacity.id}" %>
+    	
+			    	v<%= iii %>w = parseFloat($('#position_capacity_user_<%= iii %>_score_weight').val());
+			    	v<%= iii %> = 0;
+			    	v<%= iii %>r = 0;
+			        if ($('#position_capacity_user_<%= iii %>_score_0').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 0 ? 0 : position_capacity.expect %>; }
+			        if ($('#position_capacity_user_<%= iii %>_score_1').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 1 ? 1 : position_capacity.expect %>;}
+			        if ($('#position_capacity_user_<%= iii %>_score_2').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 2 ? 2 : position_capacity.expect %>; }
+			        if ($('#position_capacity_user_<%= iii %>_score_3').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 3 ? 3 : position_capacity.expect %>; }
+			        if ($('#position_capacity_user_<%= iii %>_score_4').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 4 ? 4 : position_capacity.expect %>; }
+			        if ($('#position_capacity_user_<%= iii %>_score_5').is(':checked')) { v<%= iii %> = <%= position_capacity.expect > 5 ? 5 : position_capacity.expect %>; }
+			        
+			        v<%= iii %>r = (v<%= iii %>w / <%= position_capacity.expect %>) * v<%= iii %>;
+			        v<%= iii %>r100 = (v<%= iii %> / <%= position_capacity.expect %>) * 100;
+			        
+			        $('#position_capacity_user_<%= iii %>_score_real_expect').val(v<%= iii %>);
+			        $('#position_capacity_user_<%= iii %>_score_real_100').val(v<%= iii %>r100.toFixed(4));
+			        $('#position_capacity_user_<%= iii %>_score_real').val(v<%= iii %>r.toFixed(4));
+	        
+	        	<% end %>
+	        <% end %>
+	        
+	        $('#position_capacity_user_<%= user.id %>_score2_weight_total').val(
+	        	(
+					<% user.position.position_capacity_groups.each do |position_capacity_group| %>
+						<% position_capacity_group.position_capacities.each do |position_capacity| %>
+		      				<% iii = "#{user.id}_#{position_capacity.id}" %>
+			        		v<%= iii %>w + 
+			        	<% end %>
+		        	<% end %>
+		        	0
+		        ).toFixed(2)
+	        );
+	        
+	        $('#position_capacity_user_<%= user.id %>_score2_real_total').val(
+	        	(
+					<% user.position.position_capacity_groups.each do |position_capacity_group| %>
+						<% position_capacity_group.position_capacities.each do |position_capacity| %>
+		      				<% iii = "#{user.id}_#{position_capacity.id}" %>
+			        		v<%= iii %>r + 
+			        	<% end %>
+		        	<% end %>
+		        	0
+		        ).toFixed(2)
+	        );
+	        
+		}
+	
+		function saveScore2 (user_id, position_capacity_id) {
+			
+			score = 0
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_0').is(':checked')) { score = 0; }
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_1').is(':checked')) { score = 1; }
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_2').is(':checked')) { score = 2; }
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_3').is(':checked')) { score = 3; }
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_4').is(':checked')) { score = 4; }
+			if ($('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_5').is(':checked')) { score = 5; }
+			
+	 		$.ajax({
+            	url: '<%= position_capacity_user_save_assess_url(@role) %>',
+    			type: 'post',
+    			data: {
+				      position_capacity_id: position_capacity_id,  
+				      user_id: user_id,  
+				      evaluation_id: <%= @current_evaluation.id %>, 
+				      score: score, 
+				      role: '<%= @role %>',  
+				      section_id: <%= @section ? @section.id : "null" %>,  
+				      team_id: <%= @team ? @team.id : "null" %>,  
+				      faculty_id: <%= @faculty ? @faculty.id : "null" %>,  
+				      expect: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_expect').val(), 
+				      weight: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_weight').val(), 
+				      score_real_expect: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_real_expect').val(), 
+				      score_real_100: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_real_100').val(), 
+				      score_weight: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_weight').val(), 
+				      score_real: $('#position_capacity_user_' + user_id + '_' + position_capacity_id  + '_score_real').val()
+			      },
+                dataType: 'script'
+            });
+		}
+
+	 	jQuery(function($) {
+		 	
+		    $('input').click(function () {
+		        autoCalculateScore();
+		        autoCalculateScore2();
+		        
+				arr = this.id.split('_');
+				
+				if(arr[0] == "employee"){
+		        	saveScore(arr[4], arr[5]);	
+				}else{
+		        	saveScore2(arr[3], arr[4]);
+				}
+		    });
+	        
+		 });
+		 
+		 autoCalculateScore();
+		 autoCalculateScore2();
+		 
+	</script>
+<% end %>

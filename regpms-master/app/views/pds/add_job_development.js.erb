@@ -1,0 +1,45 @@
+<% if @error_message.blank? %>
+	$('#job-development-list').append("<%=j render(partial: "row_job_development", locals: {job_development: @job_development}) %>");
+	$('#new_job_development_job_template_id').val('');
+	$('#new_job_development_job_template_id').trigger('chosen:updated');
+	$('#new_job_development_expect_qty').val('');
+	$('#new_job_development_name').val('');
+	$('#new_job_development_weight').val('');
+	$('#new_job_development_expect').val('');
+	$('#job-development-row-<%= @job_development.id %>').effect("highlight", 1000);
+	
+	$('#xnew_job_development_expect_1').prop('checked', false);
+	$('#xnew_job_development_expect_2').prop('checked', false);
+	$('#xnew_job_development_expect_3').prop('checked', false);
+	$('#xnew_job_development_expect_4').prop('checked', false);
+	$('#xnew_job_development_expect_5').prop('checked', false);
+	
+	$('#new_job_development_name').parent().removeClass('has-error');
+	$('#new_job_development_expect').parent().removeClass('has-error');
+	$('#new_job_development_weight').parent().removeClass('has-error');
+<% else %>
+	
+	if($('#new_job_development_name').val() == ''){
+		$('#new_job_development_name').parent().addClass('has-error');
+	}else{
+		$('#new_job_development_name').parent().removeClass('has-error');
+	}
+	
+	if($('#new_job_development_expect').val() == ''){
+		$('#new_job_development_expect').parent().addClass('has-error');
+	}else{
+		$('#new_job_development_expect').parent().removeClass('has-error');
+	}
+	
+	if($('#new_job_development_weight').val() == ''){
+		$('#new_job_development_weight').parent().addClass('has-error');
+	}else{
+		$('#new_job_development_weight').parent().removeClass('has-error');
+	}
+	
+	alert('<%=h @error_message %>\r\n<%= @job_development.errors.full_messages.join("\\r\\n") %>');
+	
+<% end %>
+
+
+init_input_chosen();

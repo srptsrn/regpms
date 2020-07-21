@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-xs-6">
+		<section class="panel">
+            <div class="panel-body">
+				<% 
+					events = []
+					@models.each do |model|
+						events += model.workflow_spec.states.collect {|key, value| value.to_s}
+					end 
+				%>
+            	<table class="table  table-hover general-table">
+            		<thead>
+            			<tr>
+            				<td></td>
+            				<td></td>
+            				<td>state_btn_class</td>
+            				<td>state_label_class</td>
+            			</tr>
+            		</thead>
+	            	<tbody>
+						<% events.uniq.sort.each do |event| %>
+							<tr>
+								<td>"<%= event %>"</td>
+								<td><%=t event %></td>
+								<td><span class="btn <%= state_btn_class(event.to_sym) %>"><%=t event %></span></td>
+								<td><span class="label <%= state_label_class(event.to_sym) %>"><%=t event %></span></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+            </div>
+        </section>
+    </div>
+    <div class="col-xs-6">
+		<section class="panel">
+            <div class="panel-body">
+				<% 
+					events = []
+					@models.each do |model|
+						(model.workflow_spec.states.values.collect &:events).each do |xxx|
+							events += xxx.collect {|key, value| key.to_s}
+						end
+					end 
+				%>
+            	<table class="table  table-hover general-table">
+            		<thead>
+            			<tr>
+            				<td></td>
+            				<td></td>
+            				<td>event_btn_class</td>
+            			</tr>
+            		</thead>
+	            	<tbody>
+						<% events.uniq.sort.each do |event| %>
+							<tr>
+								<td>"<%= event %>"</td>
+								<td><%=t event %></td>
+								<td><span class="btn <%= event_btn_class(event.to_sym) %>"><%= event_icon_tag(event.to_sym) %> <%=t event %></span></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+            </div>
+        </section>
+    </div>
+</div>

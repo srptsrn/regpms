@@ -1,0 +1,30 @@
+en:
+  activerecord:
+    models:
+      e360_item: E360Item
+    attributes:
+      e360_item:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        sorting: Sorting
+        name: Name
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      e360_item: หัวข้อประเมิน
+    attributes:
+      e360_item:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: รอบการประเมิน
+        sorting: ลำดับที่
+        name: หัวข้อประเมิน 360 องศา
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

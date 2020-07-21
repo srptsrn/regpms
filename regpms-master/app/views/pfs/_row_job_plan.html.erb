@@ -1,0 +1,37 @@
+<tr id="job-plan-row-<%= job_plan.id %>">
+	<td id="job-plan-name-<%= job_plan.id %>" class="h4">
+		<b>
+			<% job_plan.name.split("\n").each do |jn| %>
+				<%= jn %><br/>
+			<% end %>
+		</b>
+	</td>
+	<td nowrap class="h4 text-top text-right"><%= JobPlan.human_attribute_name(:expect) %> <b><%= job_plan.expect %></b></td>
+	<td nowrap class="h4 text-top text-right"><%= JobPlan.human_attribute_name(:weight_short) %> <b><%= job_plan.weight.to_s_decimal_comma %></b></td>
+	<td nowrap class="h4 text-top text-right" style="width:130px;"><%= JobPlan.human_attribute_name(:self_point) %></td>
+	<td nowrap class="h4 text-top text-right" style="width:90px;">
+		<%= select "xjob_plan_#{job_plan.id}", :self_point, [1, 2, 3, 4, 5].reverse, {include_blank: "-", selected: job_plan.self_point}, {class: "form-control", style: "width:60px;"} %>
+		<script type="text/javascript">
+		 	jQuery(function($) {
+			 	
+			    $('#xjob_plan_<%= job_plan.id %>_self_point').change(function () {
+			 		$.ajax({
+		            	url: '<%= update_job_plan_self_point_pfs_url %>',
+		    			type: 'post',
+		    			data: {
+		    				job_plan_id: <%= job_plan.id %>, 
+					      	self_point: $('#xjob_plan_<%= job_plan.id %>_self_point').val()
+				      	},
+		                dataType: 'script'
+		            });
+			    });
+		        
+			 });
+		 </script>
+	</td>
+</tr>
+<tr id="job-plan-results-row-<%= job_plan.id %>">
+	<td colspan="5" class="padding-left-20">
+		<%= render partial: "list_job_plan_result", locals: {job_plan: job_plan} %>
+	</td>
+</tr>

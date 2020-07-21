@@ -1,0 +1,42 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@evaluation_score_card.respond_to?(:current_state) && @evaluation_score_card.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(@evaluation_score_card, html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: EvaluationScoreCard, resource: @evaluation_score_card, f: f,
+	            resources_url: evaluation_score_cards_path(q: params[:q], page: params[:page]),
+	            resource_url: @evaluation_score_card.new_record? ? nil : evaluation_score_card_path(@evaluation_score_card, q: params[:q], page: params[:page]),
+	            edit_resource_url: @evaluation_score_card.new_record? ? nil : edit_evaluation_score_card_path(@evaluation_score_card, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :evaluation, collection: (Evaluation.all + (f.object.evaluation.nil? ? [] : [f.object.evaluation])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/evaluations/chosen_select", locals: {object_name: :evaluation_score_card, no_create: true} %>
+		        <%= f.association :user, collection: (User.all + (f.object.user.nil? ? [] : [f.object.user])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/users/chosen_select", locals: {object_name: :evaluation_score_card, no_create: true} %>
+		        <%= f.association :committee, collection: (Committee.all + (f.object.committee.nil? ? [] : [f.object.committee])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/committees/chosen_select", locals: {object_name: :evaluation_score_card, no_create: true} %>
+	        	<%= f.input :role %>
+	        	<%= f.input :task_score %>
+	        	<%= f.input :ability_score %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: EvaluationScoreCard, resource: @evaluation_score_card, f: f,
+			            resources_url: evaluation_score_cards_path(q: params[:q], page: params[:page]),
+			            resource_url: @evaluation_score_card.new_record? ? nil : evaluation_score_card_path(@evaluation_score_card, q: params[:q], page: params[:page]),
+			            edit_resource_url: @evaluation_score_card.new_record? ? nil : edit_evaluation_score_card_path(@evaluation_score_card, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

@@ -1,0 +1,25 @@
+<% if can?(:index_select, User) %>
+    <td class="center">
+	 	<label class="csscheckbox csscheckbox-default">
+            <%= check_box_tag 'ids[]', user.id, false %>
+            <span></span>
+        </label>
+    </td>
+<% end %>
+<td nowrap>
+    <%= render partial: "/appui_scaffold/index_row_actions", locals: {
+        resource_class: User, resource: user,
+        resources_url: admin_users_path(q: params[:q], page: params[:page]),
+        resource_url: admin_user_path(user, q: params[:q], page: params[:page]),
+        edit_resource_url: edit_admin_user_path(user, q: params[:q], page: params[:page])
+    } %>
+</td>
+<td><span class="label <%= state_label_class(user.workflow_state.to_sym) %>"><%=t "workflow.state.#{user.workflow_state}" %></span></td>
+<td><%= image_tag(user.avatar.url(:row)) if user.avatar.present? %></td>
+<td><%= user.username %></td>
+<td><%= user.gender %></td>
+<td><%= user.nickname %></td>
+<td><%= user.firstname %></td>
+<td><%= user.lastname %></td>
+<td><%= user.phone %></td>
+<td><%= user.email %></td>

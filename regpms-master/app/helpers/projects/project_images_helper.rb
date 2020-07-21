@@ -1,0 +1,2 @@
+module Projects::ProjectImagesHelper
+end

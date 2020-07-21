@@ -1,0 +1,29 @@
+th:
+  errors:
+    # The default format to use in full error messages.
+    format: "%{attribute} %{message}"
+
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages:
+      inclusion: "ไม่พบในรายการ"
+      exclusion: "ถูกสงวนไว้"
+      invalid: "ไม่ถูกต้อง"
+      confirmation: "ไม่ตรงกับ %{attribute}"
+      accepted: "must be accepted"
+      empty: "ห้ามว่างเปล่า"
+      blank: "ห้ามว่างเปล่า"
+      present: "ต้องว่างเปล่า"
+      too_long: "ยาวเกินไป (ห้ามเกิน %{count} ตัวอักษร)"
+      too_short: "สั้นเกินไป (อย่างน้อย %{count} ตัวอักษร)"
+      wrong_length: "ความยาวไม่ถูกต้อง (ต้องเท่ากับ %{count} ตัวอักษร)"
+      not_a_number: "ไม่ใช่ตัวเลข"
+      not_an_integer: "ไม่ใช่เลขหน่วย"
+      greater_than: "ต้องมากกว่า %{count}"
+      greater_than_or_equal_to: "ต้องมากกว่าหรือเท่ากับ %{count}"
+      equal_to: "ต้้องเท่ากับ %{count}"
+      less_than: "ต้องน้อยกว่า %{count}"
+      less_than_or_equal_to: "ต้องน้อยกว่าหรือเท่ากับ %{count}"
+      other_than: "ต้องไม่เท่ากับ %{count}"
+      odd: "ต้องเป็นเลขคี่"
+      even: "ต้องเป็นเลขคู่"

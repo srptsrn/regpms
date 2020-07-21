@@ -1,0 +1,40 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@strategy.respond_to?(:current_state) && @strategy.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+
+		<%= simple_form_for(["settings", @strategy], html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Strategy, resource: @strategy, f: f,
+	            resources_url: settings_strategies_path(q: params[:q], page: params[:page]),
+	            resource_url: @strategy.new_record? ? nil : settings_strategy_path(@strategy, q: params[:q], page: params[:page]),
+	            edit_resource_url: @strategy.new_record? ? nil : edit_settings_strategy_path(@strategy, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+
+		  	<fieldset>
+
+		        <%= f.association :strategy_group, collection: (StrategyGroup.all_enabled + (f.object.strategy_group.nil? ? [] : [f.object.strategy_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {class: "chosen-select", data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/settings/strategy_groups/chosen_select", locals: {object_name: :strategy} %>
+	        	<%= f.input :year, collection: (2010..(Date.current.year + 3)).collect {|y| [y + 543, y]}, input_html: {class: "chosen-select"} %>
+	        	<%= f.input :sorting %>
+				<%= f.input :name %>
+				
+				<%#= render partial: "/settings/tactics/nested_form", locals: {f: f} %>
+	            
+		  		<div class="col-md-6 col-md-offset-4">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Strategy, resource: @strategy, f: f,
+			            resources_url: settings_strategies_path(q: params[:q], page: params[:page]),
+			            resource_url: @strategy.new_record? ? nil : settings_strategy_path(@strategy, q: params[:q], page: params[:page]),
+			            edit_resource_url: @strategy.new_record? ? nil : edit_settings_strategy_path(@strategy, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+		  	</fieldset>
+		<% end %>
+  	</div>
+</div>		

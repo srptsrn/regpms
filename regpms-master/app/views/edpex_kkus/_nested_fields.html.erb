@@ -1,0 +1,32 @@
+<!-- replace 'parent_object' with your parent object name -->
+<% 
+	f_index = "#{f.index}".to_s
+	object_name = "parent_object_edpex_kkus_attributes_#{f_index}".to_sym
+	edpex_kku_group_select_id = "parent_object_edpex_kkus_attributes_#{f_index}_edpex_kku_group_id".to_sym
+%> 
+<tr class="nested-fields">
+    <td style="vertical-align:top;">
+        <%= f.input :year, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.association :edpex_kku_group, wrapper: :nested_form, collection: (EdpexKkuGroup.all + (f.object.edpex_kku_group.nil? ? [] : [f.object.edpex_kku_group])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+        <%= render partial: "/edpex_kku_groups/chosen_select", locals: {object_name: :edpex_kku, no_create: true, select_id: edpex_kku_group_select_id} %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :no, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :name, wrapper: :nested_form %>
+    </td>
+    <td style="vertical-align:top;">
+        <%= f.input :description, wrapper: :nested_form %>
+    </td>
+    <% unless action_name == "show" %>
+        <td style="vertical-align:top;">
+            <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>
+               <i class='fa fa-trash-o'></i>
+            <% end %>
+			<script type="text/javascript">$(document).ready( function() { jQuery(function($){ $("#parent_object_edpex_kkus_attributes_<%= f.index %>_edpex_kku_group").chosen({width: "100%"}); }); });</script>
+        </td>
+    <% end %>
+</tr>

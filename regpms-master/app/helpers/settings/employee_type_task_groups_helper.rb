@@ -1,0 +1,2 @@
+module Settings::EmployeeTypeTaskGroupsHelper
+end

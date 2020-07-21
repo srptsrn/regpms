@@ -1,0 +1,44 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: 202.28.92.172
+  port: 5432
+
+
+development:
+  <<: *default
+  database: regpms
+  username: regpms
+  password: regpms
+test:
+  <<: *default
+  database: regpms
+  username: regpms
+  password: regpms
+production:
+  <<: *default
+  database: regpms
+  username: regpms
+  password: regpms
+
+# evaluation198 CONNECTION ####################################################
+evaluation198_database_development:
+  adapter: mysql2
+  encoding: utf8
+  host: localhost
+  database: evaluation
+  username: root
+  password: 1q2w3e4r
+
+evaluation198_database_production:
+  adapter: mysql2
+  encoding: utf8
+  host: localhost
+  database: evaluation
+  username: root
+  password: 1q2w3e4r
+  # host: 202.28.92.198
+  # database: evaluation
+  # username: somphot
+  # password: chayanon

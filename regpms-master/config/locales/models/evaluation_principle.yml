@@ -1,0 +1,38 @@
+en:
+  activerecord:
+    models:
+      evaluation_principle: EvaluationPrinciple
+    attributes:
+      evaluation_principle:
+        workflow_state: Status
+        workflow_state_updater: Status updater
+        evaluation: Evaluation
+        task: Task
+        principle1: Principle1
+        principle2: Principle2
+        principle3: Principle3
+        principle4: Principle4
+        principle5: Principle5
+        created_by: Created by
+        updated_by: Updated by 
+        created_at: Created at
+        updated_at: Updated at
+th:
+  activerecord:
+    models:
+      evaluation_principle: ระดับความสำเร็จในการดำเนินการงานที่ได้รับมอบหมาย
+    attributes:
+      evaluation_principle:
+        workflow_state: สถานะ
+        workflow_state_updater: เปลี่ยนสถานะโดย
+        evaluation: รอบการประเมิน
+        task: ภาระงาน
+        principle1: ระดับที่ 1
+        principle2: ระดับที่ 2
+        principle3: ระดับที่ 3
+        principle4: ระดับที่ 4
+        principle5: ระดับที่ 5
+        created_by: สร้างโดย
+        updated_by: แก้ไขโดย
+        created_at: สร้างเมื่อ
+        updated_at: แก้ไขเมื่อ

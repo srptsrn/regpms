@@ -1,0 +1,174 @@
+<% @form_defaults = {input_html: {autocomplete: :off}} %>
+<% @form_defaults[:disabled] = (action_name == "show") || (@ticket.respond_to?(:current_state) && @ticket.current_state.meta[:disabled]) %>
+<div data-widget-editbutton="false" id="power-forms-grid" class="powerwidget cold-grey" role="widget">
+	<div class="inner-spacer" role="content">
+		<%= simple_form_for(@ticket, html: {class: 'form-horizontal'}, defaults: @form_defaults) do |f| %>
+	    	<% params[:q].each do |k,v| %>
+		        <%= hidden_field_tag "q[#{k}]", v %>
+		    <% end unless params[:q].blank? %>
+		    <%= hidden_field_tag(:page, params[:page]) unless params[:page].blank? %>
+		    
+	        <%= render partial: "/form_actions_top", locals: {
+	            resource_class: Ticket, resource: @ticket, f: f,
+	            resources_url: tickets_path(q: params[:q], page: params[:page]),
+	            resource_url: @ticket.new_record? ? nil : ticket_path(@ticket, q: params[:q], page: params[:page]),
+	            edit_resource_url: @ticket.new_record? ? nil : edit_ticket_path(@ticket, q: params[:q], page: params[:page])
+	        } unless params[:modal] %>
+	        
+			<div class="invoice-block no-padding-bottom">
+		  		<div class="page-header">
+                    <h1>
+                    	<%= Ticket.model_name.human %>
+                    	<%= @ticket.new_record? ? "#new" : "##{@ticket.no}" %> 
+						<span class="btn <%= state_btn_class(@ticket.current_state.to_sym) %> pull-right"><%=t "workflow.state.#{@ticket.current_state}" %></span>
+                	</h1>
+          		</div>
+                <div class="row">
+                  	<div class="col-lg-6 col-md-6 col-sm-12">
+	          			<div class="form-group col-md-12 margin-bottom-5">
+                			<div class="input-group">
+                				<span class="input-group-addon"><div class='w100r'><%= Ticket.human_attribute_name(:creator) %></div></span>
+                    			<div class="form-control" <%= %{disabled} if @form_defaults[:disabled] %>>
+                					<%= @ticket.new_record? ? current_user : @ticket.creator %>
+                				</div>
+            				</div>
+        				</div>
+                  	</div>
+                  	<div class="col-lg-6 col-md-6 col-sm-12">
+				        <div class="form-group margin-bottom-5 <%= 'has-error' if @ticket.errors && @ticket.errors.get(:priority) %>">
+			                <div class="col-md-12">
+			                    <div id="priority-toggle" data-toggle="buttons" class="btn-group pull-right">
+			                    	<% Ticket::PRIORTIES.each do |priority| %>
+				                        <label class="btn <%= @ticket.priority == priority[0] ? " btn-#{priority[1]} active" : "btn-default" %>" type="button" <%= %{disabled} if @form_defaults[:disabled] %>> 
+				                            <%= radio_button :ticket, :priority, priority[0] %>
+				                            <%= priority[0].upcase %>
+				                        </label>
+			                        <% end %>
+			                    </div>
+			                    <div class="clearfix"></div>
+			                </div>
+			            </div>
+              		</div>
+                  	<div class="col-md-12">
+	          			<div class="form-group margin-bottom-5">
+	                  		<div class="col-md-12">
+	                			<div class="input-group">
+	                				<span class="input-group-addon"><div class='w100r'><%= Ticket.human_attribute_name(:users) %></div></span>
+		                  			<% unless @form_defaults[:disabled] %>
+					                    <select multiple id="ticket_users" name="users[]" class="form-control input-md" <%= %{disabled} if @form_defaults[:disabled] %>>
+					                    	<% (User.all).sort_by {|u| u.to_s}.each do |user| %>
+					                    		<option value="<%= user.id %>" <%= 'selected' if @ticket.users.include?(user) %>><%= user.to_s %></option>
+					                    	<% end %>
+					                	</select>
+					            		<script type="text/javascript">jQuery(function($){ $("#ticket_users").select2(); })</script>
+				            		<% else %>
+			                    		<div class="form-control" disabled>
+			                    			<%= @ticket.users.collect {|u| u.to_s}.join(', ') %>
+				          				</div>
+				            		<% end %>
+	          					</div>
+	          				</div>
+	          			</div>
+              		</div>
+                  	<div class="col-sm-12">
+                  		<%= f.input :name, wrapper: :input_group, required: false, label: "<div class='w100r'>#{Ticket.human_attribute_name(:name)}</div>".html_safe %>
+                  		<%= f.input :description, wrapper: :input_group, required: false, label: "<div class='w100r'>#{Ticket.human_attribute_name(:description)}</div>".html_safe %>
+    				</div>
+            	</div>
+		  		<div class="col-md-12 no-padding">
+			        <%= render partial: "/form_actions_bottom", locals: {
+			            resource_class: Ticket, resource: @ticket, f: f,
+			            resources_url: tickets_path(q: params[:q], page: params[:page]),
+			            resource_url: @ticket.new_record? ? nil : ticket_path(@ticket, q: params[:q], page: params[:page]),
+			            edit_resource_url: @ticket.new_record? ? nil : edit_ticket_path(@ticket, q: params[:q], page: params[:page])
+			        } %>
+		        </div>
+			</div>
+		<% end %>
+		<% if action_name == "show" %>
+			<div class="inner-spacer no-padding-top">
+				<div class="inner-spacer no-padding-top">
+					<% if @ticket.ticket_comments.size > 0 %>
+				  		<div class="chat-container bg-primary col-xs-12">
+				      		<div class="chat-pusher">
+		                    	<div class="clearfix">
+		                      		<div class="chat-messages col-md-12 col-lg-10 col-lg-offset-1">
+		                        		<ul>
+		                        			<% @ticket.ticket_comments.each do |ticket_comment| %>
+			                          			<li class="<%= ticket_comment.creator_id == current_user.id ? 'right' : 'left' %> clearfix">
+		                        					<% if ticket_comment.creator_id == current_user.id %>
+				                                  		<span class="user-img pull-right"> 
+				                                    		<%= image_tag ticket_comment.creator.avatar.url(:thumb) %> 
+			                                  			</span>
+			                                    	<% else %>
+				                                    	<div class="user-img pull-left"> 
+				                                    		<%= image_tag ticket_comment.creator.avatar.url(:thumb) %>
+			                                    		</div>
+		                                  			<% end %>
+				                                	<div class="chat-body clearfix">
+			                                      		<div class="header text-black"> 
+			                                      			<span class="name"><%= ticket_comment.creator %></span>
+			                                      			<span class="name"></span> 
+			                                      			<span class="badge"><i class="fa fa-clock-o"></i> <%= distance_of_time_in_words_to_now ticket_comment.created_at %></span>
+			                                      			<span class="btn btn-xs pull-right margin-right-10 <%= state_btn_class(ticket_comment.current_state.to_sym) %>"><%=t "workflow.state.#{ticket_comment.current_state}" %></span>
+		                                      			</div>
+			                                      		<p class="text-black"><%= ticket_comment.description.to_s.gsub("\n", "<br/>").html_safe %></p>
+			                                    	</div>
+			                              		</li>
+		                                  	<% end %>
+		                            	</ul>
+		                      		</div>
+			                  	</div>
+				          	</div>
+			          	</div>
+		          	<% end %>
+		          	<div class="chat-message-form">
+	                	<div class="row">
+							<%= form_tag(comment_tickets_url(ticket_id: @ticket.id), {class: 'form-horizontal col-md-12 col-lg-10 col-lg-offset-1 margin-top-15'}) do %>
+	                  			<div class="col-md-12">
+	                    			<textarea rows="2" class="form-control margin-bottom" placeholder="Write Your Message Here" name="ticket_comment[description]"></textarea>
+	                  			</div>
+	                  			<div class="col-md-12">
+					                <%= button_tag :button, value: :reply, class: "btn #{event_btn_class(:reply)} margin-right-10" do %>
+					                    <%= event_icon_tag(:reply) %>
+					                    <%= t("workflow.event.#{:reply}") %>
+					                <% end %>
+					                <%= button_tag :button, value: :reply_n_fix, class: "btn #{event_btn_class(:reply_n_fix)} margin-right-10" do %>
+					                    <%= event_icon_tag(:reply_n_fix) %>
+					                    <%= t("workflow.event.#{:reply_n_fix}") %>
+					                <% end if @ticket.can_fix? %>
+					                <%= button_tag :button, value: :reply_n_open, class: "btn #{event_btn_class(:reply_n_open)} margin-right-10" do %>
+					                    <%= event_icon_tag(:reply_n_open) %>
+					                    <%= t("workflow.event.#{:reply_n_open}") %>
+					                <% end if @ticket.can_reopen? %>
+					                <%= button_tag :button, value: :reply_n_close, class: "btn #{event_btn_class(:reply_n_close)} margin-right-10" do %>
+					                    <%= event_icon_tag(:reply_n_close) %>
+					                    <%= t("workflow.event.#{:reply_n_close}") %>
+					                <% end if @ticket.can_close? %>
+		                  		</div>
+	                  		<% end %>
+	                	</div>
+	              	</div>
+		        </div>
+	        </div>
+		<% end %>
+	</div>		
+</div>		
+
+<% unless action_name == "show" %>
+	<script>   
+    	<% Ticket::PRIORTIES.each do |priority| %>
+		    $('#ticket_priority_<%= priority[0] %>').parent().on('click' , function(){
+		    	<% Ticket::PRIORTIES.each do |priority2| %>
+			    	<% if priority[0] == priority2[0] %>
+			    		$('#ticket_priority_<%= priority2[0] %>').parent().addClass('btn-<%= priority[1] %>');
+			    		$('#ticket_priority_<%= priority2[0] %>').parent().removeClass('btn-default');
+	    			<% else %>
+			    		$('#ticket_priority_<%= priority2[0] %>').parent().addClass('btn-default');
+			    		$('#ticket_priority_<%= priority2[0] %>').parent().removeClass('btn-<%= priority[1] %>');
+	    			<% end %>
+	    		<% end %>
+		    });
+	    <% end %>
+	</script>
+<% end %>
