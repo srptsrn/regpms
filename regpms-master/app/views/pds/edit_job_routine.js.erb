@@ -1,8 +1,0 @@
-<% if @error_message.blank? %>
-
-	$('#job-routine-row-<%= @job_routine.id %>').replaceWith("<%=j render(partial: "row_job_routine_form", locals: {job_routine: @job_routine}) %>");
-	$('#job-routine-row-<%= @job_routine.id %>').effect("highlight");
-	
-<% else %>
-	alert('<%=h @error_message %>');
-<% end %>

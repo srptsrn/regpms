@@ -1,1 +1,0 @@
-json.extract! @responsible, :id, :to_s, :workflow_state, :workflow_state_updater_id, :project_id, :sorting, :user_id, :prefix, :firstname, :lastname, :position, :created_at, :updated_at

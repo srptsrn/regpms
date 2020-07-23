@@ -1,1 +1,0 @@
-json.extract! @policy, :id, :to_s, :workflow_state, :workflow_state_updater_id, :policy_id, :code, :name, :created_at, :updated_at

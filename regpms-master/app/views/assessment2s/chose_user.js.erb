@@ -1,5 +1,0 @@
-<% if @user %>
-	$("#documentary-leaves").html("<%=j render(partial: "documentary_leaves", locals: {pid: @user.pid}) %>");
-<% else %>
-	$("#documentary-leaves").html("");
-<% end %>

@@ -1,1 +1,0 @@
-json.extract! @ticket, :id, :to_s, :no, :name, :description, :priority, :workflow_state, :workflow_state_updater_id, :created_at, :updated_at

@@ -1,1 +1,0 @@
-json.extract! @message, :id, :to_s, :message_id, :user_id, :topic, :body, :workflow_state, :workflow_state_updater_id, :created_at, :updated_at

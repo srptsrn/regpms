@@ -1,5 +1,0 @@
-<% if @error_message.blank? %>
-	$('#job-routine-row-<%= @job_routine.id %>').effect("highlight");
-<% else %>
-	alert('<%=h @error_message %>');
-<% end %>

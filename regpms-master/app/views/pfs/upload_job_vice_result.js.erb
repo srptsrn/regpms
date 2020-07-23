@@ -1,8 +1,0 @@
-<% if @error_message.blank? %>
-	$('#job-vice-result-files-<%= @job_vice_result.id %>').append("<%=j render(partial: "row_job_vice_result_file", locals: {job_vice_result_file: @job_vice_result_file}) %>");
-	$('#new_job_vice_result_file_<%= @job_vice_result.id %>_file').val('');
-	$('#new_job_vice_result_file_<%= @job_vice_result.id %>_description').val('');
-	$('#job-vice-result-file-<%= @job_vice_result_file.id %>').effect("slide", 1000);
-<% else %>
-	alert('<%=h @error_message %>');
-<% end %>

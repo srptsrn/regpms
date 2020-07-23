@@ -1,1 +1,0 @@
-json.extract! @news_front, :id, :to_s, :workflow_state, :workflow_state_updater_id, :title, :detail, :image, :published_at, :created_at, :updated_at

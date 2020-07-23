@@ -1,5 +1,0 @@
-<% if @error_message.blank? %>
-	$('#job-vice-result-file-<%= @job_vice_result_file.id %>').effect("explode");
-<% else %>
-	alert('<%=h @error_message %>');
-<% end %>

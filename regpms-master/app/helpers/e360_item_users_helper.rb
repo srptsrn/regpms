@@ -1,2 +1,0 @@
-module E360ItemUsersHelper
-end

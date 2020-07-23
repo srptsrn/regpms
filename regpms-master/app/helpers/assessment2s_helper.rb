@@ -1,2 +1,0 @@
-module Assessment2sHelper
-end

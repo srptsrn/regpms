@@ -1,1 +1,0 @@
-json.extract! @edpex_kku_group, :id, :to_s, :no, :name, :created_at, :updated_at

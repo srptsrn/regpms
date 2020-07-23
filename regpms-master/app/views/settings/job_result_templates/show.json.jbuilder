@@ -1,1 +1,0 @@
-json.extract! @job_result_template, :id, :to_s, :workflow_state, :workflow_state_updater_id, :job_template_id, :name, :unit, :duration, :created_at, :updated_at

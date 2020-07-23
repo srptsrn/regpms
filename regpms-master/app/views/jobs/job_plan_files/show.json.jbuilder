@@ -1,1 +1,0 @@
-json.extract! @job_plan_file, :id, :to_s, :workflow_state, :workflow_state_updater_id, :job_plan_id, :file, :description, :created_at, :updated_at

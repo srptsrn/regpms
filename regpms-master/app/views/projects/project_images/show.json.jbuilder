@@ -1,1 +1,0 @@
-json.extract! @project_image, :id, :to_s, :workflow_state, :workflow_state_updater_id, :project_id, :image, :created_at, :updated_at

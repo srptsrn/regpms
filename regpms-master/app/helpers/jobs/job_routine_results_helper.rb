@@ -1,2 +1,0 @@
-module Jobs::JobRoutineResultsHelper
-end

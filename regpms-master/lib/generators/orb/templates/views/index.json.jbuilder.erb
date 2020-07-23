@@ -1,4 +1,0 @@
-json.array!(@<%= plural_table_name %>) do |<%= singular_table_name %>|
-  json.extract! <%= singular_table_name %>, :id, :to_s, <%= attributes_list %>
-  json.url <%= orb_plain_model_url %>_url(<%= singular_table_name %>, format: :json)
-end

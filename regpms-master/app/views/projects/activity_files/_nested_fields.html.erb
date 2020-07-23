@@ -1,9 +1,0 @@
-<div class="nested-fields">
-    <div class="pull-left"><%= f.input :file, wrapper: :nested_form, as: :file_custom %></div>
-    <% unless action_name == "show" %>
-        <%= link_to_remove_association f, class: "btn btn-danger pull-left" do %>
-           <i class='fa fa-trash-o'></i>
-        <% end %>
-    <% end %>
-</div>
-<div class="clearfix"></div>

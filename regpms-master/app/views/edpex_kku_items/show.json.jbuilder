@@ -1,1 +1,0 @@
-json.extract! @edpex_kku_item, :id, :to_s, :edpex_kku_id, :no, :name, :target, :year1, :year2, :year3, :year4, :year5, :year, :institute, :created_at, :updated_at

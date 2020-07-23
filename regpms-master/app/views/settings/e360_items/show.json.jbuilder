@@ -1,1 +1,0 @@
-json.extract! @e360_item, :id, :to_s, :workflow_state, :workflow_state_updater_id, :evaluation_id, :sorting, :name, :created_at, :updated_at

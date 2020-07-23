@@ -1,2 +1,0 @@
-module Jobs::JobDevelopmentResultFilesHelper
-end

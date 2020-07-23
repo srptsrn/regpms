@@ -1,1 +1,0 @@
-json.extract! @news_calendar, :id, :to_s, :workflow_state, :workflow_state_updater_id, :start_at, :end_at, :title, :detail, :published_at, :created_at, :updated_at
