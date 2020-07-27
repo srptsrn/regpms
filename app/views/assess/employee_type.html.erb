@@ -14,7 +14,7 @@
       			if @role == "director"
       				subtitle = "#{Evaluation.human_attribute_name(:director)}"
       			elsif @role == "vice_director"
-					subtitle = "#{Evaluation.human_attribute_name(:vice_director)}"
+					subtitle = "#{Evaluation.human_attribute_name(:vice_director) }"
 				elsif @role == "vice_director2"
 					subtitle = "#{Evaluation.human_attribute_name(:vice_director2)}"
 				elsif @role == "vice_director3"
@@ -91,11 +91,11 @@
 			                      		<th rowspan="2" style="text-align:center; width:85px;"><%= "คะแนนหลังถ่วงน้ำหนัก" %></th>
 			                    	</tr>
 			                    	<tr>
-			                      		<th style="text-align:center; width:30px;">0</th>
 			                      		<th style="text-align:center; width:30px;">1</th>
 			                      		<th style="text-align:center; width:30px;">2</th>
 			                      		<th style="text-align:center; width:30px;">3</th>
 			                      		<th style="text-align:center; width:30px;">4</th>
+			                      		<th style="text-align:center; width:30px;">5</th>
 			                    	</tr>
 			                  	</thead>
 					          	<tbody>
@@ -118,11 +118,11 @@
 												<span class="btn btn-xs btn-default disabled pull-right"><%= user.employee_type_name %></span>
 												<%= image_tag user.avatar.url(:row), {alt: "", class: "tooltipx pull-right margin-right-10", title: html_escape(image_title)} %>
 											</td>
-											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range} %></td>
-											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range} %></td>
-											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range} %></td>
-											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range} %></td>
-											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 1} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 2} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 3} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 4} %></td>
+											<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 5} %></td>
 											<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :weight, {value: employee_type_task.weight, class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
 											<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score_real, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
 					                	</tr>

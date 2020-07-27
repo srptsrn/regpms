@@ -30,7 +30,7 @@ th:
         vice_director_ratio: รองผู้อำนวยการ
         vice_director2_ratio: รองผู้อำนวยการ
         vice_director3_ratio: รองผู้อำนวยการ
-        secretary_ratio: หัวหน้าสำนักงานผู้อำนวยการ
+        secretary_ratio: ผู้อำนวยการกองฯ
         section_leader_ratio: หัวหน้ากลุ่มภารกิจ
         section_vice_leader_ratio: ผู้ช่วยหัวหน้ากลุ่มภารกิจ
         leader_ratio: ผู้บังคับบัญชาขั้นต้น
@@ -43,10 +43,10 @@ th:
         updated_at: แก้ไขเมื่อ
 
         director_ratio_nested: ผู้อำนวยการ
-        vice_director_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>ที่เกี่ยวข้อง
-        vice_director2_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>1
-        vice_director3_ratio_nested: รอง<br/>ผู้อำนวยการ<br/>2
-        secretary_ratio_nested: หัวหน้า<br/>สำนักงาน<br/>ผู้อำนวยการ
+        vice_director_ratio_nested: รองผอ.<br/>ที่เกี่ยวข้อง
+        vice_director2_ratio_nested: รองผอ.<br/>1
+        vice_director3_ratio_nested: รองผอ.<br/>2
+        secretary_ratio_nested: ผอ.กองฯ
         section_leader_ratio_nested: หัวหน้า<br/>งาน
         section_vice_leader_ratio_nested: ผู้ช่วย<br/>หัวหน้า<br/>กลุ่มภารกิจ
         leader_ratio_nested: ผู้บังคับบัญชา<br/>ขั้นต้น

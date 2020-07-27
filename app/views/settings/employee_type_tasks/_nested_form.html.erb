@@ -5,6 +5,7 @@
             <th nowrap style="width:90px;"><%= EmployeeTypeTask.human_attribute_name :sorting %></th>
             <th nowrap><%= EmployeeTypeTask.human_attribute_name :task %></th>
             <th nowrap style="width:90px;"><%= EmployeeTypeTask.human_attribute_name :weight %></th>
+            <th nowrap style="width90px;"><%= EmployeeTypeTask.human_attribute_name :min_value %></th>
             <% unless action_name == "show" %>
                 <th style="width:30px;">
                     <%= link_to_add_association f, :employee_type_tasks, partial: "/settings/employee_type_tasks/nested_fields", class: "btn btn-sm btn-success",

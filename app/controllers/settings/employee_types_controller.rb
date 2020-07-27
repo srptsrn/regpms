@@ -108,7 +108,7 @@ class Settings::EmployeeTypesController < SettingsController
         :workflow_state, :workflow_state_updater_id, :name, :sorting, 
         employee_type_task_groups_attributes: [
           :id, :sorting, :name, :_destroy, 
-          employee_type_tasks_attributes: [:id, :sorting, :task_id, :weight, :_destroy, :criteria1, :criteria2, :criteria3, :criteria4, :criteria5]
+          employee_type_tasks_attributes: [:id, :sorting, :task_id, :weight, :_destroy, :criteria1, :criteria2, :criteria3, :criteria4, :criteria5, :min_value]
         ]
       )
     end

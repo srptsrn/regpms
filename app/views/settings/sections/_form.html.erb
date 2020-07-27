@@ -21,10 +21,10 @@
 	        	<%= f.input :name %>
 		        <%= f.association :vice_director, collection: (User.all + (f.object.vice_director.nil? ? [] : [f.object.vice_director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
 		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director_id} %>
-		        <%= f.association :vice_director2, collection: (User.all + (f.object.vice_director.nil? ? [] : [f.object.vice_director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
-		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director_id} %>
-		        <%= f.association :vice_director3, collection: (User.all + (f.object.vice_director.nil? ? [] : [f.object.vice_director])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
-		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director_id} %>		        
+		        <%= f.association :vice_director2, collection: (User.all + (f.object.vice_director2.nil? ? [] : [f.object.vice_director2])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director2_id} %>
+		        <%= f.association :vice_director3, collection: (User.all + (f.object.vice_director3.nil? ? [] : [f.object.vice_director3])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
+		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_vice_director3_id} %>		        
 				<%= f.association :leader, collection: (User.all + (f.object.leader.nil? ? [] : [f.object.leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>
 		        <%= render partial: "/admin/users/chosen_select", locals: {object_name: :section, no_create: true, select_id: :section_leader_id} %>
 		        <%= f.association :vice_leader, collection: (User.all + (f.object.vice_leader.nil? ? [] : [f.object.vice_leader])).uniq.sort_by {|asso| asso.to_s}, value_method: :id, label_method: :to_s, input_html: {data: {placeholder: t(:choose)}} %>

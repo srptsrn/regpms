@@ -29,7 +29,11 @@
       			elsif @role == "staff"
       				subtitle = "บุคลากร"
   					task_scores = EvaluationScoreCard::STAFF_TASK_SCORES
-  					ability_scores = EvaluationScoreCard::STAFF_ABILITY_SCORES
+					  ability_scores = EvaluationScoreCard::STAFF_ABILITY_SCORES
+				elsif @role == "committee"
+      				subtitle = 	"คณะกรรมการประเมิน"
+  					task_scores = EvaluationScoreCard::BOARD_TASK_SCORES
+  					ability_scores = EvaluationScoreCard::BOARD_TASK_SCORES
       			end
   			%>
 		</small>
@@ -57,8 +61,8 @@
 									= ผลสัมฤทธิ์ของงาน (70) + พฤติกรรมการปฏิบัติงาน (30)
 							<% else %>
 									* คะแนนประเมิน (100)<br/>
-									= (ผู้บริหารประเมินผลสัมฤทธิ์ของงาน + รองผู้บริหารประเมินผลสัมฤทธิ์ของงาน + หัวหน้าสำนักงานผู้อำนวยการประเมินผลสัมฤทธิ์ของงาน + หัวหน้างานประเมินผลสัมฤทธิ์ของงาน) + <br/>
-									(ผู้บริหารประเมินพฤติกรรมการปฏิบัติงาน + รองผู้บริหารประเมินพฤติกรรมการปฏิบัติงาน + หัวหน้าสำนักงานผู้อำนวยการประเมินพฤติกรรมการปฏิบัติงาน + หัวหน้างานประเมินพฤติกรรมการปฏิบัติงาน)
+									= (ผอ.ประเมินผลสัมฤทธิ์ของงาน + รองผอ.ประเมินผลสัมฤทธิ์ของงาน + รองผอ.ประเมินผลสัมฤทธิ์ของงาน + รองผอ.ประเมินผลสัมฤทธิ์ของงาน + ผอ.กองฯประเมินผลสัมฤทธิ์ของงาน + หัวหน้างานประเมินผลสัมฤทธิ์ของงาน) + <br/>
+									(ผอ.ประเมินพฤติกรรมการปฏิบัติงาน + รองผอ.ประเมินพฤติกรรมการปฏิบัติงาน + รองผอ.ประเมินพฤติกรรมการปฏิบัติงาน + รองผอ.ประเมินพฤติกรรมการปฏิบัติงาน + ผอ.กองฯประเมินพฤติกรรมการปฏิบัติงาน + หัวหน้างานประเมินพฤติกรรมการปฏิบัติงาน)
 							<% end %>
 						</small>
 						<div class="clearfix margin-bottom-5"></div>
@@ -73,7 +77,9 @@
 						                    <th class="text-center" style="width:120px;">คะแนนประเมินตนเอง<br/>(100)</th>
 					                    <% end %>
 					                    <th class="text-center" style="width:120px;">คะแนนประเมิน*<br/>(100)</th>
-					                    <th class="text-center" style="width:120px;">คะแนนปรับ<br/>(100)</th>
+										<% if @role == "director" %>
+											<th class="text-center" style="width:120px;">คะแนนปรับ<br/>(100)</th>
+										<% end %>
 					            	</tr>
 					          	</thead>
 					          	<tbody>
@@ -168,28 +174,36 @@
 																<div class="clearfix"></div>
 																<small class="text-cold-grey">
 																	<%
-																		tls, tlsd, tlsv, tlsl, tlslv = user.task_leader_score(@current_evaluation)
+																		tls, tlsd, tlsv, tlsv2,tlsv3, tlss, tlsl, tlslv = user.task_leader_score(@current_evaluation)
 																		tr = user.task_ratio(@current_evaluation)
-																		als, alsd, alsv, alsl, alslv = user.ability_leader_score(@current_evaluation)
+																		als, alsd, alsv, alsv2, alsv3, alss, alsl, alslv = user.ability_leader_score(@current_evaluation)
 																		ar = user.ability_ratio(@current_evaluation)
 																	%>
 																	(
 																	<b><span title="ผอ. ประเมินผลสัมฤทธิ์ของงาน"><%= (tlsd.to_f * tr.to_f / 100).to_s_decimal_comma %></span></b> + 
 																	<b><span title="รอง ผอ. ประเมินผลสัมฤทธิ์ของงาน"><%= (tlsv.to_f * tr.to_f / 100).to_s_decimal_comma %></span></b> + 
-																	<span title="หัวหน้าประเมินผลสัมฤทธิ์ของงาน"><%= (tlsl.to_f * tr.to_f / 100).to_s_decimal_comma %> + 
-																	<span title="รองหัวหน้าประเมินผลสัมฤทธิ์ของงาน"><%= (tlslv.to_f * tr.to_f / 100).to_s_decimal_comma %>
+																	<b><span title="รอง ผอ. ประเมินผลสัมฤทธิ์ของงาน"><%= (tlsv2.to_f * tr.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<b><span title="รอง ผอ. ประเมินผลสัมฤทธิ์ของงาน"><%= (tlsv3.to_f * tr.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<span title="ผอ.กองฯ ประเมินผลสัมฤทธิ์ของงาน"><%= (tlss.to_f * tr.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<span title="หัวหน้างานประเมินผลสัมฤทธิ์ของงาน"><%= (tlsl.to_f * tr.to_f / 100).to_s_decimal_comma %>
+															
 																	) + (
 																	<b><span title="ผอ. ประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsd.to_f * ar.to_f / 100).to_s_decimal_comma %></span></b> + 
 																	<b><span title="รอง ผอ. ประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsv.to_f * ar.to_f / 100).to_s_decimal_comma %></span></b> + 
-																	<span title="หัวหน้าประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsl.to_f * ar.to_f / 100).to_s_decimal_comma %> + 
-																	<span title="รองหัวหน้าประเมินพฤติกรรมการปฏิบัติงาน"><%= (alslv.to_f * ar.to_f / 100).to_s_decimal_comma %>
+																	<b><span title="รอง ผอ. ประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsv2.to_f * ar.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<b><span title="รอง ผอ. ประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsv3.to_f * ar.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<span title="ผอ.กองฯ ประเมินพฤติกรรมการปฏิบัติงาน"><%= (alss.to_f * ar.to_f / 100).to_s_decimal_comma %></span></b> + 
+																	<span title="หัวหน้างานประเมินพฤติกรรมการปฏิบัติงาน"><%= (alsl.to_f * ar.to_f / 100).to_s_decimal_comma %>
+																	
 																	)
 																</small>
 															<% end %>
 														</td>
-														<td class="text-top text-center">
+														<% if @role == "director" %>
+															<td class="text-top text-center">
 															<%= text_field "evaluation_salary_up_user_#{user.id}", :point, {value: evaluation_salary_up_user.point ? evaluation_salary_up_user.point.to_s_decimal : nil, class: "form-control text-right"} %>
 														</td>
+														<% end %>
 								                	</tr>
 							                	<% end %>
 					                		<% end %>

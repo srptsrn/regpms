@@ -23,11 +23,11 @@
 			<th rowspan="2" style="width:70px;">(6)<br/>ค่าคะแนน<br/>ถ่วงน้ำหนัก<br/>(4) X (5)<br/>100</th>
 		</tr>
 		<tr>
-			<th class="text-center" style="width:20px;">0</th>
 			<th class="text-center" style="width:20px;">1</th>
 			<th class="text-center" style="width:20px;">2</th>
 			<th class="text-center" style="width:20px;">3</th>
 			<th class="text-center" style="width:20px;">4</th>
+			<th class="text-center" style="width:20px;">5</th>
 		</tr>
 	</thead>
   	<tbody>
@@ -184,7 +184,7 @@
 				  				<%= position_capacity.capacity %>
 				  			</td>
 				  			<td class="text-top text-center"><%= position_capacity.expect.to_i %></td>
-				  			<td class="text-top text-center"></td>
+				  			<td class="text-top text-center"><%= position_capacity.expect.to_i %></td>
 				  		</tr>
 			  		<% end %>
 		  		</tbody>

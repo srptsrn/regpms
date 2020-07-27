@@ -23,6 +23,9 @@
     <td class="text-top">
         <%= f.input :weight, wrapper: :nested_form %>
     </td>
+    <td class="text-top">
+        <%= f.input :min_value, wrapper: :nested_form, collection: (0..4).collect {|i| [i, i+1]} %>
+    </td>
     <% unless action_name == "show" %>
         <td class="text-top">
             <%= link_to_remove_association f, class: "btn btn-sm btn-danger" do %>

@@ -223,13 +223,12 @@ class User < ActiveRecord::Base
     else
       return ev.director_id == id
     end
-  end
-# ใช้อยู้แล้ววววว ถ้า error มาเปิด จะได้ของเดิม  
+  end 
   def is_vice_director?(ev=nil)
     if ev.nil?
       return false
     elsif ev.is_360?
-      return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
+      return ev.vice_director_id == id #|| ev.vice_director2_id == id || ev.vice_director3_id == id
     else
       return Section.where(["workflow_state = ? AND vice_director_id = ?", :enabled, id]).size > 0
     end
@@ -240,16 +239,6 @@ class User < ActiveRecord::Base
      #  return ev.vice_director_id == id || ev.vice_director2_id == id || ev.vice_director3_id == id
      #end
   end
-# จบ code ที่เปิดใช้ปกติ ##########################################
-
-#.................................................
-  #def is_vice_director_id?(ev=nil)
-  #  if ev.nil?
-  #    return false
-  #  else
-  #    return ev.vice_director_id == id
-  #  end
-  #end
 
   def is_vice_director2?(ev=nil)
     if ev.nil?
@@ -270,8 +259,7 @@ class User < ActiveRecord::Base
       return Section.where(["workflow_state = ? AND vice_director3_id = ?", :enabled, id]).size > 0
     end
   end
-
-#................................................. 
+ 
   def is_secretary?(ev=nil)
     if ev.nil?
       return false
@@ -370,8 +358,6 @@ class User < ActiveRecord::Base
         joins += "JOIN sections ON sections.id = section_users.section_id "
         where = ["sections.vice_director_id = ?", id]
         users = User.joins(joins).where(where)
-
-       # ..................................................................... 
       elsif role == "vice_director2"
         joins = "JOIN section_users ON users.id = section_users.user_id "
         joins += "JOIN sections ON sections.id = section_users.section_id "
@@ -383,9 +369,8 @@ class User < ActiveRecord::Base
         where = ["sections.vice_director3_id = ?", id]
         users = User.joins(joins).where(where)
       elsif role == "secretary"
-          where = nil
-          users = User.joins(joins).where(where).select {|u| !u.is_secretary?(ev)}
-      # ..................................................................... 
+        where = nil
+        users = User.joins(joins).where(where).select {|u| !u.is_secretary?(ev)}
       elsif role == "committee"
         where = nil
         users = User.joins(joins).where(where).select {|u| !u.is_director?(ev)}
@@ -444,12 +429,11 @@ class User < ActiveRecord::Base
 #    end
 #  end
   
-  #........................................................
   def assess_vice_director_by(ev=nil)
     if ev.nil?
       return []
     else
-      return ev.vice_director
+      return [ev.vice_director]
     end
   end
 
@@ -457,7 +441,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return []
     else
-      return ev.vice_director2 
+      return [ev.vice_director2] 
     end
   end
 
@@ -465,7 +449,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return []
     else
-      return ev.vice_director3
+      return [ev.vice_director3]
     end
   end
 
@@ -473,11 +457,10 @@ class User < ActiveRecord::Base
     if ev.nil?
       return []
     else
-      return ev.secretary
+      return [ev.secretary]
     end
   end
-  #........................................................
-
+  
   def assess_committee_by(ev=nil)
     if ev.nil?
       return []
@@ -662,8 +645,6 @@ class User < ActiveRecord::Base
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-
-      #.....................................................
       assess_vice_director2_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director2"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
@@ -679,8 +660,6 @@ class User < ActiveRecord::Base
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      #.....................................................
-
       assess_section_leaders_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "section_leader"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
@@ -732,7 +711,7 @@ class User < ActiveRecord::Base
   
   def task_leader_score(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0, 0 , 0, 0
     else
       # total, count = task_leader_total_count(ev)
       # score = count.to_i > 0 ? total.to_f / count.to_i : 0
@@ -756,7 +735,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return 0
     else
-      tls, tlsd, tlsv, tlsl, tlslv = task_leader_score(ev)
+      tls, tlsd, tlsv, tlsv2, tlsv3, tlss, tlsl, tlslv = task_leader_score(ev)
       return tls * leader_ratio(ev).to_f / 100
     end
   end
@@ -773,7 +752,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return 0
     else
-      tls, tlsd, tlsv, tlsl, tlslv = task_leader_score(ev)
+      tls, tlsd, tlsv, tlsv2, tlsv3, tlss, tlsl, tlslv = task_leader_score(ev)
       return tls * task_ratio(ev).to_f / 100
     end
   end
@@ -823,8 +802,6 @@ class User < ActiveRecord::Base
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-
-      #.....................................................
       assess_vice_director2_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director2"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
@@ -840,7 +817,6 @@ class User < ActiveRecord::Base
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      #.....................................................
 
       assess_section_leaders_by(ev).each do |ab|
         total_score_real = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "section_leader"}.collect {|ettu| ettu.score_real.to_f}.sum
@@ -893,7 +869,7 @@ class User < ActiveRecord::Base
   
   def ability_leader_score(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0, 0, 0, 0
     else
       # total, count = ability_leader_total_count(ev)
       # score = count.to_i > 0 ? total.to_f / count.to_i : 0
@@ -917,7 +893,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return 0
     else
-      als, alsd, alsv, alsl, alslv = ability_leader_score(ev)
+      als, alsd, alsv, alsv2, alsv3, alss, alsl, alslv = ability_leader_score(ev)
       return als * leader_ratio(ev) / 100
     end
   end
@@ -934,7 +910,7 @@ class User < ActiveRecord::Base
     if ev.nil?
       return 0
     else
-      als, alsd, alsv, alsl, alslv = ability_leader_score(ev)
+      als, alsd, alsv, alsv2, alsv3, alss, alsl, alslv = ability_leader_score(ev)
       return als * ability_ratio(ev).to_f / 100
     end
   end
@@ -996,7 +972,7 @@ class User < ActiveRecord::Base
   
   def task_leader_total(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0, 0, 0, 0
     else
       
       scorex = 0
@@ -1020,28 +996,26 @@ class User < ActiveRecord::Base
       end
       scorexvd = count > 0 ? (total / count) : 0
       
-      #.....................................................
       assess_vice_director2_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director2"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
+      scorexvd2 = count > 0 ? (total / count) : 0
 
       assess_vice_director3_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director3"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
+      scorexvd3 = count > 0 ? (total / count) : 0
 
       assess_secretary_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "secretary"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
-      #.....................................................
+      scorexs = count > 0 ? (total / count) : 0
 
       assess_section_leaders_by(ev).each do |ab|
         total_score_real = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "section_leader"}.collect {|ettu| ettu.score_real.to_f}.sum
@@ -1058,10 +1032,10 @@ class User < ActiveRecord::Base
       scorexsvl = count > 0 ? (total / count) : 0
       
       #scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
-      scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director2_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director3_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.secretary_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexvd2 * evet.vice_director2_ratio.to_f / leader_ratio(ev)) + (scorexvd3 * evet.vice_director3_ratio.to_f / leader_ratio(ev)) + (scorexs * evet.secretary_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
       
       #return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
-      return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director2_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director3_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.secretary_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexvd2 * evet.vice_director2_ratio.to_f / leader_ratio(ev)), (scorexvd3 * evet.vice_director3_ratio.to_f / leader_ratio(ev)), (scorexs * evet.secretary_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
     end
   end
   
@@ -1094,7 +1068,7 @@ class User < ActiveRecord::Base
   
   def ability_leader_total(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0, 0, 0, 0
     else
       
       scorex = 0
@@ -1118,28 +1092,24 @@ class User < ActiveRecord::Base
         count += 1 if total_score_real > 0
       end
       scorexvd = count > 0 ? (total / count) : 0
-      
-      #.............................................................
       assess_vice_director2_by(ev).each do |ab|
         total_score_real = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director2"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
+      scorexvd2 = count > 0 ? (total / count) : 0
       assess_vice_director3_by(ev).each do |ab|
         total_score_real = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "vice_director3"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
+      scorexvd3 = count > 0 ? (total / count) : 0
       assess_secretary_by(ev).each do |ab|
         total_score_real = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "secretary"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
         count += 1 if total_score_real > 0
       end
-      scorexvd = count > 0 ? (total / count) : 0
-      #.............................................................
-
+      scorexs = count > 0 ? (total / count) : 0
       assess_section_leaders_by(ev).each do |ab|
         total_score_real = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && !ettu.role.blank? && ettu.role == "section_leader"}.collect {|ettu| ettu.score_real.to_f}.sum
         total += total_score_real
@@ -1160,9 +1130,9 @@ class User < ActiveRecord::Base
         
       #eturn scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
 
-      scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director2_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director3_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.secretary_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexvd2 * evet.vice_director2_ratio.to_f / leader_ratio(ev)) + (scorexvd3 * evet.vice_director3_ratio.to_f / leader_ratio(ev)) + (scorexs * evet.secretary_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
         
-      return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director2_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director3_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.secretary_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexvd2 * evet.vice_director2_ratio.to_f / leader_ratio(ev)), (scorexvd3 * evet.vice_director3_ratio.to_f / leader_ratio(ev)), (scorexs * evet.secretary_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
     end
   end
   
@@ -1208,14 +1178,14 @@ class User < ActiveRecord::Base
     if ev.nil? || role.blank?
       return []
     else
-      if role == "director" || role == "vice_director" || role == "vice_director2" || role == "vice_director3" || role == "secretary"
+      if role == "director" || role == "vice_director" || role == "vice_director2" || role == "vice_director3" || role == "secretary" || role == "committee"
         order = "firstname, lastname"
         where = ["(is_except_evaluation IS NULL OR is_except_evaluation = ?)", false]
-        users = User.order(order).where(where).select {|u| !u.is_director?(ev) && !u.is_vice_director?(ev) && !u.is_vice_director2?(ev) && !u.is_vice_director3?(ev) && !u.is_secretary?(ev)}
+        users = User.order(order).where(where).select {|u| !u.is_director?(ev) && !u.is_vice_director?(ev) && !u.is_vice_director2?(ev) && !u.is_vice_director3?(ev) && !u.is_secretary?(ev) }
       elsif role == "staff"
         order = "firstname, lastname"
         where = ["(is_except_evaluation IS NULL OR is_except_evaluation = ?)", false]
-        users = User.order(order).where(where).select {|u| !u.is_director?(ev) && !u.is_vice_director?(ev) && !u.is_vice_director2?(ev) && !u.is_vice_director3?(ev) && !u.is_secretary?(ev)}
+        users = User.order(order).where(where).select {|u| !u.is_director?(ev) && !u.is_vice_director?(ev) && !u.is_vice_director2?(ev) && !u.is_vice_director3?(ev) && !u.is_secretary?(ev)} 
       else
         users = []
       end

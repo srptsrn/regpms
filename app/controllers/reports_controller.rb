@@ -59,8 +59,9 @@ class ReportsController < OrbController
         committees = []
         committees << [evaluation.director_id, "director"]
         committees << [evaluation.vice_director_id, "vice_director"]
-        committees << [evaluation.vice_director2_id, "vice_director"]
-        committees << [evaluation.vice_director3_id, "vice_director"]
+        committees << [evaluation.vice_director2_id, "vice_director2"]
+        committees << [evaluation.vice_director3_id, "vice_director3"]
+        committees << [evaluation.secretary_id, "secretary"]
         
         evaluation_users = user.evaluation_score_cards.where(["evaluation_id = ?", evaluation.id])
 
@@ -438,7 +439,7 @@ class ReportsController < OrbController
         
         [0, 1, 2, 3, 4, 13, 14].each {|column| sheet.merge_cells(row, column, row + 1, column)}
         
-        rdata = ["ลำดับที่", "ชื่อ-สกุล", "ประเภท", "ตำแหน่ง", "กลุ่มภารกิจ", "ผู้บังคับบัญชาขั้นต้น", nil, nil, nil, "คณะกรรมการ", nil, nil, nil, "รวมหลังถ่วงน้ำหนัก (100%)", "ระดับผลการประเมิน"]
+        rdata = ["ลำดับที่", "ชื่อ-สกุล", "ประเภท", "ตำแหน่ง", "กลุ่มงาน", "ผู้บังคับบัญชาขั้นต้น", nil, nil, nil, "คณะกรรมการ", nil, nil, nil, "รวมหลังถ่วงน้ำหนัก (100%)", "ระดับผลการประเมิน"]
         sheet.row(row).replace rdata
         (0..4).each {|column| sheet.row(row).set_format(column, format_table_header_merge)}
         (5..12).each {|column| sheet.row(row).set_format(column, format_table_header_merge)}
@@ -536,7 +537,7 @@ class ReportsController < OrbController
         
         [0, 1, 2, 3, 4, 8].each {|column| sheet.merge_cells(row, column, row + 1, column)}
         
-        rdata = ["ลำดับที่", "ชื่อ-สกุล", "กลุ่มงาน", "ตำแหน่ง", "กลุ่มภารกิจ", "ผลการประเมิน", nil, nil, "ระดับผลการประเมิน"]
+        rdata = ["ลำดับที่", "ชื่อ-สกุล", "กลุ่มงาน", "ตำแหน่ง", "กลุ่มงาน", "ผลการประเมิน", nil, nil, "ระดับผลการประเมิน"]
         sheet.row(row).replace rdata
         (0..8).each {|column| sheet.row(row).set_format(column, format_table_header_merge)}
         row += 1
@@ -610,7 +611,7 @@ class ReportsController < OrbController
         (0..9).each {|column| sheet.row(row).set_format(column, format_header_merge)}
         row += 1
         
-        rdata = ["ลำดับที่", "ชื่อ-สกุล", "กลุ่มงาน", "ประเภท", "ตำแหน่ง", "กลุ่มภารกิจ", "สังกัดหน่วยงาน", "คะแนน (100)", "ระดับผลการประเมิน", "หมายเหตุ"]
+        rdata = ["ลำดับที่", "ชื่อ-สกุล", "กลุ่มงาน", "ประเภท", "ตำแหน่ง", "กลุ่มงาน", "สังกัดหน่วยงาน", "คะแนน (100)", "ระดับผลการประเมิน", "หมายเหตุ"]
         sheet.row(row).replace rdata
         (0..9).each {|column| sheet.row(row).set_format(column, format_table_header_merge)}
         row += 1

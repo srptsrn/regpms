@@ -19,7 +19,7 @@ en:
 th:
   activerecord:
     models:
-      section: กลุ่มภารกิจ
+      section: กลุ่มงาน
     attributes:
       section:
         workflow_state: สถานะ
@@ -28,8 +28,8 @@ th:
         vice_director: รองผู้อำนวยการที่เกี่ยวข้อง
         vice_director2: รองผู้อำนวยการ 1
         vice_director3: รองผู้อำนวยการ 2
-        leader: หัวหน้ากลุ่มภารกิจ
-        vice_leader: ผู้ช่วยหัวหน้ากลุ่มภารกิจ
+        leader: หัวหน้ากลุ่มงาน
+        vice_leader: ผู้ช่วยหัวหน้ากลุ่มงาน
         created_by: สร้างโดย
         updated_by: แก้ไขโดย
         created_at: สร้างเมื่อ

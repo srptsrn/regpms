@@ -98,8 +98,8 @@
           		<% count = 0 %>
 				<% user.employee_type.employee_type_task_groups.each do |employee_type_task_group| %>
             		<tr>
-            			<th colspan="9"><%= employee_type_task_group %></th>
-        			</tr>
+						<th colspan="9" class="text-top"><%= employee_type_task_group %></th>
+					</tr>
 					<% employee_type_task_group.employee_type_tasks.each do |employee_type_task| %>
 	          			<%
 	          				employee_type_task_user = EmployeeTypeTaskUser.where(["employee_type_task_id = ? AND user_id = ? AND evaluation_id = ? AND committee_id = ? AND role = ?", employee_type_task.id, user.id, @current_evaluation.id, current_user.id, @role]).first
@@ -110,13 +110,13 @@
 	          				checked_5 = employee_type_task_user && employee_type_task_user.score == 5
 	          			%>
 	            		<tr>
-	            			<td class="text-right"><%= count += 1 %>.</td>
+	            			<td class="text-right"></td>
 							<td class="text-top"><%= employee_type_task %></td>
-							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range} %></td>
-							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range} %></td>
-							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range} %></td>
-							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range} %></td>
-							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range} %></td>
+							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 1, {checked: checked_1, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 1} %></td>
+							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 2, {checked: checked_2, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 2} %></td>
+							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 3, {checked: checked_3, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 3} %></td>
+							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 4, {checked: checked_4, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 4} %></td>
+							<td class="text-center"><%= radio_button "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score, 5, {checked: checked_5, disabled: !@current_evaluation.is_evaluation_range || employee_type_task.min_value.to_i > 5} %></td>
 							<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :weight, {value: employee_type_task.weight, class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
 							<td class="text-center"><%= text_field "employee_type_task_user_#{user.id}_#{employee_type_task.id}", :score_real, {class: "form-control-inline", style: "text-align:center;", disabled: true} %></td>
 	                	</tr>

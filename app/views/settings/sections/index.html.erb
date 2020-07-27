@@ -73,13 +73,13 @@
                     	<tr>
                       		<th class="tools text-top"></th>
                             <th><%= sort_link @q, :name %></th>
-                            <th><%= sort_link @q, :vice_director, Section.human_attribute_name(:vice_director) %></th>
-							<th><%= sort_link @q, :vice_director2, Section.human_attribute_name(:vice_director2) %></th>
-							<th><%= sort_link @q, :vice_director3, Section.human_attribute_name(:vice_director3) %></th>
-                            <th><%= sort_link @q, :leader, Section.human_attribute_name(:leader) %></th>
-                            <th><%= sort_link @q, :vice_leader, Section.human_attribute_name(:vice_leader) %></th>
-                            <th class="text-right">จำนวนบุคลากร</th>
-                            <th class="workflow_state"><%= sort_link @q, :workflow_state %></th>
+                            <th class="tools text-center"><%= sort_link @q, :vice_director, Section.human_attribute_name(:vice_director) %></th>
+							<th class="tools text-center"><%= sort_link @q, :vice_director2, Section.human_attribute_name(:vice_director2) %></th>
+							<th class="tools text-center"><%= sort_link @q, :vice_director3, Section.human_attribute_name(:vice_director3) %></th>
+                            <th class="tools text-center"><%= sort_link @q, :leader, Section.human_attribute_name(:leader) %></th>
+                            <th class="tools text-center"><%= sort_link @q, :vice_leader, Section.human_attribute_name(:vice_leader) %></th>
+                            <th class="text-center">จำนวนบุคลากร</th>
+                            <th class="text-center" class="workflow_state"><%= sort_link @q, :workflow_state %></th>
                     	</tr>
                   	</thead>
                   	<tbody>
@@ -99,8 +99,8 @@
 								<td class="text-top"><%= section.vice_director3 %></td>
 								<td class="text-top"><%= section.leader %></td>
 								<td class="text-top"><%= section.vice_leader %></td>
-								<td class="text-right text-top"><%= section.section_users.size %></td>
-								<td class="text-top"><span class="label <%= state_label_class(section.workflow_state.to_sym) %>"><%=t "workflow.state.#{section.workflow_state}" %></span></td>
+								<td class="text-center text-top"><%= section.section_users.size %></td>
+								<td class="text-center text-top"><span class="label <%= state_label_class(section.workflow_state.to_sym) %>"><%=t "workflow.state.#{section.workflow_state}" %></span></td>
 	                    	</tr>
                     	<% end %>
                   	</tbody>

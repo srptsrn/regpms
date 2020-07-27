@@ -48,13 +48,13 @@ class OrbController < ApplicationController
     
     sub_navs << {:title => EmployeeType.model_name.human, :icon_class => "fa fa-cog", :url => settings_employee_types_path, :resource => EmployeeType}
     # sub_navs << {:title => EmployeeTypeUser.model_name.human, :icon_class => "fa fa-cog", :url => settings_employee_type_users_path, :resource => EmployeeTypeUser}
-    # sub_navs << {:title => Task.model_name.human, :icon_class => "fa fa-cog", :url => settings_tasks_path, :resource => Task}
+    sub_navs << {:title => Task.model_name.human, :icon_class => "fa fa-cog", :url => settings_tasks_path, :resource => Task}
 
     sub_navs << {:title => Position.model_name.human, :icon_class => "fa fa-cog", :url => settings_positions_path, :resource => Position}
     sub_navs << {:title => PositionType.model_name.human, :icon_class => "fa fa-cog", :url => settings_position_types_path, :resource => PositionType}
     sub_navs << {:title => PositionLevel.model_name.human, :icon_class => "fa fa-cog", :url => settings_position_levels_path, :resource => PositionLevel}
     sub_navs << {:title => Capacity.model_name.human, :icon_class => "fa fa-cog", :url => settings_capacities_path, :resource => Capacity}
-    
+
     sub_navs << {:title => t(:personel) + " / " + User.model_name.human, :icon_class => "fa fa-user", :url => admin_users_path, :resource => User}
     # sub_navs << {:title => UserGroup.model_name.human, :icon_class => "fa fa-users", :url => admin_user_groups_path, :resource => UserGroup}
 

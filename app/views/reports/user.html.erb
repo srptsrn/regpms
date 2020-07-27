@@ -4,6 +4,9 @@
 	user = @user
 	assess_director_by = user.assess_director_by(evaluation)
 	assess_vice_director_by = user.assess_vice_director_by(evaluation) 
+	assess_vice_director2_by = user.assess_vice_director2_by(evaluation) 
+	assess_vice_director3_by = user.assess_vice_director3_by(evaluation) 
+	assess_secretary_by = user.assess_secretary_by(evaluation) 
 	assess_committees_by = user.assess_committee_by(evaluation) 
 	assess_section_leaders_by = user.assess_section_leaders_by(evaluation) 
 	assess_section_vice_leaders_by = user.assess_section_vice_leaders_by(evaluation) 
@@ -12,7 +15,7 @@
 	assess_faculty_leaders_by = user.assess_faculty_leaders_by(evaluation) 
 	evaluation_users = user.evaluation_users.where(["evaluation_id = ?", evaluation.id]) 
 	
-	leader_colspan = assess_director_by.size + assess_vice_director_by.size + assess_section_leaders_by.size + assess_section_vice_leaders_by.size + assess_team_leaders_by.size + assess_faculty_deans_by.size + assess_faculty_leaders_by.size
+	leader_colspan = assess_director_by.size + assess_vice_director_by.size + assess_vice_director2_by.size + assess_vice_director3_by.size + assess_secretary_by.size + assess_section_leaders_by.size + assess_section_vice_leaders_by.size + assess_team_leaders_by.size + assess_faculty_deans_by.size + assess_faculty_leaders_by.size
 	committee_colspan = assess_committees_by.size
 %>
 <div class="page-header">
@@ -96,6 +99,15 @@
 	                    <% assess_vice_director_by.each do |ab| %>
 	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director) %>)"><%= cc += 1 %><%#= ab %></th>
 	                    <% end %>
+						<% assess_vice_director2_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director2) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
+						<% assess_vice_director3_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director3) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
+						<% assess_secretary_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:secretary) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
 	                    <% assess_section_leaders_by.each do |ab| %>
 	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Section.human_attribute_name(:leader) %>)"><%= cc += 1 %><%#= ab %></th>
 	                    <% end %>
@@ -147,6 +159,28 @@
 					          		%>	
 			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
 			                    <% end %>
+								<% assess_vice_director2_by.each do |ab| %>
+					          		<% 
+					          			employee_type_task_user = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && ettu.employee_type_task_id == employee_type_task.id && !ettu.role.blank? && ettu.role == "vice_director2"}.first
+					          			score_real = employee_type_task_user ? employee_type_task_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
+								<% assess_vice_director3_by.each do |ab| %>
+					          		<% 
+					          			employee_type_task_user = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && ettu.employee_type_task_id == employee_type_task.id && !ettu.role.blank? && ettu.role == "vice_director3"}.first
+					          			score_real = employee_type_task_user ? employee_type_task_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
+								<% assess_secretary_by.each do |ab| %>
+					          		<% 
+					          			employee_type_task_user = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && ettu.employee_type_task_id == employee_type_task.id && !ettu.role.blank? && ettu.role == "secretary"}.first
+					          			score_real = employee_type_task_user ? employee_type_task_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
+
 	                    		<% assess_section_leaders_by.each do |ab| %>
 					          		<% 
 					          			employee_type_task_user = committee_employee_type_task_users.select {|ettu| ettu.committee_id == ab.id && ettu.employee_type_task_id == employee_type_task.id && !ettu.role.blank? && ettu.role == "section_leader"}.first
@@ -193,7 +227,7 @@
 	            		<% end %>
 	            	<% end %>
 	          	</tbody>
-	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? %>
+	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? || current_user.is_vice_director2? || current_user.is_vice_director3? || current_user.is_secretary? %>
 		          	<tfoot>
 		          		<%
 		          			task_leader_total, task_leader_count 		= user.task_leader_total_count(evaluation)
@@ -244,6 +278,15 @@
 	                    <% end %>
 	                    <% assess_vice_director_by.each do |ab| %>
 	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
+						<% assess_vice_director2_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director2) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
+						<% assess_vice_director3_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:vice_director3) %>)"><%= cc += 1 %><%#= ab %></th>
+	                    <% end %>
+						<% assess_secretary_by.each do |ab| %>
+	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Evaluation.human_attribute_name(:secretary) %>)"><%= cc += 1 %><%#= ab %></th>
 	                    <% end %>
 	                    <% assess_section_leaders_by.each do |ab| %>
 	                    	<th style="width:65px; text-align:center; background-color:#5bc0de;" title="<%= is_show_score ? ab : '' %> (<%= Section.human_attribute_name(:leader) %>)"><%= cc += 1 %><%#= ab %></th>
@@ -296,6 +339,27 @@
 					          		%>	
 			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
 			                    <% end %>
+								<% assess_vice_director2_by.each do |ab| %>
+					          		<% 
+					          			position_capacity_user = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && ettu.position_capacity_id == position_capacity.id && !ettu.role.blank? && ettu.role == "vice_director2"}.first
+					          			score_real = position_capacity_user ? position_capacity_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
+								<% assess_vice_director3_by.each do |ab| %>
+					          		<% 
+					          			position_capacity_user = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && ettu.position_capacity_id == position_capacity.id && !ettu.role.blank? && ettu.role == "vice_director3"}.first
+					          			score_real = position_capacity_user ? position_capacity_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
+								<% assess_secretary_by.each do |ab| %>
+					          		<% 
+					          			position_capacity_user = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && ettu.position_capacity_id == position_capacity.id && !ettu.role.blank? && ettu.role == "secretary"}.first
+					          			score_real = position_capacity_user ? position_capacity_user.score_real : nil
+					          		%>	
+			                    	<td class="text-center"><%= score_real ? (is_show_score ? score_real.to_f.to_s_decimal_comma : "<i class='fa fa-check'></i>".html_safe) : "-" %></td>
+			                    <% end %>
 	                    		<% assess_section_leaders_by.each do |ab| %>
 					          		<% 
 					          			position_capacity_user = committee_position_capacity_users.select {|ettu| ettu.committee_id == ab.id && ettu.position_capacity_id == position_capacity.id && !ettu.role.blank? && ettu.role == "section_leader"}.first
@@ -342,7 +406,7 @@
 	            		<% end %>
 	            	<% end %>
 	          	</tbody>
-	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? || current_user.is_vice_director2 || current_user.is_vice_director3 %>
+	          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? || current_user.is_vice_director2? || current_user.is_vice_director3? %>
 		          	<tfoot>
 		          		<%
 		          			ability_leader_total, ability_leader_count 			= user.ability_leader_total_count(evaluation)
@@ -375,7 +439,7 @@
 	        </table>
 	        <div class="clearfix margin-bottom-20"></div>
 	        
-          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? %>
+          	<% if current_user.authorized_as?(:ibattz) || current_user.is_director? || current_user.is_vice_director? || current_user.is_vice_director2? || current_user.is_vice_director3? %>
 		        <div class="col-xs-12 btn btn-lg btn-danger">
 		        	ผลการประเมิน : 
 		        	<%= user.final_score(evaluation).to_s_decimal_comma %>

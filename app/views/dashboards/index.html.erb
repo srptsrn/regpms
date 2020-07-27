@@ -1,6 +1,6 @@
 <div class="page-header">
 	<h1><%= t(:dashboard) %><small>...</small></h1>
-	<h1><%= @role == 'vice_director'%></h1>
+	<h1><%= @role %></h1>
 
 </div>
 
@@ -80,12 +80,7 @@
 										<td>
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director) %>
 										</td>
-										<td>
-											<%= link_to cards_summary_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
-											<%= link_to cards_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+										<td><%= link_to cards_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
 										</td>
@@ -96,10 +91,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director2) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to cards_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -111,10 +102,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director3) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to cards_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -126,10 +113,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:secretary) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to cards_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -175,10 +158,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to assess_url("vice_director", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -191,10 +170,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director2) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to assess_url("vice_director2", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -207,10 +182,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:vice_director3) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to assess_url("vice_director3", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -223,10 +194,6 @@
 											<%= t(:assess_as) %> : <%= Evaluation.human_attribute_name(:secretary) %>
 										</td>
 										<td>
-											<%= link_to cards_summary_assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
-												ปรับแก้ผลประเมินสำหรับใช้รายงาน
-											<% end %>
-											
 											<%= link_to assess_url("secretary", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
@@ -239,7 +206,10 @@
 											<%= t(:assess_as) %> : <%= Committee.model_name.human %>
 										</td>
 										<td>
-											<%= link_to assess_url("committee", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
+											<%= link_to cards_summary_assess_url("committee", evid: evaluation.id), {class: "btn btn-sm btn-danger margin-left-5 pull-right"} do %>
+												ปรับแก้ผลประเมินสำหรับใช้รายงาน
+											<% end %>
+												<%= link_to assess_url("committee", evid: evaluation.id), {class: "btn btn-sm btn-success pull-right"} do %>
 												เริ่มประเมิน
 											<% end %>
 										</td>

@@ -235,13 +235,11 @@ class AssessController < OrbController
   
   def cards_summary
     if @role == "director" && current_user.is_director?(@current_evaluation)
-      
     elsif @role == "vice_director" && current_user.is_vice_director?(@current_evaluation)
-    #.................................................
     elsif @role == "vice_director2" && current_user.is_vice_director2?(@current_evaluation)
     elsif @role == "vice_director3" && current_user.is_vice_director3?(@current_evaluation)
     elsif @role == "secretary" && current_user.is_secretary?(@current_evaluation)
-    #.................................................
+    elsif @role == "committee" && current_user.is_committee?(@current_evaluation)
       
     else
       redirect_to root_url
@@ -260,15 +258,12 @@ class AssessController < OrbController
   end
   
   def save_cards_summary
-    if @role == "director" && current_user.is_director?(@current_evaluation)
-      
+    if @role == "director" && current_user.is_director?(@current_evaluation)  
     elsif @role == "vice_director" && current_user.is_vice_director?(@current_evaluation)
-     
-    #.................................................
     elsif @role == "vice_director2" && current_user.is_vice_director2?(@current_evaluation)
     elsif @role == "vice_director3" && current_user.is_vice_director3?(@current_evaluation)
     elsif @role == "secretary" && current_user.is_secretary?(@current_evaluation)
-    #.................................................
+    elsif @role == "committee" && current_user.is_committee?(@current_evaluation)
          
     else
       redirect_to root_url
@@ -414,19 +409,12 @@ class AssessController < OrbController
       @role = params[:role]
       
       if @role == "director" && current_user.is_director?(@current_evaluation)
-      
       elsif @role == "vice_director" && current_user.is_vice_director?(@current_evaluation)
-
-      #.................................................
       elsif @role == "vice_director2" && current_user.is_vice_director2?(@current_evaluation)
       elsif @role == "vice_director3" && current_user.is_vice_director3?(@current_evaluation)
       elsif @role == "secretary" && current_user.is_secretary?(@current_evaluation)
-      #.................................................
-      
       elsif @role == "committee" && current_user.is_committee?(@current_evaluation)
-      
       elsif @role == "staff"
-      
       elsif @role == "section_leader" && current_user.is_section_leader?
         if Section.exists?(params[:section_id])
           @section = Section.find(params[:section_id])
