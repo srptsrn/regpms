@@ -972,7 +972,7 @@ class User < ActiveRecord::Base
   
   def task_leader_total(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0
     else
       
       scorex = 0
@@ -1068,7 +1068,7 @@ class User < ActiveRecord::Base
   
   def ability_leader_total(ev=nil)
     if ev.nil?
-      return 0, 0, 0, 0, 0, 0, 0, 0
+      return 0, 0, 0, 0, 0
     else
       
       scorex = 0
@@ -1126,9 +1126,9 @@ class User < ActiveRecord::Base
       end
       scorexsvl = count > 0 ? (total / count) : 0
       
-      #scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      # scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
         
-      #eturn scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
+      # return scorex, (scorexd * evet.director_ratio.to_f / leader_ratio(ev)), (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)), (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)), (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
 
       scorex = (scorexd * evet.director_ratio.to_f / leader_ratio(ev)) + (scorexvd * evet.vice_director_ratio.to_f / leader_ratio(ev)) + (scorexvd2 * evet.vice_director2_ratio.to_f / leader_ratio(ev)) + (scorexvd3 * evet.vice_director3_ratio.to_f / leader_ratio(ev)) + (scorexs * evet.secretary_ratio.to_f / leader_ratio(ev)) + (scorexsl * evet.section_leader_ratio.to_f / leader_ratio(ev)) + (scorexsvl * evet.section_vice_leader_ratio.to_f / leader_ratio(ev))
         

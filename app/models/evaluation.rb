@@ -47,7 +47,9 @@ class Evaluation < ActiveRecord::Base
   validates :evaluation_start_date, presence: true
   validates :evaluation_end_date, presence: true
   validates :director, presence: true
-  # validates :vice_director, presence: true
+  validates :vice_director, presence: true
+  validates :vice_director2, presence: true
+  validates :vice_director3, presence: true
   validates :secretary, presence: true
   
   def to_s
