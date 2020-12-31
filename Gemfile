@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 gem 'rake','=10.4.2'
 gem 'minitest' , '=5.7.0'
 gem 'thor','=0.19.1'
-gem 'nokogiri','=1.6.8.1'
+gem 'nokogiri','1.10.10'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.1'
